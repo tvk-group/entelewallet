@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { cn } from '@entelewallet/utils';
-import { EntelekronCoinLogo, TvkCoinMark } from './entelekron-coin-logo';
+import { EntelekronCoinLogo, TvkLabsCoinLogo } from './entelekron-coin-logo';
 
 export const ECOSYSTEM_MODULES = [
   'SOVRA',
@@ -40,14 +40,13 @@ interface EcosystemCyberCoinProps {
 }
 
 const COIN_EDGE_COUNT = 36;
-const COIN_RADIUS = 90;
 const HUB_SIZE = 1000;
 const HUB_CENTER = HUB_SIZE / 2;
 
 const ORBIT_RINGS = [
-  { radius: 0.28, offsetDeg: 0 },
-  { radius: 0.35, offsetDeg: 14 },
-  { radius: 0.41, offsetDeg: -10 },
+  { radius: 0.56, offsetDeg: 0 },
+  { radius: 0.64, offsetDeg: 12 },
+  { radius: 0.72, offsetDeg: -8 },
 ] as const;
 
 type OrbitNode = {
@@ -103,7 +102,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
   return (
     <div
       className={cn(
-        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-6xl overflow-hidden rounded-[2rem]',
+        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-[690px] overflow-hidden rounded-[2rem]',
         className,
       )}
       aria-hidden
@@ -128,7 +127,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
         />
       ))}
 
-      <div className="cyber-ecosystem-hub relative z-10 mx-auto aspect-square w-full max-w-[min(100%,920px)]">
+      <div className="cyber-ecosystem-hub relative z-10 mx-auto aspect-square w-full max-w-[690px]">
         <svg
           className="cyber-signal-layer absolute inset-0 h-full w-full"
           viewBox={`0 0 ${HUB_SIZE} ${HUB_SIZE}`}
@@ -146,7 +145,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
             </linearGradient>
           </defs>
 
-          <circle cx={HUB_CENTER} cy={HUB_CENTER} r="120" fill="url(#signal-core-glow)" />
+          <circle cx={HUB_CENTER} cy={HUB_CENTER} r="200" fill="url(#signal-core-glow)" />
 
           {ORBIT_RINGS.map((ring, i) => (
             <ellipse
@@ -190,20 +189,27 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           ))}
         </svg>
 
-        <div className="cyber-coin-stage">
+        <div
+          className="cyber-coin-stage"
+          style={
+            {
+              '--coin-diameter': 'min(360px, 52vw)',
+            } as React.CSSProperties
+          }
+        >
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
               <div className="cyber-coin-face cyber-coin-face-front">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <EntelekronCoinLogo className="h-[5.5rem] w-[5.5rem] sm:h-28 sm:w-28" />
+                  <EntelekronCoinLogo className="cyber-coin-logo-mark" />
                 </div>
               </div>
 
               <div className="cyber-coin-face cyber-coin-face-back">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <TvkCoinMark />
+                  <TvkLabsCoinLogo className="cyber-coin-logo-mark cyber-coin-logo-mark-tvk" />
                 </div>
               </div>
 
@@ -211,9 +217,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                 <div
                   key={i}
                   className="cyber-coin-edge"
-                  style={{
-                    transform: `rotateY(${(360 / COIN_EDGE_COUNT) * i}deg) translateZ(${COIN_RADIUS}px)`,
-                  }}
+                  style={{ '--edge-angle': `${(360 / COIN_EDGE_COUNT) * i}deg` } as React.CSSProperties}
                 />
               ))}
             </div>

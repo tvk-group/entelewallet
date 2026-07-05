@@ -2,93 +2,154 @@
 
 import { useId } from 'react';
 
-/** ENK + EnteleKRON mark for the cyber coin front face. */
+/** EnteleKRON mark — Σ center + spectrum ring, transparent background. */
 export function EntelekronCoinLogo({ className }: { className?: string }) {
   const uid = useId().replace(/:/g, '');
 
   return (
     <svg
-      viewBox="0 0 160 160"
+      viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden
     >
       <defs>
-        <linearGradient id={`enk-diamond-${uid}`} x1="15%" y1="0%" x2="85%" y2="100%">
-          <stop offset="0%" stopColor="#a5f3fc" />
-          <stop offset="40%" stopColor="#22d3ee" />
-          <stop offset="100%" stopColor="#8b5cf6" />
+        <linearGradient id={`sigma-${uid}`} x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%" stopColor="#38bdf8" />
+          <stop offset="45%" stopColor="#2563eb" />
+          <stop offset="100%" stopColor="#6d28d9" />
         </linearGradient>
-        <linearGradient id={`enk-shine-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.65" />
-          <stop offset="45%" stopColor="#ffffff" stopOpacity="0" />
-          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.2" />
+        <linearGradient id={`ring-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#22d3ee" />
+          <stop offset="18%" stopColor="#2563eb" />
+          <stop offset="38%" stopColor="#7c3aed" />
+          <stop offset="58%" stopColor="#db2777" />
+          <stop offset="78%" stopColor="#f97316" />
+          <stop offset="100%" stopColor="#eab308" />
         </linearGradient>
-        <filter id={`enk-glow-${uid}`} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2.5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
+        <linearGradient id={`ring-shine-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+          <stop offset="50%" stopColor="#ffffff" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={`ribbon-a-${uid}`} x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#10b981" />
+          <stop offset="55%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="#2563eb" />
+        </linearGradient>
+        <linearGradient id={`ribbon-b-${uid}`} x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#2563eb" />
+          <stop offset="50%" stopColor="#0891b2" />
+          <stop offset="100%" stopColor="#059669" />
+        </linearGradient>
       </defs>
 
-      <circle cx="80" cy="80" r="74" stroke="rgba(103,232,249,0.2)" strokeWidth="1" fill="none" />
-
-      <path
-        d="M80 18 L132 80 L80 142 L28 80 Z"
-        fill={`url(#enk-diamond-${uid})`}
-        filter={`url(#enk-glow-${uid})`}
-        stroke="rgba(255,255,255,0.5)"
-        strokeWidth="1.75"
+      {/* Spectrum ring */}
+      <circle
+        cx="100"
+        cy="100"
+        r="78"
+        stroke={`url(#ring-${uid})`}
+        strokeWidth="18"
+        strokeLinecap="round"
       />
-      <path
-        d="M80 32 L112 80 L80 128 L48 80 Z"
-        fill="none"
-        stroke="rgba(255,255,255,0.28)"
-        strokeWidth="1.25"
+      <circle
+        cx="100"
+        cy="100"
+        r="78"
+        stroke={`url(#ring-shine-${uid})`}
+        strokeWidth="18"
+        opacity="0.55"
       />
-      <path d="M80 18 L132 80 L80 142 L28 80 Z" fill={`url(#enk-shine-${uid})`} opacity="0.55" />
 
+      {/* Stylized Σ — EnteleKRON core mark */}
       <text
-        x="80"
-        y="88"
-        textAnchor="middle"
-        fill="#ffffff"
-        fontSize="30"
-        fontWeight="800"
-        fontFamily="system-ui, sans-serif"
-        letterSpacing="0.12em"
-      >
-        ENK
-      </text>
-
-      <text
-        x="80"
+        x="100"
         y="118"
         textAnchor="middle"
-        fill="rgba(224,242,254,0.95)"
-        fontSize="11"
+        fill={`url(#sigma-${uid})`}
+        fontSize="76"
         fontWeight="700"
-        fontFamily="system-ui, sans-serif"
-        letterSpacing="0.22em"
+        fontFamily="Georgia, 'Times New Roman', serif"
       >
-        ENTELEKRON
+        Σ
       </text>
     </svg>
   );
 }
 
-export function TvkCoinMark({ className }: { className?: string }) {
+/** TVK Labs mark for the cyber coin back face — ribbon icon + wordmark, transparent. */
+export function TvkLabsCoinLogo({ className }: { className?: string }) {
+  const uid = useId().replace(/:/g, '');
+
   return (
-    <div className={className}>
-      <span className="block bg-gradient-to-b from-white via-cyan-100 to-violet-200 bg-clip-text text-5xl font-black tracking-[0.22em] text-transparent sm:text-6xl">
-        TVK
-      </span>
-      <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.42em] text-cyan-100/75 sm:text-[10px]">
-        Group
-      </span>
-    </div>
+    <svg
+      viewBox="0 0 280 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id={`tvk-ribbon-a-${uid}`} x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#10b981" />
+          <stop offset="50%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="#1d4ed8" />
+        </linearGradient>
+        <linearGradient id={`tvk-ribbon-b-${uid}`} x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1e40af" />
+          <stop offset="100%" stopColor="#059669" />
+        </linearGradient>
+      </defs>
+
+      {/* Interlocking ribbon loops */}
+      <path
+        d="M18 70 C18 38, 48 28, 62 48 C76 68, 52 88, 38 68 C28 54, 18 70, 18 70 Z"
+        fill={`url(#tvk-ribbon-a-${uid})`}
+        opacity="0.95"
+      />
+      <path
+        d="M38 52 C52 32, 78 38, 82 58 C86 78, 58 92, 44 72 C36 62, 38 52, 38 52 Z"
+        fill={`url(#tvk-ribbon-b-${uid})`}
+        opacity="0.95"
+      />
+      <ellipse cx="52" cy="66" rx="34" ry="30" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+
+      {/* T.V.K. LABS wordmark */}
+      <text
+        x="108"
+        y="58"
+        fill="#ffffff"
+        fontSize="28"
+        fontWeight="800"
+        fontFamily="system-ui, sans-serif"
+        letterSpacing="0.14em"
+      >
+        T.V.K.
+      </text>
+      <text
+        x="108"
+        y="92"
+        fill="#ffffff"
+        fontSize="28"
+        fontWeight="800"
+        fontFamily="system-ui, sans-serif"
+        letterSpacing="0.14em"
+      >
+        LABS
+      </text>
+      <text
+        x="108"
+        y="118"
+        fill="rgba(226,232,240,0.75)"
+        fontSize="9"
+        fontWeight="600"
+        fontFamily="system-ui, sans-serif"
+        letterSpacing="0.18em"
+      >
+        INNOVARE AD FUTURUM
+      </text>
+    </svg>
   );
 }
