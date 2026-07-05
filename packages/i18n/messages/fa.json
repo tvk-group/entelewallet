@@ -1,0 +1,342 @@
+{
+  "meta": {
+    "title": "EnteleWALLET Lite | Secure Wallet Dashboard for the EnteleKRON Ecosystem",
+    "description": "Connect, verify and monitor your EnteleKRON ecosystem wallet with EnteleWALLET Lite."
+  },
+  "brand": {
+    "name": "EnteleWALLET",
+    "lite": "EnteleWALLET Lite"
+  },
+  "nav": {
+    "home": "خانه",
+    "connect": "اتصال",
+    "overview": "نمای کلی",
+    "assets": "دارایی‌ها",
+    "transactions": "تراکنش‌ها",
+    "vesting": "وesting",
+    "claims": "مطالبات",
+    "security": "امنیت",
+    "transparency": "شفافیت",
+    "settings": "تنظیمات",
+    "account": "حساب",
+    "support": "پشتیبانی",
+    "roadmap": "نقشه راه",
+    "legal": "قانونی"
+  },
+  "common": {
+    "connectWallet": "اتصال کیف پول",
+    "disconnect": "قطع اتصال",
+    "verifyOwnership": "تأیید مالکیت",
+    "copyAddress": "Copy Address",
+    "copied": "Copied",
+    "viewExplorer": "View on Explorer",
+    "loading": "در حال بارگذاری…",
+    "error": "Error",
+    "retry": "Retry",
+    "learnMore": "Learn More",
+    "contactSupport": "Contact Support",
+    "pendingConfiguration": "Pending official configuration",
+    "pendingVerification": "Pending official verification",
+    "integrationPending": "Integration pending",
+    "noWalletConnected": "No wallet connected",
+    "connectToView": "Connect your wallet to view this page",
+    "goToConnect": "Go to Connect",
+    "createAccount": "Create Account",
+    "signIn": "Sign In",
+    "linkInvestorAccount": "Link Investor Account",
+    "openInvestorApp": "Open EnteleKRON Investor App",
+    "viewSecurityCenter": "View Security Center",
+    "openTransparencyCenter": "Open Transparency Center",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "language": "زبان"
+  },
+  "warnings": {
+    "liteNotice": "EnteleWALLET Lite connects to your existing wallet. It does not store seed phrases, private keys or custody funds.",
+    "signatureNotice": "Wallet verification signatures only prove wallet ownership. They do not authorize transfers, spending approvals, payments or blockchain transactions.",
+    "maliciousSignature": "A signature request that asks you to approve spending, or that does not clearly say this does not authorize a transaction, is not an EnteleWALLET verification request — do not sign it.",
+    "domainCheck": "Always verify official domains before connecting a wallet.",
+    "seedPhrase": "EnteleWALLET, EnteleKRON, TVK Group, TVK Labs, SOVRA, support staff, partners and moderators will never ask for seed phrases, private keys or recovery phrases."
+  },
+  "home": {
+    "heroTitle": "EnteleWALLET Lite",
+    "heroHeadline": "Connect, verify and monitor your EnteleKRON ecosystem wallet.",
+    "heroSubtitle": "A secure wallet-connected dashboard for ENK, SOVRA, EnergieMIND and future TVK Group ecosystem assets.",
+    "featureWalletVerification": "Wallet verification",
+    "featureAssetMonitoring": "Ecosystem asset monitoring",
+    "featureVestingClaims": "Vesting and claim readiness",
+    "featureAddressVerification": "Official address verification",
+    "featureSecurityFirst": "Security-first wallet access",
+    "featureRoadmap": "Future full wallet roadmap",
+    "roadmapBlock": "Full EnteleWALLET will be a future non-custodial wallet phase and requires security architecture, independent audits and legal review before private-key features are implemented."
+  },
+  "connect": {
+    "title": "اتصال Wallet",
+    "description": "Connect your existing wallet and verify ownership securely.",
+    "connectedAddress": "Connected Address",
+    "network": "Network",
+    "verificationStatus": "Verification Status",
+    "verifyPrompt": "Verify your wallet ownership with a safe SIWE signature. No gas fees. No transactions.",
+    "verifying": "Waiting for signature…",
+    "verified": "Wallet verified successfully",
+    "verificationFailed": "Verification failed. Please try again.",
+    "wrongNetwork": "Please switch to a supported network",
+    "unsupportedNetwork": "This network is not supported",
+    "walletConnectMissing": "WalletConnect is not configured. Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable.",
+    "walletConnectDevWarning": "WalletConnect Project ID is missing. WalletConnect wallets will be unavailable.",
+    "notLinked": "This wallet is verified but not yet linked to an EnteleWALLET or EnteleKRON account."
+  },
+  "overview": {
+    "title": "نمای کلی",
+    "description": "Your connected wallet dashboard and ecosystem status.",
+    "address": "Address",
+    "network": "Network",
+    "verification": "Verification",
+    "primaryWallet": "Primary Wallet",
+    "enkBalance": "ENK Balance",
+    "ecosystemAssets": "Ecosystem Assets",
+    "vestingStatus": "Vesting Status",
+    "claimStatus": "Claim Status",
+    "notVerified": "Not verified",
+    "notLinked": "No investor account linked"
+  },
+  "assets": {
+    "title": "دارایی‌ها",
+    "description": "View your ecosystem token balances.",
+    "balance": "Balance",
+    "network": "Network",
+    "contract": "Contract",
+    "symbol": "Symbol",
+    "failedToLoad": "Failed to load balance",
+    "nativeAsset": "Native asset",
+    "futureAsset": "Future TVK ecosystem asset"
+  },
+  "transactions": {
+    "title": "تراکنش‌ها",
+    "description": "Transaction history and explorer links.",
+    "indexingFuture": "Detailed transaction indexing will be added in a future release.",
+    "walletExplorer": "Wallet Explorer",
+    "tokenExplorer": "ENK Token Explorer",
+    "emptyState": "No transactions to display yet."
+  },
+  "vesting": {
+    "title": "وesting",
+    "description": "View your ENK vesting schedule and unlock status.",
+    "notLinked": "Link your verified EnteleKRON investor account to view vesting details.",
+    "learnAboutVesting": "Learn about vesting",
+    "allocationCategory": "Allocation Category",
+    "totalAllocated": "Total Allocated ENK",
+    "unlocked": "Unlocked ENK",
+    "locked": "Locked ENK",
+    "claimable": "Claimable ENK",
+    "cliff": "Cliff",
+    "vestingStart": "Vesting Start",
+    "nextUnlock": "Next Unlock",
+    "schedule": "Schedule"
+  },
+  "claims": {
+    "title": "مطالبات",
+    "description": "Token claim readiness and requirements.",
+    "notOpen": "Token claims are not open yet.",
+    "requirementsTitle": "Claim Requirements",
+    "reqVerifiedWallet": "Verified wallet",
+    "reqInvestorAccount": "Approved investor account",
+    "reqKyc": "Completed KYC/AML if required",
+    "reqAllocation": "Allocation confirmation",
+    "reqClaimContract": "Official claim contract live",
+    "reqClaimPeriod": "Claim period active"
+  },
+  "security": {
+    "title": "امنیت Center",
+    "description": "Security guidance, official domains and phishing protection.",
+    "officialDomains": "Official Domains",
+    "redirectDomains": "Redirect Domains",
+    "seedPhraseWarning": "Seed Phrase & Private Key Warning",
+    "signatureSafety": "Signature Safety",
+    "signatureSafetyDetail": "EnteleWALLET Lite signatures only verify wallet ownership. They do not transfer funds, approve spending, or cost gas.",
+    "walletConnectSafety": "WalletConnect Safety",
+    "walletConnectDetail": "Only connect through the official EnteleWALLET app. Verify the domain shown in your wallet matches app.entelewallet.com.",
+    "supportedWallets": "Supported Wallets",
+    "phishingProtection": "Phishing Protection",
+    "addressVerification": "Official Address Verification",
+    "reportConcern": "Report a Security Concern",
+    "futureRoadmap": "Future Security Roadmap"
+  },
+  "transparency": {
+    "title": "شفافیت Center",
+    "description": "Official EnteleKRON and EnteleWALLET transparency information.",
+    "externalLink": "View full Transparency Center on EnteleKRON",
+    "enkContract": "ENK Contract",
+    "treasurySafe": "Treasury Safe",
+    "presaleSafe": "Presale Safe",
+    "liquiditySafe": "Liquidity Safe",
+    "vestingSafe": "Vesting Safe",
+    "ecosystemReserveSafe": "Ecosystem Reserve Safe",
+    "governanceSafe": "Governance Safe"
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "description": "Manage connected wallets and verification settings.",
+    "connectedWallets": "Connected Wallets",
+    "verifiedWallets": "Verified Wallets",
+    "setPrimary": "Set as Primary",
+    "unlinkWallet": "Unlink Wallet",
+    "unlinkConfirm": "Are you sure you want to unlink this wallet?",
+    "lastVerified": "Last Verified",
+    "verificationHistory": "Verification History",
+    "securityWarnings": "Security Warnings"
+  },
+  "account": {
+    "title": "حساب",
+    "description": "Manage your EnteleWALLET account and linked wallets.",
+    "guest": "Guest",
+    "connectedWallet": "Connected Wallet",
+    "verifiedWallet": "Verified Wallet",
+    "accountCreated": "Account Created",
+    "accountLinked": "Account Linked",
+    "investorLinked": "Investor Linked",
+    "partnerLinked": "Partner Linked",
+    "linkedWallets": "Linked Wallets",
+    "noAccount": "No account linked yet"
+  },
+  "support": {
+    "title": "پشتیبانی",
+    "description": "Report security concerns or get help.",
+    "reportPhishing": "Report Phishing",
+    "reportFakeDomain": "Report Fake Domain",
+    "reportSuspiciousSignature": "Report Suspicious Signature Request",
+    "reportFakeSupport": "Report Fake Support Contact",
+    "generalSupport": "General Support Request",
+    "securityEmail": "Security Contact",
+    "supportEmail": "Support Contact",
+    "formSubject": "Subject",
+    "formMessage": "Message",
+    "formEmail": "Your Email",
+    "formSeverity": "Severity",
+    "formSubmit": "Submit Report",
+    "formSuccess": "Report submitted successfully",
+    "formFallback": "Email us directly at"
+  },
+  "roadmap": {
+    "title": "نقشه راه",
+    "description": "EnteleWALLET development phases and future features.",
+    "activeNow": "Active Now",
+    "activeWalletConnect": "Wallet connection",
+    "activeVerification": "Wallet verification",
+    "activeAssets": "Asset monitoring",
+    "activeTransparency": "Transparency links",
+    "activeSecurity": "Security center",
+    "nextPhase": "Next",
+    "nextInvestorLinking": "Investor account linking",
+    "nextVesting": "Vesting integration",
+    "nextClaims": "Claim readiness",
+    "nextTransactions": "Transaction indexing",
+    "futurePhase": "Future Only",
+    "futureCreateImport": "Create/import wallet",
+    "futureKeyStorage": "Encrypted local key storage",
+    "futureMobile": "Mobile app",
+    "futureExtension": "Browser extension",
+    "futureWalletConnectMode": "WalletConnect wallet mode",
+    "futureSmartAccounts": "Smart accounts",
+    "futureRecovery": "Recovery",
+    "futureSimulation": "Transaction simulation",
+    "futureAudits": "Audits",
+    "futureBugBounty": "Bug bounty",
+    "futureNotice": "Future phase — not active in EnteleWALLET Lite."
+  },
+  "legal": {
+    "title": "قانونی",
+    "description": "Important legal information about EnteleWALLET Lite.",
+    "disclaimer": "EnteleWALLET Lite is a wallet connection and verification interface. It does not custody funds, store seed phrases, provide investment advice, provide legal or tax advice, or guarantee token value, liquidity, listing or returns.",
+    "noCustody": "No Custody",
+    "noCustodyDetail": "EnteleWALLET Lite never holds or controls your funds.",
+    "noFinancialAdvice": "No Financial Advice",
+    "noFinancialAdviceDetail": "Nothing in this app constitutes investment, legal or tax advice.",
+    "noGuarantee": "No Guarantee",
+    "noGuaranteeDetail": "Token value, liquidity, listing and returns are not guaranteed.",
+    "userResponsibility": "User Responsibility",
+    "userResponsibilityDetail": "You are responsible for the security of your wallet and private keys.",
+    "cryptoRisk": "Crypto Risk",
+    "cryptoRiskDetail": "Crypto-assets involve significant risk including total loss of value.",
+    "jurisdiction": "Jurisdictional Restrictions",
+    "jurisdictionDetail": "Access may be restricted in certain jurisdictions.",
+    "futureFeatures": "Future Features",
+    "futureFeaturesDetail": "Future features are subject to legal and security review before activation."
+  },
+  "wallet": {
+    "status": {
+      "disconnected": "Disconnected",
+      "connectedUnverified": "Connected — Unverified",
+      "signaturePending": "Signature Pending",
+      "verified": "Verified",
+      "verificationFailed": "Verification Failed",
+      "wrongNetwork": "Wrong Network",
+      "unsupportedNetwork": "Unsupported Network",
+      "linkedToAccount": "Linked to Account",
+      "linkedToOtherAccount": "Linked to Other Account",
+      "revoked": "Revoked"
+    }
+  },
+  "pages": {
+    "connect": {
+      "title": "Connect Wallet | EnteleWALLET Lite",
+      "description": "Connect and verify your wallet securely with EnteleWALLET Lite."
+    },
+    "overview": {
+      "title": "Overview | EnteleWALLET Lite",
+      "description": "Your wallet overview dashboard for the EnteleKRON ecosystem."
+    },
+    "assets": {
+      "title": "Assets | EnteleWALLET Lite",
+      "description": "View ENK, ETH, USDT and ecosystem token balances."
+    },
+    "transactions": {
+      "title": "Transactions | EnteleWALLET Lite",
+      "description": "Transaction explorer links and history."
+    },
+    "vesting": {
+      "title": "Vesting | EnteleWALLET Lite",
+      "description": "View your ENK vesting schedule and unlock status."
+    },
+    "claims": {
+      "title": "Claims | EnteleWALLET Lite",
+      "description": "Token claim readiness and requirements."
+    },
+    "security": {
+      "title": "Security Center | EnteleWALLET Lite",
+      "description": "Security guidance and official domain verification."
+    },
+    "transparency": {
+      "title": "Transparency | EnteleWALLET Lite",
+      "description": "Official addresses and transparency information."
+    },
+    "settings": {
+      "title": "Settings | EnteleWALLET Lite",
+      "description": "Manage connected wallets and verification settings."
+    },
+    "account": {
+      "title": "Account | EnteleWALLET Lite",
+      "description": "Manage your account and linked wallets."
+    },
+    "support": {
+      "title": "Support | EnteleWALLET Lite",
+      "description": "Report security concerns or get help."
+    },
+    "roadmap": {
+      "title": "Roadmap | EnteleWALLET Lite",
+      "description": "EnteleWALLET development phases and future features."
+    },
+    "legal": {
+      "title": "Legal | EnteleWALLET Lite",
+      "description": "Legal and risk notice for EnteleWALLET Lite."
+    }
+  },
+  "footer": {
+    "copyright": "© TVK Group. All rights reserved.",
+    "security": "Security",
+    "legal": "Legal",
+    "support": "Support"
+  }
+}

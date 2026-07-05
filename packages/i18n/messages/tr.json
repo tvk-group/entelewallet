@@ -1,0 +1,342 @@
+{
+  "meta": {
+    "title": "EnteleWALLET Lite | EnteleKRON Ekosistemi için Güvenli Cüzdan Paneli",
+    "description": "EnteleWALLET Lite ile EnteleKRON ekosistem cüzdanınızı bağlayın, doğrulayın ve izleyin."
+  },
+  "brand": {
+    "name": "EnteleWALLET",
+    "lite": "EnteleWALLET Lite"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "connect": "Bağlan",
+    "overview": "Genel Bakış",
+    "assets": "Varlıklar",
+    "transactions": "İşlemler",
+    "vesting": "Hakediş",
+    "claims": "Talepler",
+    "security": "Güvenlik",
+    "transparency": "Şeffaflık",
+    "settings": "Ayarlar",
+    "account": "Hesap",
+    "support": "Destek",
+    "roadmap": "Yol Haritası",
+    "legal": "Yasal"
+  },
+  "common": {
+    "connectWallet": "Cüzdan Bağla",
+    "disconnect": "Bağlantıyı Kes",
+    "verifyOwnership": "Sahipliği Doğrula",
+    "copyAddress": "Adresi Kopyala",
+    "copied": "Kopyalandı",
+    "viewExplorer": "Explorer'da Görüntüle",
+    "loading": "Yükleniyor…",
+    "error": "Hata",
+    "retry": "Tekrar Dene",
+    "learnMore": "Daha Fazla Bilgi",
+    "contactSupport": "Destek ile İletişim",
+    "pendingConfiguration": "Resmi yapılandırma bekleniyor",
+    "pendingVerification": "Resmi doğrulama bekleniyor",
+    "integrationPending": "Entegrasyon bekleniyor",
+    "noWalletConnected": "Bağlı cüzdan yok",
+    "connectToView": "Bu sayfayı görüntülemek için cüzdanınızı bağlayın",
+    "goToConnect": "Bağlan'a Git",
+    "createAccount": "Hesap Oluştur",
+    "signIn": "Giriş Yap",
+    "linkInvestorAccount": "Yatırımcı Hesabını Bağla",
+    "openInvestorApp": "EnteleKRON Yatırımcı Uygulamasını Aç",
+    "viewSecurityCenter": "Güvenlik Merkezini Görüntüle",
+    "openTransparencyCenter": "Şeffaflık Merkezini Aç",
+    "confirm": "Onayla",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "back": "Geri",
+    "language": "Dil"
+  },
+  "warnings": {
+    "liteNotice": "EnteleWALLET Lite mevcut cüzdanınıza bağlanır. Seed phrase, özel anahtar veya fon saklamaz.",
+    "signatureNotice": "Cüzdan doğrulama imzaları yalnızca cüzdan sahipliğini kanıtlar. Transfer, harcama onayı, ödeme veya blockchain işlemi yetkilendirmez.",
+    "maliciousSignature": "Harcama onayı isteyen veya işlem yetkilendirmediğini açıkça belirtmeyen bir imza isteği EnteleWALLET doğrulama isteği değildir — imzalamayın.",
+    "domainCheck": "Cüzdan bağlamadan önce her zaman resmi alan adlarını doğrulayın.",
+    "seedPhrase": "EnteleWALLET, EnteleKRON, TVK Group, TVK Labs, SOVRA, destek personeli, ortaklar ve moderatörler asla seed phrase, özel anahtar veya kurtarma ifadesi istemez."
+  },
+  "home": {
+    "heroTitle": "EnteleWALLET Lite",
+    "heroHeadline": "EnteleKRON ekosistem cüzdanınızı bağlayın, doğrulayın ve izleyin.",
+    "heroSubtitle": "ENK, SOVRA, EnergieMIND ve gelecekteki TVK Group ekosistem varlıkları için güvenli bir cüzdan bağlantılı panel.",
+    "featureWalletVerification": "Cüzdan doğrulama",
+    "featureAssetMonitoring": "Ekosistem varlık izleme",
+    "featureVestingClaims": "Hakediş ve talep hazırlığı",
+    "featureAddressVerification": "Resmi adres doğrulama",
+    "featureSecurityFirst": "Güvenlik odaklı cüzdan erişimi",
+    "featureRoadmap": "Gelecek tam cüzdan yol haritası",
+    "roadmapBlock": "Tam EnteleWALLET gelecekteki bir non-custodial cüzdan aşaması olacaktır ve özel anahtar özellikleri uygulanmadan önce güvenlik mimarisi, bağımsız denetimler ve yasal inceleme gerektirir."
+  },
+  "connect": {
+    "title": "Cüzdan Bağla",
+    "description": "Mevcut cüzdanınızı bağlayın ve sahipliği güvenle doğrulayın.",
+    "connectedAddress": "Bağlı Adres",
+    "network": "Ağ",
+    "verificationStatus": "Doğrulama Durumu",
+    "verifyPrompt": "Güvenli bir SIWE imzası ile cüzdan sahipliğinizi doğrulayın. Gas ücreti yok. İşlem yok.",
+    "verifying": "İmza bekleniyor…",
+    "verified": "Cüzdan başarıyla doğrulandı",
+    "verificationFailed": "Doğrulama başarısız. Lütfen tekrar deneyin.",
+    "wrongNetwork": "Lütfen desteklenen bir ağa geçin",
+    "unsupportedNetwork": "Bu ağ desteklenmiyor",
+    "walletConnectMissing": "WalletConnect yapılandırılmamış.",
+    "walletConnectDevWarning": "WalletConnect Project ID eksik.",
+    "notLinked": "Bu cüzdan doğrulandı ancak henüz bir EnteleWALLET veya EnteleKRON hesabına bağlanmadı."
+  },
+  "overview": {
+    "title": "Cüzdan Genel Bakış",
+    "description": "Bağlı cüzdan paneliniz ve ekosistem durumu.",
+    "address": "Adres",
+    "network": "Ağ",
+    "verification": "Doğrulama",
+    "primaryWallet": "Birincil Cüzdan",
+    "enkBalance": "ENK Bakiyesi",
+    "ecosystemAssets": "Ekosistem Varlıkları",
+    "vestingStatus": "Hakediş Durumu",
+    "claimStatus": "Talep Durumu",
+    "notVerified": "Doğrulanmadı",
+    "notLinked": "Bağlı yatırımcı hesabı yok"
+  },
+  "assets": {
+    "title": "Varlıklar",
+    "description": "Ekosistem token bakiyelerinizi görüntüleyin.",
+    "balance": "Bakiye",
+    "network": "Ağ",
+    "contract": "Kontrat",
+    "symbol": "Sembol",
+    "failedToLoad": "Bakiye yüklenemedi",
+    "nativeAsset": "Yerel varlık",
+    "futureAsset": "Gelecek TVK ekosistem varlığı"
+  },
+  "transactions": {
+    "title": "İşlemler",
+    "description": "İşlem geçmişi ve explorer bağlantıları.",
+    "indexingFuture": "Detaylı işlem indeksleme gelecek sürümde eklenecektir.",
+    "walletExplorer": "Cüzdan Explorer",
+    "tokenExplorer": "ENK Token Explorer",
+    "emptyState": "Henüz gösterilecek işlem yok."
+  },
+  "vesting": {
+    "title": "Hakediş",
+    "description": "ENK hakediş programınızı ve kilit açma durumunu görüntüleyin.",
+    "notLinked": "Hakediş detaylarını görüntülemek için doğrulanmış EnteleKRON yatırımcı hesabınızı bağlayın.",
+    "learnAboutVesting": "Hakediş hakkında bilgi edinin",
+    "allocationCategory": "Tahsis Kategorisi",
+    "totalAllocated": "Toplam Tahsis Edilen ENK",
+    "unlocked": "Kilit Açılmış ENK",
+    "locked": "Kilitli ENK",
+    "claimable": "Talep Edilebilir ENK",
+    "cliff": "Cliff",
+    "vestingStart": "Hakediş Başlangıcı",
+    "nextUnlock": "Sonraki Kilit Açma",
+    "schedule": "Program"
+  },
+  "claims": {
+    "title": "Talepler",
+    "description": "Token talep hazırlığı ve gereksinimleri.",
+    "notOpen": "Token talepleri henüz açık değil.",
+    "requirementsTitle": "Talep Gereksinimleri",
+    "reqVerifiedWallet": "Doğrulanmış cüzdan",
+    "reqInvestorAccount": "Onaylı yatırımcı hesabı",
+    "reqKyc": "Gerekirse tamamlanmış KYC/AML",
+    "reqAllocation": "Tahsis onayı",
+    "reqClaimContract": "Resmi talep kontratı aktif",
+    "reqClaimPeriod": "Talep dönemi aktif"
+  },
+  "security": {
+    "title": "Güvenlik Merkezi",
+    "description": "Güvenlik rehberi, resmi alan adları ve oltalama koruması.",
+    "officialDomains": "Resmi Alan Adları",
+    "redirectDomains": "Yönlendirme Alan Adları",
+    "seedPhraseWarning": "Seed Phrase ve Özel Anahtar Uyarısı",
+    "signatureSafety": "İmza Güvenliği",
+    "signatureSafetyDetail": "EnteleWALLET Lite imzaları yalnızca cüzdan sahipliğini doğrular. Fon transferi, harcama onayı veya gas maliyeti oluşturmaz.",
+    "walletConnectSafety": "WalletConnect Güvenliği",
+    "walletConnectDetail": "Yalnızca resmi EnteleWALLET uygulaması üzerinden bağlanın.",
+    "supportedWallets": "Desteklenen Cüzdanlar",
+    "phishingProtection": "Oltalama Koruması",
+    "addressVerification": "Resmi Adres Doğrulama",
+    "reportConcern": "Güvenlik Endişesi Bildir",
+    "futureRoadmap": "Gelecek Güvenlik Yol Haritası"
+  },
+  "transparency": {
+    "title": "Şeffaflık Merkezi",
+    "description": "Resmi EnteleKRON ve EnteleWALLET şeffaflık bilgileri.",
+    "externalLink": "EnteleKRON'da tam Şeffaflık Merkezini görüntüle",
+    "enkContract": "ENK Kontratı",
+    "treasurySafe": "Hazine Safe",
+    "presaleSafe": "Ön Satış Safe",
+    "liquiditySafe": "Likidite Safe",
+    "vestingSafe": "Hakediş Safe",
+    "ecosystemReserveSafe": "Ekosistem Rezerv Safe",
+    "governanceSafe": "Yönetişim Safe"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "description": "Bağlı cüzdanları ve doğrulama ayarlarını yönetin.",
+    "connectedWallets": "Bağlı Cüzdanlar",
+    "verifiedWallets": "Doğrulanmış Cüzdanlar",
+    "setPrimary": "Birincil Olarak Ayarla",
+    "unlinkWallet": "Cüzdan Bağlantısını Kes",
+    "unlinkConfirm": "Bu cüzdanın bağlantısını kesmek istediğinizden emin misiniz?",
+    "lastVerified": "Son Doğrulama",
+    "verificationHistory": "Doğrulama Geçmişi",
+    "securityWarnings": "Güvenlik Uyarıları"
+  },
+  "account": {
+    "title": "Hesap",
+    "description": "EnteleWALLET hesabınızı ve bağlı cüzdanları yönetin.",
+    "guest": "Misafir",
+    "connectedWallet": "Bağlı Cüzdan",
+    "verifiedWallet": "Doğrulanmış Cüzdan",
+    "accountCreated": "Hesap Oluşturuldu",
+    "accountLinked": "Hesap Bağlandı",
+    "investorLinked": "Yatırımcı Bağlandı",
+    "partnerLinked": "Ortak Bağlandı",
+    "linkedWallets": "Bağlı Cüzdanlar",
+    "noAccount": "Henüz bağlı hesap yok"
+  },
+  "support": {
+    "title": "Destek",
+    "description": "Güvenlik endişelerini bildirin veya yardım alın.",
+    "reportPhishing": "Oltalama Bildir",
+    "reportFakeDomain": "Sahte Alan Adı Bildir",
+    "reportSuspiciousSignature": "Şüpheli İmza İsteği Bildir",
+    "reportFakeSupport": "Sahte Destek İletişimi Bildir",
+    "generalSupport": "Genel Destek Talebi",
+    "securityEmail": "Güvenlik İletişimi",
+    "supportEmail": "Destek İletişimi",
+    "formSubject": "Konu",
+    "formMessage": "Mesaj",
+    "formEmail": "E-posta Adresiniz",
+    "formSeverity": "Önem Derecesi",
+    "formSubmit": "Rapor Gönder",
+    "formSuccess": "Rapor başarıyla gönderildi",
+    "formFallback": "Doğrudan e-posta gönderin"
+  },
+  "roadmap": {
+    "title": "Yol Haritası",
+    "description": "EnteleWALLET geliştirme aşamaları ve gelecek özellikler.",
+    "activeNow": "Şu An Aktif",
+    "activeWalletConnect": "Cüzdan bağlantısı",
+    "activeVerification": "Cüzdan doğrulama",
+    "activeAssets": "Varlık izleme",
+    "activeTransparency": "Şeffaflık bağlantıları",
+    "activeSecurity": "Güvenlik merkezi",
+    "nextPhase": "Sonraki",
+    "nextInvestorLinking": "Yatırımcı hesabı bağlama",
+    "nextVesting": "Hakediş entegrasyonu",
+    "nextClaims": "Talep hazırlığı",
+    "nextTransactions": "İşlem indeksleme",
+    "futurePhase": "Yalnızca Gelecek",
+    "futureCreateImport": "Cüzdan oluşturma/içe aktarma",
+    "futureKeyStorage": "Şifreli yerel anahtar depolama",
+    "futureMobile": "Mobil uygulama",
+    "futureExtension": "Tarayıcı eklentisi",
+    "futureWalletConnectMode": "WalletConnect cüzdan modu",
+    "futureSmartAccounts": "Akıllı hesaplar",
+    "futureRecovery": "Kurtarma",
+    "futureSimulation": "İşlem simülasyonu",
+    "futureAudits": "Denetimler",
+    "futureBugBounty": "Bug bounty",
+    "futureNotice": "Gelecek aşama — EnteleWALLET Lite'da aktif değil."
+  },
+  "legal": {
+    "title": "Yasal ve Risk Bildirimi",
+    "description": "EnteleWALLET Lite hakkında önemli yasal bilgiler.",
+    "disclaimer": "EnteleWALLET Lite bir cüzdan bağlantı ve doğrulama arayüzüdür. Fon saklamaz, seed phrase depolamaz, yatırım tavsiyesi vermez, yasal veya vergi tavsiyesi vermez ve token değeri, likidite, listeleme veya getiri garantisi vermez.",
+    "noCustody": "Saklama Yok",
+    "noCustodyDetail": "EnteleWALLET Lite fonlarınızı asla tutmaz veya kontrol etmez.",
+    "noFinancialAdvice": "Finansal Tavsiye Yok",
+    "noFinancialAdviceDetail": "Bu uygulamadaki hiçbir şey yatırım, yasal veya vergi tavsiyesi oluşturmaz.",
+    "noGuarantee": "Garanti Yok",
+    "noGuaranteeDetail": "Token değeri, likidite, listeleme ve getiriler garanti edilmez.",
+    "userResponsibility": "Kullanıcı Sorumluluğu",
+    "userResponsibilityDetail": "Cüzdanınızın ve özel anahtarlarınızın güvenliğinden siz sorumlusunuz.",
+    "cryptoRisk": "Kripto Riski",
+    "cryptoRiskDetail": "Kripto varlıklar toplam değer kaybı dahil önemli risk içerir.",
+    "jurisdiction": "Yargı Kısıtlamaları",
+    "jurisdictionDetail": "Erişim belirli yargı bölgelerinde kısıtlanabilir.",
+    "futureFeatures": "Gelecek Özellikler",
+    "futureFeaturesDetail": "Gelecek özellikler etkinleştirilmeden önce yasal ve güvenlik incelemesine tabidir."
+  },
+  "wallet": {
+    "status": {
+      "disconnected": "Bağlı Değil",
+      "connectedUnverified": "Bağlı — Doğrulanmadı",
+      "signaturePending": "İmza Bekleniyor",
+      "verified": "Doğrulandı",
+      "verificationFailed": "Doğrulama Başarısız",
+      "wrongNetwork": "Yanlış Ağ",
+      "unsupportedNetwork": "Desteklenmeyen Ağ",
+      "linkedToAccount": "Hesaba Bağlı",
+      "linkedToOtherAccount": "Başka Hesaba Bağlı",
+      "revoked": "İptal Edildi"
+    }
+  },
+  "pages": {
+    "connect": {
+      "title": "Connect Wallet | EnteleWALLET Lite",
+      "description": "Connect and verify your wallet securely with EnteleWALLET Lite."
+    },
+    "overview": {
+      "title": "Overview | EnteleWALLET Lite",
+      "description": "Your wallet overview dashboard for the EnteleKRON ecosystem."
+    },
+    "assets": {
+      "title": "Assets | EnteleWALLET Lite",
+      "description": "View ENK, ETH, USDT and ecosystem token balances."
+    },
+    "transactions": {
+      "title": "Transactions | EnteleWALLET Lite",
+      "description": "Transaction explorer links and history."
+    },
+    "vesting": {
+      "title": "Vesting | EnteleWALLET Lite",
+      "description": "View your ENK vesting schedule and unlock status."
+    },
+    "claims": {
+      "title": "Claims | EnteleWALLET Lite",
+      "description": "Token claim readiness and requirements."
+    },
+    "security": {
+      "title": "Security Center | EnteleWALLET Lite",
+      "description": "Security guidance and official domain verification."
+    },
+    "transparency": {
+      "title": "Transparency | EnteleWALLET Lite",
+      "description": "Official addresses and transparency information."
+    },
+    "settings": {
+      "title": "Settings | EnteleWALLET Lite",
+      "description": "Manage connected wallets and verification settings."
+    },
+    "account": {
+      "title": "Account | EnteleWALLET Lite",
+      "description": "Manage your account and linked wallets."
+    },
+    "support": {
+      "title": "Support | EnteleWALLET Lite",
+      "description": "Report security concerns or get help."
+    },
+    "roadmap": {
+      "title": "Roadmap | EnteleWALLET Lite",
+      "description": "EnteleWALLET development phases and future features."
+    },
+    "legal": {
+      "title": "Legal | EnteleWALLET Lite",
+      "description": "Legal and risk notice for EnteleWALLET Lite."
+    }
+  },
+  "footer": {
+    "copyright": "© TVK Group. Tüm hakları saklıdır.",
+    "security": "Güvenlik",
+    "legal": "Yasal",
+    "support": "Destek"
+  }
+}

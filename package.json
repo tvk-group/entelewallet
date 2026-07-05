@@ -1,0 +1,27 @@
+{
+  "name": "entelewallet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EnteleWALLET Lite and future non-custodial wallet platform for the EnteleKRON ecosystem",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mjs}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mjs}\"",
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "security:check": "node scripts/security-check.mjs",
+    "test": "echo \"Tests placeholder — add test suite in future release\" && exit 0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@10.33.3",
+  "engines": {
+    "node": ">=20"
+  }
+}
