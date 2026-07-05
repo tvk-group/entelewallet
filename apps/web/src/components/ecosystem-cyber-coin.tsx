@@ -211,7 +211,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                   <div className="cyber-coin-face-inner">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/brand/tvk-labs-logo-transparent.png"
+                      src="/brand/tvk-labs-logo-coin-back-512.png"
                       alt=""
                       className="cyber-coin-logo-mark cyber-coin-logo-tvk"
                       draggable={false}
