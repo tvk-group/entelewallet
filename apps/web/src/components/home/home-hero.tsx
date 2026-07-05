@@ -45,7 +45,7 @@ export function HomeHero() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <WalletConnectButton size="lg" className="btn-primary-glow" />
+            <WalletConnectButton className="btn-primary-glow" />
             <Link href={ROUTES.security}>
               <Button variant="secondary" size="lg" className="glass-btn rounded-xl">
                 {t('common.securityCenter')}

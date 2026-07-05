@@ -9,16 +9,19 @@ import {
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { mainnet, base, sepolia } from 'wagmi/chains';
-import type { Config } from 'wagmi';
+import { createConfig, http, type Config } from 'wagmi';
 import { CANONICAL_APP_URL } from '@entelewallet/config';
 
-/** Required by RainbowKit when no real project ID is configured — WalletConnect is omitted from the wallet list. */
+/**
+ * RainbowKit requires a projectId string even when WalletConnect is disabled in the UI.
+ * This placeholder must never be used for live WalletConnect sessions.
+ */
 const PLACEHOLDER_PROJECT_ID = '00000000000000000000000000000000';
 
 export const walletConnectProjectId =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID?.trim() || '';
 
-/** WalletConnect / Reown Cloud project IDs are 32-character hex strings. */
+/** Reown Cloud project IDs are 32-character hex strings. */
 export function isValidWalletConnectProjectId(projectId: string): boolean {
   return /^[a-f0-9]{32}$/i.test(projectId);
 }
@@ -39,14 +42,19 @@ function walletConnectMetadata() {
   };
 }
 
-/** Honest wallet grouping — browser extensions + WalletConnect QR only. */
-export function buildEnteleWalletList(projectId: string): WalletList {
-  const wallets: WalletList = [
+/** Browser extensions only — used when WalletConnect is not configured. */
+function buildBrowserOnlyWalletList(): WalletList {
+  return [
     {
       groupName: 'Browser Wallets',
       wallets: [injectedWallet, metaMaskWallet, rabbyWallet, coinbaseWallet, okxWallet],
     },
   ];
+}
+
+/** Browser wallets + WalletConnect QR when a valid Reown project ID exists. */
+export function buildEnteleWalletList(projectId: string): WalletList {
+  const wallets = buildBrowserOnlyWalletList();
 
   if (isValidWalletConnectProjectId(projectId)) {
     wallets.push({
@@ -58,21 +66,60 @@ export function buildEnteleWalletList(projectId: string): WalletList {
   return wallets;
 }
 
-export function createEnteleWagmiConfig(): Config {
-  const projectId = isWalletConnectConfigured ? walletConnectProjectId : PLACEHOLDER_PROJECT_ID;
+function createBrowserOnlyFallbackConfig(): Config {
+  if (typeof window !== 'undefined') {
+    console.warn(
+      '[EnteleWALLET] WalletConnect unavailable — using browser-wallet-only fallback config.',
+    );
+  }
 
   return getDefaultConfig({
     appName: 'EnteleWALLET',
     appDescription:
       'EnteleWALLET Lite — connect and verify your wallet for the EnteleKRON ecosystem.',
     appUrl: CANONICAL_APP_URL,
-    projectId,
-    wallets: buildEnteleWalletList(walletConnectProjectId),
+    projectId: PLACEHOLDER_PROJECT_ID,
+    wallets: buildBrowserOnlyWalletList(),
     chains: [...enteleChains],
     ssr: true,
     multiInjectedProviderDiscovery: true,
-    walletConnectParameters: {
-      metadata: walletConnectMetadata(),
-    },
   });
+}
+
+export function createEnteleWagmiConfig(): Config {
+  if (!isWalletConnectConfigured && typeof window !== 'undefined') {
+    console.warn('Missing NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID');
+  }
+
+  try {
+    const wallets = buildEnteleWalletList(walletConnectProjectId);
+    const projectId = isWalletConnectConfigured ? walletConnectProjectId : PLACEHOLDER_PROJECT_ID;
+
+    return getDefaultConfig({
+      appName: 'EnteleWALLET',
+      appDescription:
+        'EnteleWALLET Lite — connect and verify your wallet for the EnteleKRON ecosystem.',
+      appUrl: CANONICAL_APP_URL,
+      projectId,
+      wallets,
+      chains: [...enteleChains],
+      ssr: true,
+      multiInjectedProviderDiscovery: true,
+      walletConnectParameters: isWalletConnectConfigured
+        ? { metadata: walletConnectMetadata() }
+        : undefined,
+    });
+  } catch (error) {
+    console.error('[EnteleWALLET] wagmi config error:', error);
+    try {
+      return createBrowserOnlyFallbackConfig();
+    } catch (fallbackError) {
+      console.error('[EnteleWALLET] wagmi fallback config error:', fallbackError);
+      return createConfig({
+        chains: [mainnet],
+        transports: { [mainnet.id]: http() },
+        ssr: true,
+      });
+    }
+  }
 }

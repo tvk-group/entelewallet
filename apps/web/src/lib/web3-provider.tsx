@@ -3,7 +3,7 @@
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { ReactNode, useState, createContext, useContext, useMemo } from 'react';
+import { ReactNode, useState, createContext, useContext, useMemo, useEffect } from 'react';
 import { useI18n } from '@/lib/i18n-context';
 import type { LocaleCode } from '@entelewallet/i18n';
 import { CANONICAL_APP_URL } from '@entelewallet/config';
@@ -47,6 +47,36 @@ const RK_LOCALE_MAP: Partial<Record<LocaleCode, string>> = {
   ru: 'ru', ja: 'ja', ko: 'ko', zh: 'zh', tr: 'tr', ar: 'ar',
 };
 
+function WalletRejectionHandler({ setConnectError }: { setConnectError: (e: string | null) => void }) {
+  useEffect(() => {
+    const onRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      const message =
+        reason instanceof Error
+          ? reason.message
+          : typeof reason === 'string'
+            ? reason
+            : 'Wallet connection failed';
+
+      if (
+        message.toLowerCase().includes('wallet') ||
+        message.toLowerCase().includes('connect') ||
+        message.toLowerCase().includes('user rejected') ||
+        message.toLowerCase().includes('provider')
+      ) {
+        console.error('[EnteleWALLET] Unhandled wallet rejection:', reason);
+        setConnectError(message);
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', onRejection);
+    return () => window.removeEventListener('unhandledrejection', onRejection);
+  }, [setConnectError]);
+
+  return null;
+}
+
 function RainbowKitInner({ children }: { children: ReactNode }) {
   const { locale } = useI18n();
   const [uiState, setUiState] = useState<WalletUiState>('idle');
@@ -55,6 +85,7 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
 
   return (
     <WalletUiContext.Provider value={{ uiState, setUiState, connectError, setConnectError }}>
+      <WalletRejectionHandler setConnectError={setConnectError} />
       <RainbowKitProvider
         locale={rkLocale}
         appInfo={{
@@ -76,9 +107,9 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
   );
 }
 
-export function Web3Provider({ children }: { children: ReactNode }) {
+/** Wallet provider stack — RainbowKit + wagmi + React Query only. */
+export function WalletProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
-
   const config = useMemo(() => createEnteleWagmiConfig(), []);
 
   return (
@@ -89,5 +120,8 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     </WagmiProvider>
   );
 }
+
+/** @deprecated Use WalletProviders — kept for existing imports. */
+export const Web3Provider = WalletProviders;
 
 export { isWalletConnectConfigured, walletConnectProjectId };

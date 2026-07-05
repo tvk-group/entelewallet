@@ -55,7 +55,7 @@ export function Header() {
 
         <div className="flex items-center gap-2.5">
           <LanguageSelector className="hidden sm:inline-flex" />
-          <WalletConnectButton size="sm" className="btn-primary-glow !rounded-xl" />
+          <WalletConnectButton className="btn-primary-glow !rounded-xl" />
           <button
             type="button"
             className="rounded-xl border border-white/60 bg-white/70 p-2.5 text-slate-600 shadow-sm backdrop-blur hover:bg-white xl:hidden"

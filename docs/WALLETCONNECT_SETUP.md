@@ -12,7 +12,13 @@ NEXT_PUBLIC_APP_URL=https://entelewallet.app
 NEXT_PUBLIC_APP_ALIAS_URL=https://app.entelewallet.com
 ```
 
-The project ID must be a **32-character hex string** from [Reown Cloud](https://cloud.reown.com) (formerly WalletConnect Cloud).
+The project ID must be a **32-character hex string** from [Reown Cloud](https://cloud.reown.com) (formerly WalletConnect Cloud). Set as:
+
+```bash
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_reown_project_id
+```
+
+See also: [WALLETCONNECT_DEBUG.md](./WALLETCONNECT_DEBUG.md)
 
 If the variable is missing:
 
