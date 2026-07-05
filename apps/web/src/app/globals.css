@@ -631,7 +631,6 @@ reown-modal {
   height: 92%;
   border-radius: 50%;
   overflow: hidden;
-  transform: rotateY(180deg);
 }
 
 .cyber-coin-logo-tvk {
@@ -640,6 +639,7 @@ reown-modal {
   object-fit: contain;
   border-radius: 50%;
   background: #0b1524;
+  transform: scaleX(-1);
 }
 
 .cyber-coin-face-plate {
