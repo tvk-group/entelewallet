@@ -1,3 +1,5 @@
 packages:
   - "apps/*"
   - "packages/*"
+patchedDependencies:
+  '@rainbow-me/rainbowkit@2.2.11': patches/@rainbow-me__rainbowkit@2.2.11.patch

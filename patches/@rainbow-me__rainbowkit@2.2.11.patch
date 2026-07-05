@@ -1,0 +1,28 @@
+diff --git a/dist/index.js b/dist/index.js
+index 7915116f6f41bbb6b2941f1fbc989669c8498d4c..d463567f0c797b9303e8df531bdd22e28ccee75b 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -4365,8 +4365,23 @@ function QRCode({
+   size: sizeProp = 200,
+   uri
+ }) {
++  if (!uri || typeof uri !== "string" || uri.trim().length === 0) {
++    return /* @__PURE__ */ React51.createElement(
++      Box,
++      {
++        alignItems: "center",
++        display: "flex",
++        justifyContent: "center",
++        style: { minHeight: sizeProp, minWidth: sizeProp }
++      },
++      /* @__PURE__ */ React51.createElement(Text, { color: "modalTextSecondary", size: "14" }, "Preparing QR code…")
++    );
++  }
+   const padding = "20";
+   const size = sizeProp - Number.parseInt(padding, 10) * 2;
++  if (size <= 0) {
++    return null;
++  }
+   const resolvedLogoUrl = useAsyncImage(logoUrl);
+   return /* @__PURE__ */ React51.createElement(
+     Box,

@@ -1,92 +1,83 @@
 # WalletConnect Debug Log — EnteleWALLET Lite
 
-This document tracks WalletConnect runtime issues, reproduction steps, and fixes applied.
+## Confirmed root cause (2026-07-05)
 
-## Reported production issue
+**Symptom:** Full-page error UI — “Something went wrong” — when clicking **WalletConnect** in the RainbowKit modal.
 
-| Field | Value |
+**Exact console error:**
+```text
+Error: invalid border=0
+    at encodeQR (qr/index.js)
+    at Module.create (cuer/_dist/QrCode.js)
+    at Root (cuer/_dist/Cuer.js)
+    at QRCode (RainbowKit dist/index.js)
+```
+
+**What happens:**
+1. User clicks WalletConnect in the RainbowKit wallet list.
+2. RainbowKit renders its inline `QRCode` component (via `cuer`).
+3. `cuer@0.0.3` calls `encodeQR(..., { border: 0 })` to build a raw QR grid for SVG rendering.
+4. **`qr@0.6.0`** (resolved via `cuer`'s `qr: ~0` range) now rejects `border <= 0` and throws `invalid border=0`.
+5. React 19 treats this as an uncaught render error → `global-error.tsx` shows the recovery screen.
+
+This is **not** primarily a missing Reown Project ID issue (though that must still be configured in production). It is a **`cuer` ↔ `qr@0.6.0` dependency incompatibility** triggered whenever RainbowKit tries to render a WalletConnect QR code.
+
+**Secondary issue:** `WalletDebugPanel` caused hydration mismatch (`origin: —` on server vs `http://localhost:3000` on client). Fixed with client-only mount.
+
+---
+
+## Fix applied
+
+### 1. Pin `qr` to `0.5.5` (`package.json` → `pnpm.overrides`)
+`qr@0.6.0` rejects `border: 0`, which `cuer` (RainbowKit's QR renderer) requires. Pinning restores compatibility.
+
+### 2. RainbowKit patch (`patches/@rainbow-me__rainbowkit@2.2.11.patch`)
+Guard `QRCode` when `uri` is empty — show “Preparing QR code…” instead of crashing.
+
+### 3. Hydration fix
+`WalletDebugPanel` only renders after client mount.
+
+### 4. Error boundaries
+`app/error.tsx`, `app/global-error.tsx`, `WalletErrorBoundary` — recovery UI instead of raw Next.js crash.
+
+### 5. Standard ConnectButton only
+No custom connector `connectAsync()` calls in production UI.
+
+---
+
+## Reproduction (local)
+
+```bash
+pnpm install
+cd apps/web && NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=<reown_project_id> pnpm dev
+node ../../scripts/test-walletconnect-click.mjs
+```
+
+Or manually:
+1. Open `/connect`
+2. Accept safety checkbox
+3. Click Connect Wallet → WalletConnect
+
+---
+
+## Production checklist
+
+| Check | Action |
 |-------|--------|
-| **Symptom** | Full-page crash: `Application error: a client-side exception has occurred` |
-| **When** | User clicks **Connect Wallet → WalletConnect** |
-| **Domains** | `https://app.entelewallet.com`, `https://entelewallet.app` |
-| **Stack** | RainbowKit + wagmi + viem (Reown AppKit **not** used in connect path) |
+| Reown Project ID | Set `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in Vercel (32-char hex from [Reown Cloud](https://cloud.reown.com)) |
+| Allowlist | Add `https://entelewallet.app`, `https://app.entelewallet.com`, `https://wallet.entelekron.io` |
+| Patch + override deployed | Ensure `pnpm install` runs in CI/Vercel so RainbowKit patch and `qr@0.5.5` override apply |
+| Redeploy | Required after env or patch changes |
 
-## Most likely causes (investigated)
+---
 
-| Cause | Status / fix |
-|-------|----------------|
-| Missing or invalid `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Config now validates 32-char hex Reown ID; WalletConnect hidden when invalid; app loads with browser-only fallback |
-| Custom wallet button / manual `connectAsync()` | **Removed** — standard `<ConnectButton />` only |
-| Unhandled promise rejection on connect | Global `unhandledrejection` handler in `WalletProviders` |
-| No error boundary | Added `app/error.tsx`, `app/global-error.tsx`, `WalletErrorBoundary` |
-| Broken connector with placeholder project ID | WalletConnect wallet omitted from list unless valid Reown project ID |
-| SSR / hydration (`window`, `localStorage`) | Wallet UI gated with `mounted` state before render |
+## Browser QA
 
-## Local reproduction
-
-```bash
-cd /workspace
-pnpm --filter @entelewallet/web dev
-```
-
-1. Open `http://localhost:3000`
-2. Open DevTools → Console
-3. Click **Connect Wallet** → **WalletConnect** (Mobile / QR group)
-4. For isolated test: `http://localhost:3000/dev/walletconnect-test` (development only)
-
-### Environment checklist
-
-```bash
-# .env.local
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=<32-char hex from Reown Cloud>
-NEXT_PUBLIC_APP_URL=https://entelewallet.app
-```
-
-Project ID source: **[Reown Cloud](https://cloud.reown.com)** (formerly WalletConnect Cloud).
-
-### Reown allowlist (required)
-
-```
-https://entelewallet.app
-https://app.entelewallet.com
-https://wallet.entelekron.io
-http://localhost:3000
-http://localhost:3001
-```
-
-## Fix applied (branch `cursor/fix-walletconnect-crash-487b`)
-
-1. **`apps/web/src/components/wallet-connect-button.tsx`** — Standard RainbowKit `ConnectButton` only; safety modal before first connect; no manual connector calls
-2. **`apps/web/src/lib/wagmi.ts`** — Safe config with try/catch fallback; WalletConnect only when valid Reown project ID
-3. **`apps/web/src/lib/web3-provider.tsx`** — `WalletProviders` + unhandled rejection handler; `reconnectOnMount={false}`
-4. **`apps/web/src/components/wallet-error-boundary.tsx`** — Wallet UI error boundary
-5. **`apps/web/src/app/error.tsx`**, **`global-error.tsx`** — App-wide error UI (no default Next.js white screen)
-6. **`apps/web/src/app/dev/walletconnect-test/page.tsx`** — Dev-only isolated ConnectButton test
-7. **Removed** `wallet-connect-test-button.tsx` (direct `connectAsync` could crash app)
-
-## Expected behavior after fix
-
-| Scenario | Expected |
-|----------|----------|
-| Missing project ID | App loads; WalletConnect option hidden; dev warning shown |
-| Invalid project ID | Same as missing |
-| Valid project ID + allowed origin | WalletConnect QR opens via RainbowKit |
-| User rejects connection | Error message; app does not crash |
-| WalletConnect / modal failure | Error card or error boundary; refresh available |
-| Wrong origin (dev) | Warning in debug panel; connection may fail gracefully |
-
-## Browser QA matrix
-
-| Browser | Connect Wallet | WalletConnect QR | Notes |
-|---------|----------------|------------------|-------|
-| Chrome desktop | ☐ | ☐ | |
-| Firefox desktop | ☐ | ☐ | |
-| Edge desktop | ☐ | ☐ | |
-| Safari iPhone | ☐ | ☐ | deep link / WC mobile |
-| Chrome Android | ☐ | ☐ | |
-
-## Vercel deployment
-
-Ensure `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is set for **Production**, **Preview**, and **Development** environments, then redeploy.
+| Browser | Connect Wallet | WalletConnect (no crash) | QR appears |
+|---------|----------------|--------------------------|------------|
+| Chrome desktop | ☐ | ☐ | ☐ |
+| Firefox desktop | ☐ | ☐ | ☐ |
+| Edge desktop | ☐ | ☐ | ☐ |
+| Safari iPhone | ☐ | ☐ | ☐ |
 
 Support: security@entelewallet.com
