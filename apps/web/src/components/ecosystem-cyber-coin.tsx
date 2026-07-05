@@ -42,53 +42,58 @@ interface EcosystemCyberCoinProps {
 const COIN_EDGE_COUNT = 36;
 const HUB_SIZE = 1000;
 const HUB_CENTER = HUB_SIZE / 2;
+/** Coin radius in viewBox units (324px coin in ~960px hub). */
+const COIN_VIEWBOX_R = 168;
 
 const ORBIT_RINGS = [
-  { radius: 0.56, offsetDeg: 0 },
-  { radius: 0.64, offsetDeg: 12 },
-  { radius: 0.72, offsetDeg: -8 },
+  { radius: 0.58, offsetDeg: 0, duration: 88 },
+  { radius: 0.68, offsetDeg: 25.7, duration: 104 },
+  { radius: 0.78, offsetDeg: 0, duration: 120 },
+  { radius: 0.88, offsetDeg: 25.7, duration: 136 },
 ] as const;
 
-type OrbitNode = {
-  name: string;
-  x: number;
-  y: number;
-  angle: number;
+type RingLayout = {
+  ringIndex: number;
   radius: number;
-  ring: number;
-  delay: number;
+  offsetDeg: number;
+  duration: number;
+  reverse: boolean;
+  modules: string[];
 };
 
-function distributeModules(modules: readonly string[]): OrbitNode[] {
+function buildRingLayouts(modules: readonly string[]): RingLayout[] {
   const perRing = Math.ceil(modules.length / ORBIT_RINGS.length);
-  const nodes: OrbitNode[] = [];
-
-  modules.forEach((name, index) => {
-    const ringIndex = Math.min(Math.floor(index / perRing), ORBIT_RINGS.length - 1);
-    const indexInRing = index - ringIndex * perRing;
-    const countInRing = Math.min(perRing, modules.length - ringIndex * perRing);
-    const ring = ORBIT_RINGS[ringIndex];
-    const angleDeg = ring.offsetDeg + (360 / countInRing) * indexInRing;
-    const angleRad = (angleDeg * Math.PI) / 180;
-    const r = ring.radius * (HUB_SIZE / 2);
-    const x = HUB_CENTER + Math.cos(angleRad) * r;
-    const y = HUB_CENTER + Math.sin(angleRad) * r;
-
-    nodes.push({
-      name,
-      x,
-      y,
-      angle: angleDeg,
-      radius: ring.radius,
-      ring: ringIndex,
-      delay: (index * 0.17) % 4,
-    });
-  });
-
-  return nodes;
+  return ORBIT_RINGS.map((ring, ringIndex) => ({
+    ringIndex,
+    radius: ring.radius,
+    offsetDeg: ring.offsetDeg,
+    duration: ring.duration,
+    reverse: ringIndex % 2 === 1,
+    modules: modules.slice(ringIndex * perRing, ringIndex * perRing + perRing),
+  }));
 }
 
-const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
+function polarToHub(angleDeg: number, radiusFrac: number) {
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const r = radiusFrac * (HUB_SIZE / 2);
+  return {
+    x: HUB_CENTER + Math.cos(angleRad) * r,
+    y: HUB_CENTER + Math.sin(angleRad) * r,
+  };
+}
+
+function signalEndpoints(angleDeg: number, radiusFrac: number) {
+  const outer = polarToHub(angleDeg, radiusFrac);
+  const angleRad = (angleDeg * Math.PI) / 180;
+  return {
+    x1: HUB_CENTER + Math.cos(angleRad) * COIN_VIEWBOX_R,
+    y1: HUB_CENTER + Math.sin(angleRad) * COIN_VIEWBOX_R,
+    x2: outer.x,
+    y2: outer.y,
+  };
+}
+
+const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
   left: `${6 + ((i * 31) % 88)}%`,
   top: `${8 + ((i * 47) % 84)}%`,
   delay: `${(i * 0.33) % 5}s`,
@@ -96,13 +101,120 @@ const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
   size: 1 + (i % 3),
 }));
 
+function OrbitRing({
+  layout,
+  globalOffset,
+}: {
+  layout: RingLayout;
+  globalOffset: number;
+}) {
+  const count = layout.modules.length;
+  const step = 360 / count;
+
+  return (
+    <div
+      className={cn('cyber-orbit-ring-layer', layout.reverse && 'cyber-orbit-ring-layer-reverse')}
+      style={
+        {
+          '--orbit-duration': `${layout.duration}s`,
+          '--orbit-radius': `${layout.radius * 50}%`,
+        } as React.CSSProperties
+      }
+    >
+      <svg
+        className="cyber-orbit-ring-signals absolute inset-0 h-full w-full"
+        viewBox={`0 0 ${HUB_SIZE} ${HUB_SIZE}`}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden
+      >
+        {layout.modules.map((name, i) => {
+          const angle = layout.offsetDeg + step * i;
+          const { x1, y1, x2, y2 } = signalEndpoints(angle, layout.radius);
+          const delay = ((globalOffset + i) * 0.19) % 3.5;
+
+          return (
+            <g key={name}>
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                className="cyber-signal-line"
+                style={{ animationDelay: `${delay}s` }}
+              />
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                className="cyber-signal-pulse"
+                style={{ animationDelay: `${delay + 0.35}s` }}
+              />
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                className="cyber-signal-glow"
+                style={{ animationDelay: `${delay + 0.15}s` }}
+              />
+              <circle r="5" fill="#a5f3fc" className="cyber-signal-node">
+                <animateMotion
+                  dur={`${2.2 + (i % 3) * 0.5}s`}
+                  repeatCount="indefinite"
+                  path={`M ${x1} ${y1} L ${x2} ${y2}`}
+                  begin={`${delay}s`}
+                />
+              </circle>
+            </g>
+          );
+        })}
+      </svg>
+
+      {layout.modules.map((name, i) => {
+        const angle = layout.offsetDeg + step * i;
+        const delay = ((globalOffset + i) * 0.19) % 3.5;
+
+        return (
+          <div
+            key={name}
+            className={cn(
+              'cyber-orbit-chip-slot',
+              layout.ringIndex <= 1 ? 'cyber-orbit-chip-slot-inner' : 'cyber-orbit-chip-slot-outer',
+            )}
+            style={{ transform: `rotate(${angle}deg) translateY(calc(-1 * var(--orbit-radius)))` }}
+          >
+            <div
+              className="cyber-orbit-chip"
+              style={
+                {
+                  transform: `translate(-50%, -50%) rotate(${-angle}deg)`,
+                } as React.CSSProperties
+              }
+            >
+              <span
+                className="cyber-orbit-chip-label"
+                style={{ animationDelay: `${delay}s` }}
+              >
+                {name}
+              </span>
+              <span className="cyber-orbit-chip-ping" style={{ animationDelay: `${delay}s` }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
-  const nodes = useMemo(() => distributeModules(ECOSYSTEM_MODULES), []);
+  const ringLayouts = useMemo(() => buildRingLayouts(ECOSYSTEM_MODULES), []);
+  let moduleOffset = 0;
 
   return (
     <div
       className={cn(
-        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-[690px] overflow-hidden rounded-[2rem]',
+        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-[960px] overflow-hidden rounded-[2rem]',
         className,
       )}
       aria-hidden
@@ -127,75 +239,36 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
         />
       ))}
 
-      <div className="cyber-ecosystem-hub relative z-10 mx-auto aspect-square w-full max-w-[690px]">
+      <div className="cyber-ecosystem-hub relative z-10 mx-auto aspect-square w-full max-w-[960px]">
         <svg
           className="cyber-signal-layer absolute inset-0 h-full w-full"
           viewBox={`0 0 ${HUB_SIZE} ${HUB_SIZE}`}
           preserveAspectRatio="xMidYMid meet"
+          aria-hidden
         >
           <defs>
             <radialGradient id="signal-core-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.35)" />
+              <stop offset="0%" stopColor="rgba(34,211,238,0.45)" />
               <stop offset="100%" stopColor="rgba(34,211,238,0)" />
             </radialGradient>
-            <linearGradient id="signal-line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.05)" />
-              <stop offset="45%" stopColor="rgba(34,211,238,0.45)" />
-              <stop offset="100%" stopColor="rgba(167,139,250,0.65)" />
-            </linearGradient>
           </defs>
-
-          <circle cx={HUB_CENTER} cy={HUB_CENTER} r="200" fill="url(#signal-core-glow)" />
-
+          <circle cx={HUB_CENTER} cy={HUB_CENTER} r={COIN_VIEWBOX_R + 24} fill="url(#signal-core-glow)" />
           {ORBIT_RINGS.map((ring, i) => (
             <ellipse
               key={i}
               cx={HUB_CENTER}
               cy={HUB_CENTER}
               rx={ring.radius * (HUB_SIZE / 2)}
-              ry={ring.radius * (HUB_SIZE / 2) * 0.92}
+              ry={ring.radius * (HUB_SIZE / 2) * 0.96}
               className="cyber-orbit-track"
               style={{ animationDelay: `${i * 0.8}s` }}
             />
-          ))}
-
-          {nodes.map((node, i) => (
-            <g key={node.name}>
-              <line
-                x1={HUB_CENTER}
-                y1={HUB_CENTER}
-                x2={node.x}
-                y2={node.y}
-                className="cyber-signal-line"
-                style={{ animationDelay: `${node.delay}s` }}
-              />
-              <line
-                x1={HUB_CENTER}
-                y1={HUB_CENTER}
-                x2={node.x}
-                y2={node.y}
-                className="cyber-signal-pulse"
-                style={{ animationDelay: `${node.delay + 0.4}s` }}
-              />
-              <circle r="3" fill="#67e8f9" className="cyber-signal-node">
-                <animateMotion
-                  dur={`${2.8 + (i % 3) * 0.6}s`}
-                  repeatCount="indefinite"
-                  path={`M ${HUB_CENTER} ${HUB_CENTER} L ${node.x} ${node.y}`}
-                  begin={`${node.delay}s`}
-                />
-              </circle>
-            </g>
           ))}
         </svg>
 
         <div
           className="cyber-coin-stage"
-          style={
-            {
-              '--coin-diameter': 'min(360px, 52vw)',
-            } as React.CSSProperties
-          }
+          style={{ '--coin-diameter': 'min(324px, 34vw)' } as React.CSSProperties}
         >
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
@@ -227,23 +300,13 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           <div className="cyber-coin-reflection" />
         </div>
 
-        {nodes.map((node) => (
-          <div
-            key={node.name}
-            className="cyber-orbit-chip"
-            style={
-              {
-                left: `${(node.x / HUB_SIZE) * 100}%`,
-                top: `${(node.y / HUB_SIZE) * 100}%`,
-                '--chip-delay': `${node.delay}s`,
-                '--chip-angle': `${node.angle}deg`,
-              } as React.CSSProperties
-            }
-          >
-            <span className="cyber-orbit-chip-label">{node.name}</span>
-            <span className="cyber-orbit-chip-ping" />
-          </div>
-        ))}
+        {ringLayouts.map((layout) => {
+          const offset = moduleOffset;
+          moduleOffset += layout.modules.length;
+          return (
+            <OrbitRing key={layout.ringIndex} layout={layout} globalOffset={offset} />
+          );
+        })}
       </div>
     </div>
   );
