@@ -22,7 +22,7 @@ import { ROUTES } from '@entelewallet/config';
 import { getPublicOfficialAddresses } from '@entelewallet/config';
 import { Button, LtrSpan } from '@entelewallet/ui';
 import { cn } from '@entelewallet/utils';
-import { EcosystemHyperfield } from '@/components/ecosystem-hyperfield';
+import { EcosystemCyberCoin } from '@/components/ecosystem-cyber-coin';
 
 function PremiumCard({
   children,
@@ -148,7 +148,7 @@ export function HomeEcosystemMap() {
       <div className="relative z-10 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.ecosystemTitle')}</h2>
         <p className="mx-auto mt-2 max-w-2xl text-slate-600">{t('home.ecosystemSubtitle')}</p>
-        <EcosystemHyperfield nodes={ECOSYSTEM_NODES} />
+        <EcosystemCyberCoin modules={ECOSYSTEM_NODES} />
       </div>
     </section>
   );

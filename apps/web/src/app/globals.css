@@ -212,36 +212,18 @@ reown-modal {
   .ecosystem-orbit .orbit-core,
   .wallet-animation,
   .animated-orb,
-  .hyperfield-nebula,
-  .hyperfield-star,
-  .hyperfield-ring-a,
-  .hyperfield-ring-b,
-  .hyperfield-ring-c,
-  .hyperfield-core-halo,
-  .hyperfield-core,
-  .hyperfield-node {
+  .cyber-coin-spinner,
+  .cyber-coin-shine,
+  .cyber-coin-halo,
+  .cyber-coin-particle,
+  .cyber-coin-scanline {
     animation: none !important;
-    transform: none !important;
   }
   .ecosystem-orbit .orbit-core {
     transform: translate(-50%, -50%) !important;
   }
-  .hyperfield-node {
-    transform: rotate(var(--node-angle)) translateY(calc(-1 * min(38vw, 220px))) rotate(calc(-1 * var(--node-angle))) !important;
-  }
-  @media (min-width: 1024px) {
-    .hyperfield-node {
-      transform: rotate(var(--node-angle)) translateY(calc(-1 * min(42vw, 260px))) rotate(calc(-1 * var(--node-angle))) !important;
-    }
-  }
-  .hyperfield-ring-a {
-    transform: rotateX(68deg) rotateZ(120deg) !important;
-  }
-  .hyperfield-ring-b {
-    transform: rotateX(52deg) rotateY(38deg) rotateZ(90deg) !important;
-  }
-  .hyperfield-ring-c {
-    transform: rotateX(78deg) rotateY(-28deg) rotateZ(-60deg) !important;
+  .cyber-coin-spinner {
+    transform: rotateX(14deg) rotateY(35deg) !important;
   }
 }
 
@@ -311,187 +293,204 @@ reown-modal {
   50% { opacity: 0.85; transform: scale(1.05); }
 }
 
-/* Ecosystem hyperfield — 4D tesseract projection */
-.ecosystem-hyperfield {
+/* Ecosystem cyber coin — EnteleKRON ENK token (ETH-style 3D coin) */
+.ecosystem-cyber-coin {
   contain: paint;
-  background: radial-gradient(ellipse 120% 80% at 50% 50%, #0f172a 0%, #020617 55%, #000 100%);
+  min-height: 420px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
   box-shadow:
-    0 0 0 1px rgba(34, 211, 238, 0.12) inset,
-    0 24px 80px rgba(15, 23, 42, 0.45),
-    0 0 120px rgba(124, 58, 237, 0.08);
+    0 0 0 1px rgba(30, 64, 175, 0.15) inset,
+    0 24px 64px rgba(15, 23, 42, 0.35);
 }
 
-.hyperfield-void {
-  background: radial-gradient(circle at 50% 45%, rgba(34, 211, 238, 0.06) 0%, transparent 55%);
-}
-
-.hyperfield-nebula {
+.cyber-coin-bg {
   background:
-    radial-gradient(ellipse 40% 30% at 20% 30%, rgba(124, 58, 237, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 35% 25% at 80% 70%, rgba(14, 165, 233, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(79, 70, 229, 0.1) 0%, transparent 60%);
-  animation: hyperfieldNebula 18s ease-in-out infinite;
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(14, 165, 233, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 35%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #020617 0%, #0f172a 45%, #020617 100%);
 }
 
-.hyperfield-grid {
-  background-image:
-    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 75%);
+.cyber-coin-hexgrid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z M28 36 L56 52 L56 84 L28 100 L0 84 L0 52 Z' fill='none' stroke='rgba(34,211,238,0.08)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 56px 100px;
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 15%, transparent 72%);
+  opacity: 0.9;
 }
 
-.hyperfield-star {
-  opacity: 0.35;
-  animation: hyperfieldTwinkle 4s ease-in-out infinite;
+.cyber-coin-floor-glow {
+  background: radial-gradient(ellipse 55% 35% at 50% 100%, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.hyperfield-stage {
-  perspective: 900px;
+.cyber-coin-scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(34, 211, 238, 0.025) 3px,
+    rgba(34, 211, 238, 0.025) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.cyber-coin-particle {
+  opacity: 0;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.8);
+  animation: cyberCoinParticle 5s ease-in-out infinite;
+}
+
+.cyber-coin-stage {
+  position: relative;
+  width: min(280px, 72vw);
+  height: min(280px, 72vw);
+  perspective: 1100px;
+  perspective-origin: 50% 42%;
+}
+
+.cyber-coin-spinner {
+  position: absolute;
+  inset: 0;
   transform-style: preserve-3d;
+  transform: rotateX(14deg);
+  animation: cyberCoinSpin 9s linear infinite;
 }
 
-.hyperfield-rings {
-  transform-style: preserve-3d;
-}
-
-.hyperfield-ring {
+.cyber-coin-body {
   position: absolute;
   left: 50%;
   top: 50%;
-  border-radius: 50%;
-  border: 1px solid rgba(34, 211, 238, 0.25);
+  width: 216px;
+  height: 216px;
+  margin: -108px 0 0 -108px;
   transform-style: preserve-3d;
-  box-shadow: 0 0 24px rgba(34, 211, 238, 0.08);
 }
 
-.hyperfield-ring-a {
-  width: min(72vw, 420px);
-  height: min(72vw, 420px);
-  margin: calc(min(72vw, 420px) / -2) 0 0 calc(min(72vw, 420px) / -2);
-  transform: rotateX(68deg) rotateZ(0deg);
-  animation: hyperfieldRingA 22s linear infinite;
-}
-
-.hyperfield-ring-b {
-  width: min(58vw, 340px);
-  height: min(58vw, 340px);
-  margin: calc(min(58vw, 340px) / -2) 0 0 calc(min(58vw, 340px) / -2);
-  border-color: rgba(129, 140, 248, 0.35);
-  transform: rotateX(52deg) rotateY(38deg) rotateZ(45deg);
-  animation: hyperfieldRingB 16s linear infinite reverse;
-}
-
-.hyperfield-ring-c {
-  width: min(44vw, 260px);
-  height: min(44vw, 260px);
-  margin: calc(min(44vw, 260px) / -2) 0 0 calc(min(44vw, 260px) / -2);
-  border-color: rgba(192, 132, 252, 0.3);
-  transform: rotateX(78deg) rotateY(-28deg) rotateZ(-30deg);
-  animation: hyperfieldRingC 28s linear infinite;
-}
-
-.hyperfield-core-wrap {
-  z-index: 20;
-}
-
-.hyperfield-core-halo {
+.cyber-coin-face {
   position: absolute;
-  inset: -28px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, rgba(124, 58, 237, 0.15) 40%, transparent 70%);
-  animation: hyperfieldCoreHalo 4s ease-in-out infinite;
-}
-
-.hyperfield-core {
-  position: relative;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4.5rem;
-  height: 4.5rem;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #67e8f9 0%, #0891b2 35%, #4c1d95 100%);
+  backface-visibility: hidden;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 32% 22%, rgba(255, 255, 255, 0.38) 0%, transparent 42%),
+    radial-gradient(circle at 70% 78%, rgba(15, 23, 42, 0.55) 0%, transparent 45%),
+    linear-gradient(145deg, #1e3a8a 0%, #0e7490 38%, #312e81 72%, #1e1b4b 100%);
+  border: 2px solid rgba(103, 232, 249, 0.45);
   box-shadow:
-    0 0 40px rgba(34, 211, 238, 0.55),
-    0 0 80px rgba(124, 58, 237, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.25) inset;
-  animation: hyperfieldCorePulse 3.5s ease-in-out infinite;
+    0 0 48px rgba(34, 211, 238, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+    inset 0 -12px 24px rgba(15, 23, 42, 0.35);
 }
 
-.hyperfield-node {
-  z-index: 15;
-  transform: rotate(var(--node-angle)) translateY(calc(-1 * min(38vw, 220px))) rotate(calc(-1 * var(--node-angle)));
-  animation: hyperfieldNodeFloat 6s ease-in-out infinite;
-  animation-delay: var(--node-delay);
+.cyber-coin-face-front {
+  transform: translateZ(14px);
 }
 
-.hyperfield-node-label {
-  display: inline-block;
-  white-space: nowrap;
-  border-radius: 9999px;
-  border: 1px solid rgba(34, 211, 238, 0.35);
-  background: rgba(15, 23, 42, 0.72);
-  padding: 0.35rem 0.75rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(224, 242, 254, 0.95);
-  backdrop-filter: blur(8px);
+.cyber-coin-face-back {
+  transform: rotateY(180deg) translateZ(14px);
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255, 255, 255, 0.28) 0%, transparent 42%),
+    linear-gradient(215deg, #312e81 0%, #0e7490 45%, #1e3a8a 100%);
+}
+
+.cyber-coin-face-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cyber-coin-shine {
+  position: absolute;
+  inset: -20%;
+  z-index: 1;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 255, 255, 0.38) 50%,
+    rgba(255, 255, 255, 0.18) 52%,
+    transparent 62%
+  );
+  animation: cyberCoinShine 3.5s ease-in-out infinite;
+}
+
+.cyber-coin-edge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 19px;
+  height: 28px;
+  margin: -14px 0 0 -9.5px;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  background: linear-gradient(
+    to bottom,
+    #164e63 0%,
+    #0891b2 22%,
+    #1e3a8a 50%,
+    #0891b2 78%,
+    #164e63 100%
+  );
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.15);
+}
+
+.cyber-coin-halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 130%;
+  height: 130%;
+  margin: -65% 0 0 -65%;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.2);
   box-shadow:
-    0 0 16px rgba(34, 211, 238, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    0 0 60px rgba(34, 211, 238, 0.25),
+    0 0 120px rgba(124, 58, 237, 0.15);
+  animation: cyberCoinHalo 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
-@media (min-width: 640px) {
-  .hyperfield-node-label {
-    font-size: 0.75rem;
-    padding: 0.45rem 0.9rem;
-  }
+.cyber-coin-reflection {
+  position: absolute;
+  left: 50%;
+  bottom: -8%;
+  z-index: -1;
+  width: 55%;
+  height: 12%;
+  margin-left: -27.5%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0.7;
 }
 
-@media (min-width: 1024px) {
-  .hyperfield-node {
-    transform: rotate(var(--node-angle)) translateY(calc(-1 * min(42vw, 260px))) rotate(calc(-1 * var(--node-angle)));
-  }
+@keyframes cyberCoinSpin {
+  from { transform: rotateX(14deg) rotateY(0deg); }
+  to { transform: rotateX(14deg) rotateY(360deg); }
 }
 
-@keyframes hyperfieldNebula {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.03); }
+@keyframes cyberCoinShine {
+  0%, 100% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
+  15% { opacity: 1; }
+  45% { transform: translateX(120%) rotate(12deg); opacity: 0; }
 }
 
-@keyframes hyperfieldTwinkle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.4); }
+@keyframes cyberCoinHalo {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
 }
 
-@keyframes hyperfieldRingA {
-  from { transform: rotateX(68deg) rotateZ(0deg); }
-  to { transform: rotateX(68deg) rotateZ(360deg); }
-}
-
-@keyframes hyperfieldRingB {
-  from { transform: rotateX(52deg) rotateY(38deg) rotateZ(45deg); }
-  to { transform: rotateX(52deg) rotateY(38deg) rotateZ(405deg); }
-}
-
-@keyframes hyperfieldRingC {
-  from { transform: rotateX(78deg) rotateY(-28deg) rotateZ(-30deg); }
-  to { transform: rotateX(78deg) rotateY(-28deg) rotateZ(330deg); }
-}
-
-@keyframes hyperfieldCoreHalo {
-  0%, 100% { opacity: 0.7; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.12); }
-}
-
-@keyframes hyperfieldCorePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes hyperfieldNodeFloat {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.15); }
+@keyframes cyberCoinParticle {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+  20% { opacity: 0.85; }
+  50% { opacity: 0.4; transform: translateY(-24px) scale(1); }
+  80% { opacity: 0; }
 }
