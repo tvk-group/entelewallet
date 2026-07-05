@@ -58,21 +58,24 @@ export const ROUTES = {
   support: '/support',
   roadmap: '/roadmap',
   legal: '/legal',
+  install: '/install',
+  ecosystem: '/ecosystem',
+  officialDomains: '/official-domains',
+  privacy: '/privacy',
+  terms: '/terms',
+  risk: '/risk',
+  disclaimer: '/disclaimer',
 } as const;
 
 export const NAV_ROUTES = [
   { href: ROUTES.overview, key: 'nav.overview' },
   { href: ROUTES.assets, key: 'nav.assets' },
-  { href: ROUTES.transactions, key: 'nav.transactions' },
   { href: ROUTES.vesting, key: 'nav.vesting' },
   { href: ROUTES.claims, key: 'nav.claims' },
   { href: ROUTES.transparency, key: 'nav.transparency' },
   { href: ROUTES.security, key: 'nav.security' },
-  { href: ROUTES.settings, key: 'nav.settings' },
-  { href: ROUTES.account, key: 'nav.account' },
   { href: ROUTES.support, key: 'nav.support' },
-  { href: ROUTES.roadmap, key: 'nav.roadmap' },
-  { href: ROUTES.legal, key: 'nav.legal' },
+  { href: ROUTES.install, key: 'nav.install' },
 ] as const;
 
 export const SEO_DEFAULT = {

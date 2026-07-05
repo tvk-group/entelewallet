@@ -4,3 +4,4 @@ export { Card, CardHeader, CardTitle, CardDescription, CardContent } from './car
 export { Badge } from './badge';
 export { Alert } from './alert';
 export { LtrSpan } from './ltr-span';
+export { brand, statusColors } from './theme/brand';

@@ -1,73 +1,106 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
-import { CONTACT } from '@entelewallet/config';
+import { getActiveSupportProvider, SUPPORT_CONFIG } from '@entelewallet/config';
 import { Card, CardContent, CardHeader, CardTitle, Button, Alert, LtrSpan } from '@entelewallet/ui';
 
+const REPORT_TYPES = [
+  { value: 'report_phishing', key: 'support.reportPhishing' },
+  { value: 'report_fake_domain', key: 'support.reportFakeDomain' },
+  { value: 'report_suspicious_signature', key: 'support.reportSuspiciousSignature' },
+  { value: 'report_fake_support', key: 'support.reportFakeSupport' },
+  { value: 'wallet_connection_issue', key: 'support.walletConnectionIssue' },
+  { value: 'transparency_concern', key: 'support.transparencyConcern' },
+  { value: 'general_support', key: 'support.generalSupport' },
+] as const;
+
 export default function SupportPage() {
+  return (
+    <Suspense fallback={null}>
+      <SupportPageContent />
+    </Suspense>
+  );
+}
+
+function SupportPageContent() {
   const t = useT();
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ email: '', subject: '', message: '', severity: 'medium' });
+  const params = useSearchParams();
+  const provider = getActiveSupportProvider();
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [form, setForm] = useState({
+    reportType: params.get('type') === 'phishing' ? 'report_phishing' : params.get('type') === 'domain' ? 'report_fake_domain' : 'general_support',
+    email: '',
+    subject: '',
+    message: '',
+    severity: 'medium' as const,
+  });
 
-  const reportTypes = [
-    t('support.reportPhishing'),
-    t('support.reportFakeDomain'),
-    t('support.reportSuspiciousSignature'),
-    t('support.reportFakeSupport'),
-    t('support.generalSupport'),
-  ];
-
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Supabase not configured — use mailto fallback
-    const mailto = `mailto:${CONTACT.security}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(form.message)}`;
-    window.location.href = mailto;
-    setSubmitted(true);
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/support/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reportType: form.reportType,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          severity: form.severity,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('success');
+      } else if (data.mailto) {
+        window.location.href = data.mailto;
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
   }
 
   return (
     <PageLayout title={t('support.title')} description={t('support.description')}>
       <div className="mx-auto max-w-2xl space-y-6">
-        <div className="grid gap-3 sm:grid-cols-2">
-          {reportTypes.map((type) => (
-            <Card key={type}>
-              <CardContent className="p-4 text-sm font-medium text-slate-700">{type}</CardContent>
-            </Card>
-          ))}
-        </div>
+        <Alert variant="warning">{t('support.channelNotice')}</Alert>
+
+        <p className="text-xs text-slate-500">
+          {provider === 'supabase' ? t('support.providerSupabase') : t('support.providerMailto')}
+        </p>
 
         <Card>
           <CardHeader>
             <CardTitle>{t('support.generalSupport')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4 space-y-1 text-sm text-slate-600">
-              <p>
-                {t('support.securityEmail')}:{' '}
-                <LtrSpan>
-                  <a href={`mailto:${CONTACT.security}`} className="text-cyan-700">
-                    {CONTACT.security}
-                  </a>
-                </LtrSpan>
-              </p>
-              <p>
-                {t('support.supportEmail')}:{' '}
-                <LtrSpan>
-                  <a href={`mailto:${CONTACT.support}`} className="text-cyan-700">
-                    {CONTACT.support}
-                  </a>
-                </LtrSpan>
-              </p>
-            </div>
-
-            {submitted ? (
+            {status === 'success' ? (
               <Alert variant="info">{t('support.formSuccess')}</Alert>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t('support.formEmail')}</label>
+                  <label className="text-sm font-medium">{t('support.formType')}</label>
+                  <select
+                    value={form.reportType}
+                    onChange={(e) => setForm({ ...form, reportType: e.target.value })}
+                    className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                  >
+                    {REPORT_TYPES.map((rt) => (
+                      <option key={rt.value} value={rt.value}>
+                        {t(rt.key)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">{t('support.formEmail')}</label>
                   <input
                     type="email"
                     required
@@ -77,7 +110,7 @@ export default function SupportPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t('support.formSubject')}</label>
+                  <label className="text-sm font-medium">{t('support.formSubject')}</label>
                   <input
                     type="text"
                     required
@@ -87,19 +120,36 @@ export default function SupportPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700">{t('support.formMessage')}</label>
+                  <label className="text-sm font-medium">{t('support.formMessage')}</label>
                   <textarea
                     required
-                    rows={4}
+                    rows={5}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                   />
                 </div>
-                <Button type="submit">{t('support.formSubmit')}</Button>
-                <p className="text-xs text-slate-400">{t('support.formFallback')} {CONTACT.security}</p>
+                <Button type="submit" disabled={status === 'loading'}>
+                  {t('support.formSubmit')}
+                </Button>
+                {status === 'error' && (
+                  <Alert variant="error">{t('support.formError')}</Alert>
+                )}
               </form>
             )}
+
+            <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-100 pt-6">
+              <a href={`mailto:${SUPPORT_CONFIG.securityEmail}`}>
+                <Button variant="outline" size="sm">
+                  {t('support.emailSecurity')}
+                </Button>
+              </a>
+              <a href={`mailto:${SUPPORT_CONFIG.supportEmail}`}>
+                <Button variant="ghost" size="sm">
+                  {t('support.emailSupport')}
+                </Button>
+              </a>
+            </div>
           </CardContent>
         </Card>
       </div>

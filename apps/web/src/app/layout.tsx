@@ -9,8 +9,13 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://app.entelewallet.com'),
   title: SEO_DEFAULT.title,
   description: SEO_DEFAULT.description,
+  applicationName: 'EnteleWALLET',
+  appleWebApp: { capable: true, title: 'EnteleWALLET' },
+  themeColor: '#0ea5e9',
+  manifest: '/manifest.webmanifest',
   openGraph: {
     title: SEO_DEFAULT.title,
     description: SEO_DEFAULT.description,
