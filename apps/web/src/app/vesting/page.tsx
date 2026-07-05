@@ -16,7 +16,15 @@ export default function VestingPage() {
         <CardContent className="space-y-4 p-8 text-center">
           <p className="text-slate-600">{t('vesting.notLinked')}</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Button variant="primary">{t('common.linkInvestorAccount')}</Button>
+            <a
+              href={DOMAIN_CONFIG.investorAppDashboard}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="primary" className="gap-2">
+                {t('common.linkInvestorAccount')} <ExternalLink className="h-4 w-4" />
+              </Button>
+            </a>
             <a href={DOMAIN_CONFIG.investorApp} target="_blank" rel="noopener noreferrer">
               <Button variant="secondary" className="gap-2">
                 {t('common.openInvestorApp')} <ExternalLink className="h-4 w-4" />

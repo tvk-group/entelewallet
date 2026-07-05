@@ -34,6 +34,8 @@ export const DOMAIN_CONFIG = {
   entelekron: process.env.NEXT_PUBLIC_ENTELEKRON_URL || 'https://entelekron.io',
   transparency: 'https://entelekron.io/transparency',
   investorApp: 'https://entelekron.app',
+  /** Investor portal sign-in and wallet linking (EnteleKRON PWA dashboard). */
+  investorAppDashboard: 'https://entelekron.app/dashboard',
 } as const;
 
 /** @deprecated Use officialAddresses.ts — kept for backward compat */
