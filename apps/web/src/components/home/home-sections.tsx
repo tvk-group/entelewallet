@@ -22,6 +22,7 @@ import { ROUTES } from '@entelewallet/config';
 import { getPublicOfficialAddresses } from '@entelewallet/config';
 import { Button, LtrSpan } from '@entelewallet/ui';
 import { cn } from '@entelewallet/utils';
+import { EcosystemHyperfield } from '@/components/ecosystem-hyperfield';
 
 function PremiumCard({
   children,
@@ -147,31 +148,7 @@ export function HomeEcosystemMap() {
       <div className="relative z-10 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.ecosystemTitle')}</h2>
         <p className="mx-auto mt-2 max-w-2xl text-slate-600">{t('home.ecosystemSubtitle')}</p>
-        <div className="ecosystem-orbit-container relative mx-auto mt-10 aspect-square w-full max-w-[320px] overflow-hidden rounded-3xl border border-white/60 bg-white/40 sm:max-w-[420px]">
-          <ul className="flex h-full flex-wrap content-center justify-center gap-2 p-6 lg:hidden">
-            {ECOSYSTEM_NODES.map((node) => (
-              <li
-                key={node}
-                className="rounded-full border border-slate-200/80 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
-              >
-                {node}
-              </li>
-            ))}
-          </ul>
-          <div className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block">
-            <div
-              className="ecosystem-orbit relative mx-auto h-full w-full"
-              style={{ '--orbit-radius': 'clamp(56px, 32%, 110px)' } as React.CSSProperties}
-            >
-              <div className="orbit-core">ENK</div>
-              {ECOSYSTEM_NODES.map((item, i) => (
-                <span key={item} className="orbit-node" style={{ '--i': i } as React.CSSProperties}>
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        <EcosystemHyperfield nodes={ECOSYSTEM_NODES} />
       </div>
     </section>
   );

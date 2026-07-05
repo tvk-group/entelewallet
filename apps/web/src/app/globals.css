@@ -211,12 +211,37 @@ reown-modal {
   .ecosystem-orbit .orbit-node,
   .ecosystem-orbit .orbit-core,
   .wallet-animation,
-  .animated-orb {
+  .animated-orb,
+  .hyperfield-nebula,
+  .hyperfield-star,
+  .hyperfield-ring-a,
+  .hyperfield-ring-b,
+  .hyperfield-ring-c,
+  .hyperfield-core-halo,
+  .hyperfield-core,
+  .hyperfield-node {
     animation: none !important;
     transform: none !important;
   }
   .ecosystem-orbit .orbit-core {
     transform: translate(-50%, -50%) !important;
+  }
+  .hyperfield-node {
+    transform: rotate(var(--node-angle)) translateY(calc(-1 * min(38vw, 220px))) rotate(calc(-1 * var(--node-angle))) !important;
+  }
+  @media (min-width: 1024px) {
+    .hyperfield-node {
+      transform: rotate(var(--node-angle)) translateY(calc(-1 * min(42vw, 260px))) rotate(calc(-1 * var(--node-angle))) !important;
+    }
+  }
+  .hyperfield-ring-a {
+    transform: rotateX(68deg) rotateZ(120deg) !important;
+  }
+  .hyperfield-ring-b {
+    transform: rotateX(52deg) rotateY(38deg) rotateZ(90deg) !important;
+  }
+  .hyperfield-ring-c {
+    transform: rotateX(78deg) rotateY(-28deg) rotateZ(-60deg) !important;
   }
 }
 
@@ -284,4 +309,189 @@ reown-modal {
 @keyframes orbDrift {
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 0.85; transform: scale(1.05); }
+}
+
+/* Ecosystem hyperfield — 4D tesseract projection */
+.ecosystem-hyperfield {
+  contain: paint;
+  background: radial-gradient(ellipse 120% 80% at 50% 50%, #0f172a 0%, #020617 55%, #000 100%);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.12) inset,
+    0 24px 80px rgba(15, 23, 42, 0.45),
+    0 0 120px rgba(124, 58, 237, 0.08);
+}
+
+.hyperfield-void {
+  background: radial-gradient(circle at 50% 45%, rgba(34, 211, 238, 0.06) 0%, transparent 55%);
+}
+
+.hyperfield-nebula {
+  background:
+    radial-gradient(ellipse 40% 30% at 20% 30%, rgba(124, 58, 237, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 25% at 80% 70%, rgba(14, 165, 233, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(79, 70, 229, 0.1) 0%, transparent 60%);
+  animation: hyperfieldNebula 18s ease-in-out infinite;
+}
+
+.hyperfield-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 75%);
+}
+
+.hyperfield-star {
+  opacity: 0.35;
+  animation: hyperfieldTwinkle 4s ease-in-out infinite;
+}
+
+.hyperfield-stage {
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.hyperfield-rings {
+  transform-style: preserve-3d;
+}
+
+.hyperfield-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  transform-style: preserve-3d;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.08);
+}
+
+.hyperfield-ring-a {
+  width: min(72vw, 420px);
+  height: min(72vw, 420px);
+  margin: calc(min(72vw, 420px) / -2) 0 0 calc(min(72vw, 420px) / -2);
+  transform: rotateX(68deg) rotateZ(0deg);
+  animation: hyperfieldRingA 22s linear infinite;
+}
+
+.hyperfield-ring-b {
+  width: min(58vw, 340px);
+  height: min(58vw, 340px);
+  margin: calc(min(58vw, 340px) / -2) 0 0 calc(min(58vw, 340px) / -2);
+  border-color: rgba(129, 140, 248, 0.35);
+  transform: rotateX(52deg) rotateY(38deg) rotateZ(45deg);
+  animation: hyperfieldRingB 16s linear infinite reverse;
+}
+
+.hyperfield-ring-c {
+  width: min(44vw, 260px);
+  height: min(44vw, 260px);
+  margin: calc(min(44vw, 260px) / -2) 0 0 calc(min(44vw, 260px) / -2);
+  border-color: rgba(192, 132, 252, 0.3);
+  transform: rotateX(78deg) rotateY(-28deg) rotateZ(-30deg);
+  animation: hyperfieldRingC 28s linear infinite;
+}
+
+.hyperfield-core-wrap {
+  z-index: 20;
+}
+
+.hyperfield-core-halo {
+  position: absolute;
+  inset: -28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, rgba(124, 58, 237, 0.15) 40%, transparent 70%);
+  animation: hyperfieldCoreHalo 4s ease-in-out infinite;
+}
+
+.hyperfield-core {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #67e8f9 0%, #0891b2 35%, #4c1d95 100%);
+  box-shadow:
+    0 0 40px rgba(34, 211, 238, 0.55),
+    0 0 80px rgba(124, 58, 237, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+  animation: hyperfieldCorePulse 3.5s ease-in-out infinite;
+}
+
+.hyperfield-node {
+  z-index: 15;
+  transform: rotate(var(--node-angle)) translateY(calc(-1 * min(38vw, 220px))) rotate(calc(-1 * var(--node-angle)));
+  animation: hyperfieldNodeFloat 6s ease-in-out infinite;
+  animation-delay: var(--node-delay);
+}
+
+.hyperfield-node-label {
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: rgba(15, 23, 42, 0.72);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(224, 242, 254, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 16px rgba(34, 211, 238, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+@media (min-width: 640px) {
+  .hyperfield-node-label {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hyperfield-node {
+    transform: rotate(var(--node-angle)) translateY(calc(-1 * min(42vw, 260px))) rotate(calc(-1 * var(--node-angle)));
+  }
+}
+
+@keyframes hyperfieldNebula {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+@keyframes hyperfieldTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.4); }
+}
+
+@keyframes hyperfieldRingA {
+  from { transform: rotateX(68deg) rotateZ(0deg); }
+  to { transform: rotateX(68deg) rotateZ(360deg); }
+}
+
+@keyframes hyperfieldRingB {
+  from { transform: rotateX(52deg) rotateY(38deg) rotateZ(45deg); }
+  to { transform: rotateX(52deg) rotateY(38deg) rotateZ(405deg); }
+}
+
+@keyframes hyperfieldRingC {
+  from { transform: rotateX(78deg) rotateY(-28deg) rotateZ(-30deg); }
+  to { transform: rotateX(78deg) rotateY(-28deg) rotateZ(330deg); }
+}
+
+@keyframes hyperfieldCoreHalo {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes hyperfieldCorePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes hyperfieldNodeFloat {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
 }
