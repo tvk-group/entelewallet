@@ -136,6 +136,8 @@
     "noticeRisk": "Digital assets involve significant risk. EnteleWALLET does not guarantee token value, liquidity, listing or returns.",
     "noticeUnderstand": "Never sign messages you do not understand.",
     "connecting": "Connecting wallet…",
+    "continueConnect": "Continue to Connect Wallet",
+    "resetWalletState": "Reset wallet connection state",
     "connectionFailed": "Wallet connection failed",
     "walletRejected": "Wallet rejected the connection request",
     "noWalletDetected": "No wallet detected in this browser",

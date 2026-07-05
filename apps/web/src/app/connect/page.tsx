@@ -2,7 +2,7 @@
 
 import { PageLayout } from '@/components/page-layout';
 import { PreConnectSafetyPanel } from '@/components/pre-connect-safety';
-import { WalletConnectButton } from '@/components/wallet-connect-button';
+import { WalletConnectButton, ResetWalletUiButton } from '@/components/wallet-connect-button';
 import { WalletConnectionAlerts } from '@/components/wallet-connection-alerts';
 import { WalletVerification } from '@/components/wallet-verification';
 import { SignatureWarningBanner, SecurityBanner } from '@/components/security-banner';
@@ -22,6 +22,10 @@ export default function ConnectPage() {
         <PreConnectSafetyPanel onAckChange={setCanConnect} />
 
         <WalletConnectionAlerts />
+
+        <div className="flex justify-end">
+          <ResetWalletUiButton />
+        </div>
 
         <SecurityBanner />
 
