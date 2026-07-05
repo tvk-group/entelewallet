@@ -1,38 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
+import { ECOSYSTEM_MODULE_LABELS } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 
-export const ECOSYSTEM_MODULES = [
-  'SOVRA',
-  'EnergieMIND ENM',
-  'EnteleWALLET',
-  'EnteleSCAN',
-  'EnteleLINK',
-  'EnteleLEDGER',
-  'EnteleCLOS',
-  'EnteleVAULT',
-  'TVKWALLET',
-  'TVK ID',
-  'TVK CyberLab',
-  'GraphVAULT',
-  'ChronoSEAL',
-  'KRON Payment Systems',
-  'KRON Ecosystem Assets',
-  'ALVINA',
-  'Ava Sante',
-  'Ava Sentient',
-  'Cerebthra',
-  'Cognethra',
-  'Sentient Signals',
-  'eKRON',
-  'SoviKRON',
-  'AlviKRON',
-  'MineKRON',
-  'WarpKRON',
-  'PuppyKRON',
-  'PuriKRON',
-] as const;
+export { ECOSYSTEM_MODULE_LABELS as ECOSYSTEM_MODULES } from '@entelewallet/config';
 
 interface EcosystemCyberCoinProps {
   className?: string;
@@ -111,7 +83,7 @@ const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
-  const chipPlacements = useMemo(() => layoutChipsOrganically(ECOSYSTEM_MODULES), []);
+  const chipPlacements = useMemo(() => layoutChipsOrganically(ECOSYSTEM_MODULE_LABELS), []);
 
   return (
     <div className={cn('ecosystem-cyber-coin relative mx-auto mt-8 w-full', className)} aria-hidden>
