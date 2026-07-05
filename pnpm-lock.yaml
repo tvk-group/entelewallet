@@ -4,6 +4,14 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  qr: 0.5.5
+
+patchedDependencies:
+  '@rainbow-me/rainbowkit@2.2.11':
+    hash: 599b8662245e4fe203711cbd248e35030388cd1425f3afdc1f93671af3199786
+    path: patches/@rainbow-me__rainbowkit@2.2.11.patch
+
 importers:
 
   .:
@@ -11,6 +19,9 @@ importers:
       '@types/node':
         specifier: ^22.10.0
         version: 22.20.0
+      playwright:
+        specifier: 1.49.0
+        version: 1.49.0
       prettier:
         specifier: ^3.4.2
         version: 3.9.4
@@ -49,7 +60,7 @@ importers:
         version: link:../../packages/wallet-core
       '@rainbow-me/rainbowkit':
         specifier: ^2.2.2
-        version: 2.2.11(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.3)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.101.2)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(bufferutil@4.1.0)(react@19.2.7)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))
+        version: 2.2.11(patch_hash=599b8662245e4fe203711cbd248e35030388cd1425f3afdc1f93671af3199786)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.3)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.101.2)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(bufferutil@4.1.0)(react@19.2.7)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))
       '@tanstack/react-query':
         specifier: ^5.62.8
         version: 5.101.2(react@19.2.7)
@@ -2372,6 +2383,11 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -3060,6 +3076,16 @@ packages:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
 
+  playwright-core@1.49.0:
+    resolution: {integrity: sha512-R+3KKTQF3npy5GTiKH/T+kdhoJfJojjHESR1YEWhYuEKRVfVaxH3+4+GvXE5xyCngCxhxnykk0Vlah9v8fs3jA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.49.0:
+    resolution: {integrity: sha512-eKpmys0UFDnfNb3vfsf8Vx2LEOtflgRebl0Im2eQQnYMA4Aqd+Zw8bEOB+7ZKvN76901mRnqdsiOGKxzVTbi7A==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   pngjs@5.0.0:
     resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
     engines: {node: '>=10.13.0'}
@@ -3193,8 +3219,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qr@0.6.0:
-    resolution: {integrity: sha512-P23VoX7SipHALdiIYG+D+LT/6n22dNKwV92FAb3d+Nlki/5WisSsfLt0UDFz2XEBtuwrECTznvu+chKKFCSYhA==}
+  qr@0.5.5:
+    resolution: {integrity: sha512-iQBvKj7MRKO+co+MY0IZpyLO+ezvttxsmV86WywrgPuAmgBkv0pytyi03wourniSoPgzffeBW6cBgIkpqcvjTg==}
     engines: {node: '>= 20.19.0'}
 
   qrcode@1.5.3:
@@ -4554,7 +4580,7 @@ snapshots:
 
   '@paulmillr/qr@0.2.1': {}
 
-  '@rainbow-me/rainbowkit@2.2.11(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.3)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.101.2)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(bufferutil@4.1.0)(react@19.2.7)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))':
+  '@rainbow-me/rainbowkit@2.2.11(patch_hash=599b8662245e4fe203711cbd248e35030388cd1425f3afdc1f93671af3199786)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.3)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.101.2)(@tanstack/react-query@5.101.2(react@19.2.7))(@types/react@19.2.17)(bufferutil@4.1.0)(react@19.2.7)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.54.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))':
     dependencies:
       '@tanstack/react-query': 5.101.2(react@19.2.7)
       '@vanilla-extract/css': 1.20.1
@@ -6561,7 +6587,7 @@ snapshots:
 
   cuer@0.0.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.3):
     dependencies:
-      qr: 0.6.0
+      qr: 0.5.5
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
     optionalDependencies:
@@ -7155,6 +7181,9 @@ snapshots:
       mime-types: 2.1.35
 
   fraction.js@5.3.4: {}
+
+  fsevents@2.3.2:
+    optional: true
 
   fsevents@2.3.3:
     optional: true
@@ -7889,6 +7918,14 @@ snapshots:
 
   pirates@4.0.7: {}
 
+  playwright-core@1.49.0: {}
+
+  playwright@1.49.0:
+    dependencies:
+      playwright-core: 1.49.0
+    optionalDependencies:
+      fsevents: 2.3.2
+
   pngjs@5.0.0: {}
 
   pony-cause@2.1.11: {}
@@ -7987,7 +8024,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  qr@0.6.0: {}
+  qr@0.5.5: {}
 
   qrcode@1.5.3:
     dependencies:

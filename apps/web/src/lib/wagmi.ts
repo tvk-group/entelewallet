@@ -34,11 +34,14 @@ export const enteleChains =
     : ([mainnet, base] as const);
 
 function walletConnectMetadata() {
+  // Use canonical URL for SSR-safe config; both production domains must be Reown-allowlisted.
+  const baseUrl = CANONICAL_APP_URL.replace(/\/$/, '');
+
   return {
     name: 'EnteleWALLET',
     description: 'EnteleWALLET Lite — verified wallet access for the EnteleKRON ecosystem.',
-    url: CANONICAL_APP_URL,
-    icons: [`${CANONICAL_APP_URL}/icons/icon-512.png`],
+    url: baseUrl,
+    icons: [`${baseUrl}/icons/icon-512.png`],
   };
 }
 
