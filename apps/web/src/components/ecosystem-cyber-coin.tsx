@@ -44,7 +44,7 @@ const HUB_W = 1200;
 const HUB_H = 360;
 const HUB_CX = HUB_W / 2;
 const HUB_CY = HUB_H / 2;
-const COIN_VIEWBOX_R = 98;
+const COIN_VIEWBOX_R = 103;
 const COIN_CLEARANCE = 28;
 
 type ChipPlacement = {
@@ -188,13 +188,14 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
 
         <div
           className="cyber-coin-stage"
-          style={{ '--coin-diameter': 'min(210px, 58%)' } as React.CSSProperties}
+          style={{ '--coin-diameter': 'min(221px, 61%)' } as React.CSSProperties}
         >
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
               <div className="cyber-coin-face cyber-coin-face-front" aria-hidden>
                 <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-inner cyber-coin-face-inner-enk">
+                <div className="cyber-coin-face-plate" />
+                <div className="cyber-coin-face-inner">
                   <Image
                     src="/brand/entelekron-coin-face.png"
                     alt=""
@@ -208,7 +209,8 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
 
               <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
                 <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-inner cyber-coin-face-inner-tvk">
+                <div className="cyber-coin-face-plate" />
+                <div className="cyber-coin-face-inner">
                   <Image
                     src="/brand/tvk-labs-logo-transparent.png"
                     alt=""
