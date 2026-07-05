@@ -1,5 +1,7 @@
 import type { TransparencyAddress } from '@entelewallet/types';
 
+export { CONTACT, CONTACT_EMAIL, SUPPORT_EMAIL, SECURITY_EMAIL, LEGAL_EMAIL, PRIVACY_EMAIL, PARTNERS_EMAIL, PRESS_EMAIL, PUBLIC_CONTACT_EMAILS } from './contact';
+
 /** Primary PWA app domain — entelewallet.app */
 export const CANONICAL_APP_DOMAIN = 'entelewallet.app';
 export const CANONICAL_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://entelewallet.app';
@@ -32,12 +34,6 @@ export const DOMAIN_CONFIG = {
   entelekron: process.env.NEXT_PUBLIC_ENTELEKRON_URL || 'https://entelekron.io',
   transparency: 'https://entelekron.io/transparency',
   investorApp: 'https://entelekron.app',
-} as const;
-
-export const CONTACT = {
-  security: process.env.SECURITY_CONTACT_EMAIL || 'security@tvk.group',
-  support: process.env.SUPPORT_EMAIL || 'support@tvk.group',
-  general: process.env.GENERAL_CONTACT_EMAIL || 'contact@entelewallet.com',
 } as const;
 
 /** @deprecated Use officialAddresses.ts — kept for backward compat */

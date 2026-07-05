@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useT } from '@/lib/i18n-context';
-import { ROUTES, DOMAIN_CONFIG, CONTACT } from '@entelewallet/config';
+import { ROUTES, DOMAIN_CONFIG, PUBLIC_CONTACT_EMAILS } from '@entelewallet/config';
 import { Alert, LtrSpan } from '@entelewallet/ui';
 
 export function Footer() {
@@ -50,6 +50,10 @@ export function Footer() {
     },
   ];
 
+  const footerEmails = PUBLIC_CONTACT_EMAILS.filter((e) =>
+    ['contact', 'support', 'security', 'legal'].includes(e.key),
+  );
+
   return (
     <footer className="border-t border-slate-200 bg-gradient-to-b from-slate-50 to-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
@@ -85,13 +89,23 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row">
-          <p className="text-sm text-slate-500">{t('footer.copyright')}</p>
-          <p className="text-xs text-slate-400">
-            <LtrSpan>
-              {CONTACT.security} · {CONTACT.support}
-            </LtrSpan>
+        <div className="mt-10 border-t border-slate-200 pt-8">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {t('footer.contactSection')}
           </p>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2">
+            {footerEmails.map(({ email }) => (
+              <li key={email}>
+                <a href={`mailto:${email}`} className="text-sm text-cyan-800 hover:text-cyan-950">
+                  <LtrSpan>{email}</LtrSpan>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row">
+          <p className="text-sm text-slate-500">{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>

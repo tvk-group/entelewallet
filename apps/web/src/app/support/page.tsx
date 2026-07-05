@@ -4,8 +4,8 @@ import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
-import { getActiveSupportProvider, SUPPORT_CONFIG } from '@entelewallet/config';
-import { Card, CardContent, CardHeader, CardTitle, Button, Alert } from '@entelewallet/ui';
+import { getActiveSupportProvider, PUBLIC_CONTACT_EMAILS } from '@entelewallet/config';
+import { Card, CardContent, CardHeader, CardTitle, Button, Alert, LtrSpan } from '@entelewallet/ui';
 
 const REPORT_TYPES = [
   { value: 'report_phishing', key: 'support.reportPhishing' },
@@ -72,6 +72,27 @@ function SupportPageContent() {
       <div className="mx-auto max-w-2xl space-y-6">
         <Alert variant="warning">{t('support.channelNotice')}</Alert>
 
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{t('support.contactChannels')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {PUBLIC_CONTACT_EMAILS.map(({ email, labelKey }) => (
+                <li key={email}>
+                  <a
+                    href={`mailto:${email}`}
+                    className="flex flex-col rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 transition hover:border-cyan-200 hover:bg-cyan-50/50"
+                  >
+                    <span className="text-xs font-medium text-slate-500">{t(labelKey)}</span>
+                    <LtrSpan className="text-sm font-medium text-cyan-900">{email}</LtrSpan>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+
         <p className="text-xs text-slate-500">
           {provider === 'supabase' ? t('support.providerSupabase') : t('support.providerMailto')}
         </p>
@@ -137,19 +158,6 @@ function SupportPageContent() {
                 )}
               </form>
             )}
-
-            <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-100 pt-6">
-              <a href={`mailto:${SUPPORT_CONFIG.securityEmail}`}>
-                <Button variant="outline" size="sm">
-                  {t('support.emailSecurity')}
-                </Button>
-              </a>
-              <a href={`mailto:${SUPPORT_CONFIG.supportEmail}`}>
-                <Button variant="ghost" size="sm">
-                  {t('support.emailSupport')}
-                </Button>
-              </a>
-            </div>
           </CardContent>
         </Card>
       </div>

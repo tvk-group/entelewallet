@@ -15,13 +15,15 @@ export const SEED_PHRASE_WARNING =
 export const SIWE_STATEMENT =
   'Sign in to EnteleWALLET. This signature verifies wallet ownership only. It does not authorize a transaction, token transfer, spending approval or payment.';
 
+import { SECURITY_EMAIL } from '@entelewallet/config';
+
 export const PHISHING_TIPS = [
   'Verify the URL matches an official domain before connecting.',
   'Never share your seed phrase or private key with anyone.',
   'EnteleWALLET verification signatures do not cost gas.',
   'Reject any signature that looks like a token approval or transfer.',
   'Use WalletConnect only through the official EnteleWALLET app.',
-  'Report suspicious domains to security@tvk.group.',
+  `Report suspicious domains to ${SECURITY_EMAIL}.`,
 ] as const;
 
 export const SUPPORTED_WALLETS = [

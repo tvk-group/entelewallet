@@ -221,6 +221,7 @@
     "phishingProtection": "Phishing Protection",
     "addressVerification": "Official Address Verification",
     "reportConcern": "Report a Security Concern",
+    "reportConcernIntro": "If you suspect phishing, a fake domain, a suspicious signature request, or a fake support account, report it to:",
     "futureRoadmap": "Future Security Roadmap"
   },
   "transparency": {
@@ -274,8 +275,15 @@
     "walletConnectionIssue": "Wallet Connection Issue",
     "transparencyConcern": "Transparency / Address Concern",
     "generalSupport": "General Support Request",
-    "securityEmail": "Security Contact",
-    "supportEmail": "Support Contact",
+    "securityEmail": "Security",
+    "supportEmail": "Support contact",
+    "emailContact": "General",
+    "emailSupport": "Support",
+    "emailSecurity": "Security",
+    "emailLegal": "Legal",
+    "emailPrivacy": "Privacy",
+    "emailPartners": "Partnerships",
+    "contactChannels": "Official contact channels",
     "formType": "Report type",
     "formSubject": "Subject",
     "formMessage": "Message",
@@ -285,8 +293,6 @@
     "formSuccess": "Report received. Our security/support team will review it. Never send seed phrases, private keys or wallet passwords.",
     "formError": "Submission failed. Please use the email fallback below.",
     "formFallback": "Email us directly",
-    "emailSecurity": "Email security@tvk.group",
-    "emailSupport": "Email support@tvk.group",
     "providerSupabase": "Reports are stored securely via Supabase.",
     "providerMailto": "Reports open your email client (mailto fallback)."
   },
@@ -453,7 +459,8 @@
     "security": "Security",
     "legal": "Legal",
     "support": "Support",
-    "connectWallet": "Connect Wallet"
+    "connectWallet": "Connect Wallet",
+    "contactSection": "Contact"
   },
   "legalPages": {
     "privacyTitle": "Privacy Policy",
