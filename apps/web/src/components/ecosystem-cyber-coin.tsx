@@ -39,14 +39,13 @@ interface EcosystemCyberCoinProps {
   className?: string;
 }
 
-const COIN_EDGE_COUNT = 36;
-const HUB_W = 960;
-const HUB_H = 540;
+const COIN_EDGE_COUNT = 48;
+const HUB_W = 1200;
+const HUB_H = 360;
 const HUB_CX = HUB_W / 2;
 const HUB_CY = HUB_H / 2;
-/** Coin radius in 960×540 viewBox — matches min(220px, 52%) on hub height. */
-const COIN_VIEWBOX_R = 112;
-const COIN_CLEARANCE = 32;
+const COIN_VIEWBOX_R = 98;
+const COIN_CLEARANCE = 28;
 
 type ChipPlacement = {
   name: string;
@@ -56,12 +55,11 @@ type ChipPlacement = {
   tier: 'inner' | 'mid' | 'outer';
 };
 
-/** Golden-angle organic scatter — elliptical for 16:9, clamped inside hub, outside coin. */
 function layoutChipsOrganically(modules: readonly string[]): ChipPlacement[] {
   const golden = Math.PI * (3 - Math.sqrt(5));
   const minDist = COIN_VIEWBOX_R + COIN_CLEARANCE;
-  const labelPadX = 72;
-  const labelPadY = 16;
+  const labelPadX = 68;
+  const labelPadY = 14;
   const maxRx = HUB_CX - labelPadX;
   const maxRy = HUB_CY - labelPadY;
 
@@ -70,10 +68,10 @@ function layoutChipsOrganically(modules: readonly string[]): ChipPlacement[] {
     const t = Math.sqrt((i + 0.5) / modules.length);
     const tier: ChipPlacement['tier'] = t < 0.38 ? 'inner' : t < 0.72 ? 'mid' : 'outer';
 
-    const rx = minDist + t * (maxRx - minDist) * 0.96;
-    const ry = minDist + t * (maxRy - minDist) * 0.88;
+    const rx = minDist + t * (maxRx - minDist) * 0.98;
+    const ry = minDist + t * (maxRy - minDist) * 0.92;
 
-    const jitter = (((i * 17 + 5) % 13) - 6) * 1.6;
+    const jitter = (((i * 17 + 5) % 13) - 6) * 1.4;
     let x = HUB_CX + Math.cos(angle) * rx + Math.cos(angle + 0.9) * jitter;
     let y = HUB_CY + Math.sin(angle) * ry + Math.sin(angle + 0.9) * jitter;
 
@@ -105,11 +103,11 @@ function signalEndpoints(chip: ChipPlacement) {
   };
 }
 
-const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
-  left: `${6 + ((i * 31) % 88)}%`,
-  top: `${12 + ((i * 37) % 76)}%`,
+const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
+  left: `${8 + ((i * 29) % 84)}%`,
+  top: `${18 + ((i * 37) % 64)}%`,
   delay: `${(i * 0.41) % 4.5}s`,
-  duration: `${4 + (i % 3)}s`,
+  duration: `${4.5 + (i % 3)}s`,
   size: 1 + (i % 2),
 }));
 
@@ -117,22 +115,16 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
   const chipPlacements = useMemo(() => layoutChipsOrganically(ECOSYSTEM_MODULES), []);
 
   return (
-    <div
-      className={cn(
-        'ecosystem-cyber-coin relative mx-auto mt-10 w-full overflow-hidden rounded-[2rem]',
-        className,
-      )}
-      aria-hidden
-    >
-      <div className="cyber-coin-bg absolute inset-0" />
-      <div className="cyber-coin-hexgrid absolute inset-0" />
-      <div className="cyber-coin-floor-glow absolute inset-x-0 bottom-0 h-1/2" />
-      <div className="cyber-coin-scanline absolute inset-0" />
+    <div className={cn('ecosystem-cyber-coin relative mx-auto mt-8 w-full', className)} aria-hidden>
+      <div className="cyber-coin-cloud cyber-coin-cloud-a absolute inset-0" />
+      <div className="cyber-coin-cloud cyber-coin-cloud-b absolute inset-0" />
+      <div className="cyber-coin-cloud cyber-coin-cloud-c absolute inset-0" />
+      <div className="cyber-coin-edge-fade absolute inset-0" />
 
       {PARTICLES.map((p, i) => (
         <span
           key={i}
-          className="cyber-coin-particle absolute rounded-full bg-cyan-300"
+          className="cyber-coin-particle absolute rounded-full bg-cyan-400/80"
           style={{
             left: p.left,
             top: p.top,
@@ -144,7 +136,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
         />
       ))}
 
-      <div className="cyber-ecosystem-hub relative z-10 mx-auto w-full">
+      <div className="cyber-ecosystem-hub relative z-10 mx-auto h-full w-full">
         <svg
           className="cyber-signal-layer absolute inset-0 h-full w-full"
           viewBox={`0 0 ${HUB_W} ${HUB_H}`}
@@ -152,8 +144,8 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           aria-hidden
         >
           <defs>
-            <radialGradient id="signal-core-glow" cx="50%" cy="50%" r="42%">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.35)" />
+            <radialGradient id="signal-core-glow" cx="50%" cy="50%" r="38%">
+              <stop offset="0%" stopColor="rgba(34,211,238,0.28)" />
               <stop offset="100%" stopColor="rgba(34,211,238,0)" />
             </radialGradient>
           </defs>
@@ -161,8 +153,8 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           <ellipse
             cx={HUB_CX}
             cy={HUB_CY}
-            rx={COIN_VIEWBOX_R + 14}
-            ry={COIN_VIEWBOX_R + 10}
+            rx={COIN_VIEWBOX_R + 12}
+            ry={COIN_VIEWBOX_R + 8}
             fill="url(#signal-core-glow)"
           />
 
@@ -181,9 +173,9 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                   className="cyber-signal-pulse"
                   style={{ animationDelay: `${delay}s` }}
                 />
-                <circle r="3" fill="#a5f3fc" className="cyber-signal-node">
+                <circle r="2.5" fill="#67e8f9" className="cyber-signal-node">
                   <animateMotion
-                    dur={`${2.4 + (chip.index % 4) * 0.4}s`}
+                    dur={`${2.6 + (chip.index % 4) * 0.4}s`}
                     repeatCount="indefinite"
                     path={`M ${x1} ${y1} L ${x2} ${y2}`}
                     begin={`${delay}s`}
@@ -196,33 +188,33 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
 
         <div
           className="cyber-coin-stage"
-          style={{ '--coin-diameter': 'min(220px, 52%)' } as React.CSSProperties}
+          style={{ '--coin-diameter': 'min(210px, 58%)' } as React.CSSProperties}
         >
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
-              <div className="cyber-coin-face cyber-coin-face-front">
+              <div className="cyber-coin-face cyber-coin-face-front" aria-hidden>
                 <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-inner">
+                <div className="cyber-coin-face-inner cyber-coin-face-inner-enk">
                   <Image
                     src="/brand/entelekron-coin-face.png"
                     alt=""
                     width={512}
                     height={512}
-                    className="cyber-coin-logo-mark"
+                    className="cyber-coin-logo-mark cyber-coin-logo-enk"
                     priority
                   />
                 </div>
               </div>
 
-              <div className="cyber-coin-face cyber-coin-face-back">
+              <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
                 <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-inner">
+                <div className="cyber-coin-face-inner cyber-coin-face-inner-tvk">
                   <Image
                     src="/brand/tvk-labs-logo-transparent.png"
                     alt=""
                     width={512}
                     height={512}
-                    className="cyber-coin-logo-mark cyber-coin-logo-mark-tvk"
+                    className="cyber-coin-logo-mark cyber-coin-logo-tvk"
                     priority
                   />
                 </div>
@@ -242,7 +234,7 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           <div className="cyber-coin-reflection" />
         </div>
 
-        <div className="cyber-chip-field absolute inset-0 overflow-hidden">
+        <div className="cyber-chip-field absolute inset-0">
           {chipPlacements.map((chip) => {
             const delay = (chip.index * 0.14) % 3.2;
 
