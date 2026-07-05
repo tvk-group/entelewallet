@@ -302,7 +302,7 @@ reown-modal {
 /* Ecosystem cyber coin — EnteleKRON ENK token (ETH-style 3D coin) */
 .ecosystem-cyber-coin {
   contain: paint;
-  min-height: min(72vw, 560px);
+  min-height: min(92vw, 760px);
   border: 1px solid rgba(34, 211, 238, 0.2);
   box-shadow:
     0 0 0 1px rgba(30, 64, 175, 0.15) inset,
@@ -310,44 +310,36 @@ reown-modal {
 }
 
 .cyber-ecosystem-hub {
-  min-height: min(68vw, 520px);
-  padding: 0.5rem;
+  min-height: min(88vw, 740px);
+  padding: 0.25rem;
 }
 
-.cyber-orbit-ring-layer {
+.cyber-chip-field {
+  pointer-events: none;
+}
+
+.cyber-chip-slot {
   position: absolute;
   inset: 0;
-  animation: cyberRingRotate var(--orbit-duration, 100s) linear infinite;
-  transform-origin: center center;
-}
-
-.cyber-orbit-ring-layer-reverse {
-  animation-direction: reverse;
-}
-
-.cyber-orbit-ring-signals {
-  pointer-events: none;
-  overflow: visible;
-}
-
-.cyber-orbit-chip-slot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
   z-index: 20;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: 100%;
   transform-origin: center center;
 }
 
-.cyber-orbit-chip-slot-inner .cyber-orbit-chip-label {
-  max-width: 8.5rem;
-  font-size: 0.66rem;
+.cyber-chip-slot-inner .cyber-orbit-chip-label {
+  max-width: 7.5rem;
+  font-size: 0.62rem;
 }
 
-.cyber-orbit-chip-slot-outer .cyber-orbit-chip-label {
-  max-width: 11rem;
-  font-size: 0.74rem;
+.cyber-chip-slot-mid .cyber-orbit-chip-label {
+  max-width: 9rem;
+  font-size: 0.68rem;
+}
+
+.cyber-chip-slot-outer .cyber-orbit-chip-label {
+  max-width: 10.5rem;
+  font-size: 0.72rem;
 }
 
 .cyber-signal-layer {
@@ -357,11 +349,14 @@ reown-modal {
 
 .cyber-orbit-track {
   fill: none;
-  stroke: rgba(34, 211, 238, 0.14);
-  stroke-width: 1.25;
-  stroke-dasharray: 8 12;
+  stroke: rgba(34, 211, 238, 0.12);
+  stroke-width: 1;
+  stroke-dasharray: 6 10;
   transform-origin: center;
-  animation: cyberOrbitTrackSpin 48s linear infinite;
+}
+
+.cyber-orbit-track-static {
+  opacity: 0.55;
 }
 
 .cyber-signal-line {
@@ -433,33 +428,42 @@ reown-modal {
 }
 
 @media (min-width: 640px) {
-  .cyber-orbit-chip-slot-inner .cyber-orbit-chip-label {
-    max-width: 9.5rem;
-    font-size: 0.7rem;
+  .cyber-chip-slot-inner .cyber-orbit-chip-label {
+    max-width: 8.5rem;
+    font-size: 0.66rem;
   }
 
-  .cyber-orbit-chip-slot-outer .cyber-orbit-chip-label {
-    max-width: 12rem;
-    font-size: 0.78rem;
+  .cyber-chip-slot-mid .cyber-orbit-chip-label {
+    max-width: 10rem;
+    font-size: 0.72rem;
+  }
+
+  .cyber-chip-slot-outer .cyber-orbit-chip-label {
+    max-width: 11.5rem;
+    font-size: 0.76rem;
   }
 }
 
 @media (min-width: 1024px) {
   .ecosystem-cyber-coin {
-    min-height: 560px;
+    min-height: 760px;
   }
 
   .cyber-ecosystem-hub {
-    min-height: 520px;
+    min-height: 740px;
   }
 
-  .cyber-orbit-chip-slot-inner .cyber-orbit-chip-label {
-    font-size: 0.72rem;
+  .cyber-chip-slot-inner .cyber-orbit-chip-label {
+    font-size: 0.68rem;
   }
 
-  .cyber-orbit-chip-slot-outer .cyber-orbit-chip-label {
-    max-width: 13rem;
-    font-size: 0.8rem;
+  .cyber-chip-slot-mid .cyber-orbit-chip-label {
+    font-size: 0.74rem;
+  }
+
+  .cyber-chip-slot-outer .cyber-orbit-chip-label {
+    max-width: 12rem;
+    font-size: 0.78rem;
   }
 }
 
@@ -468,24 +472,25 @@ reown-modal {
   left: 50%;
   top: 50%;
   z-index: 15;
-  width: var(--coin-diameter, 324px);
-  height: var(--coin-diameter, 324px);
+  width: var(--coin-diameter, 243px);
+  height: var(--coin-diameter, 243px);
   transform: translate(-50%, -50%);
   perspective: 1200px;
   perspective-origin: 50% 50%;
 }
 
 .cyber-coin-logo-mark {
-  width: 78%;
-  height: 78%;
-  max-width: 280px;
-  max-height: 280px;
+  width: 72%;
+  height: auto;
+  max-width: 175px;
+  object-fit: contain;
 }
 
 .cyber-coin-logo-mark-tvk {
-  width: 88%;
+  width: 78%;
   height: auto;
-  max-width: 300px;
+  max-width: 190px;
+  object-fit: contain;
 }
 
 .cyber-coin-bg {
@@ -537,9 +542,9 @@ reown-modal {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: var(--coin-diameter, 324px);
-  height: var(--coin-diameter, 324px);
-  margin: calc(var(--coin-diameter, 324px) / -2) 0 0 calc(var(--coin-diameter, 324px) / -2);
+  width: var(--coin-diameter, 243px);
+  height: var(--coin-diameter, 243px);
+  margin: calc(var(--coin-diameter, 243px) / -2) 0 0 calc(var(--coin-diameter, 243px) / -2);
   transform-style: preserve-3d;
 }
 
@@ -564,11 +569,11 @@ reown-modal {
 }
 
 .cyber-coin-face-front {
-  transform: translateZ(calc(var(--coin-diameter, 324px) * 0.078));
+  transform: translateZ(calc(var(--coin-diameter, 243px) * 0.078));
 }
 
 .cyber-coin-face-back {
-  transform: rotateY(180deg) translateZ(calc(var(--coin-diameter, 324px) * 0.078));
+  transform: rotateY(180deg) translateZ(calc(var(--coin-diameter, 243px) * 0.078));
   background:
     radial-gradient(circle at 68% 24%, rgba(255, 255, 255, 0.28) 0%, transparent 42%),
     linear-gradient(215deg, #312e81 0%, #0e7490 45%, #1e3a8a 100%);
@@ -602,12 +607,12 @@ reown-modal {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(var(--coin-diameter, 324px) * 0.053);
-  height: calc(var(--coin-diameter, 324px) * 0.078);
-  margin: calc(var(--coin-diameter, 324px) * -0.039) 0 0 calc(var(--coin-diameter, 324px) * -0.0265);
+  width: calc(var(--coin-diameter, 243px) * 0.053);
+  height: calc(var(--coin-diameter, 243px) * 0.078);
+  margin: calc(var(--coin-diameter, 243px) * -0.039) 0 0 calc(var(--coin-diameter, 243px) * -0.0265);
   transform-origin: center center;
   backface-visibility: hidden;
-  transform: rotateY(var(--edge-angle, 0deg)) translateZ(calc(var(--coin-diameter, 324px) / 2));
+  transform: rotateY(var(--edge-angle, 0deg)) translateZ(calc(var(--coin-diameter, 243px) / 2));
   background: linear-gradient(
     to bottom,
     #164e63 0%,
@@ -690,8 +695,8 @@ reown-modal {
 }
 
 @keyframes cyberChipFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  0%, 100% { transform: translateY(0); box-shadow: 0 0 16px rgba(34, 211, 238, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.08) inset; }
+  50% { transform: translateY(-3px); box-shadow: 0 0 24px rgba(34, 211, 238, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.12) inset; }
 }
 
 @keyframes cyberChipPing {

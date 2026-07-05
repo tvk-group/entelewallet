@@ -1,8 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useMemo } from 'react';
 import { cn } from '@entelewallet/utils';
-import { EntelekronCoinLogo, TvkLabsCoinLogo } from './entelekron-coin-logo';
 
 export const ECOSYSTEM_MODULES = [
   'SOVRA',
@@ -40,37 +40,46 @@ interface EcosystemCyberCoinProps {
 }
 
 const COIN_EDGE_COUNT = 36;
-const HUB_SIZE = 1000;
+const HUB_SIZE = 960;
 const HUB_CENTER = HUB_SIZE / 2;
-/** Coin radius in viewBox units (324px coin in ~960px hub). */
-const COIN_VIEWBOX_R = 168;
+/** 243px coin mapped into 960px hub viewBox. */
+const COIN_VIEWBOX_R = 121.5;
 
-const ORBIT_RINGS = [
-  { radius: 0.58, offsetDeg: 0, duration: 88 },
-  { radius: 0.68, offsetDeg: 25.7, duration: 104 },
-  { radius: 0.78, offsetDeg: 0, duration: 120 },
-  { radius: 0.88, offsetDeg: 25.7, duration: 136 },
+/** Static rings outside the coin — radius as % of hub half-height for responsive scaling. */
+const CHIP_RING_LAYOUT = [
+  { radiusPct: 39.2, offsetDeg: -90 },
+  { radiusPct: 56.7, offsetDeg: -72 },
+  { radiusPct: 74.2, offsetDeg: -90 },
 ] as const;
 
-type RingLayout = {
+type ChipPlacement = {
+  name: string;
+  angleDeg: number;
+  radiusPct: number;
   ringIndex: number;
-  radius: number;
-  offsetDeg: number;
-  duration: number;
-  reverse: boolean;
-  modules: string[];
+  index: number;
 };
 
-function buildRingLayouts(modules: readonly string[]): RingLayout[] {
-  const perRing = Math.ceil(modules.length / ORBIT_RINGS.length);
-  return ORBIT_RINGS.map((ring, ringIndex) => ({
-    ringIndex,
-    radius: ring.radius,
-    offsetDeg: ring.offsetDeg,
-    duration: ring.duration,
-    reverse: ringIndex % 2 === 1,
-    modules: modules.slice(ringIndex * perRing, ringIndex * perRing + perRing),
-  }));
+function buildChipPlacements(modules: readonly string[]): ChipPlacement[] {
+  const perRing = Math.ceil(modules.length / CHIP_RING_LAYOUT.length);
+  const placements: ChipPlacement[] = [];
+
+  CHIP_RING_LAYOUT.forEach((ring, ringIndex) => {
+    const ringModules = modules.slice(ringIndex * perRing, ringIndex * perRing + perRing);
+    const step = 360 / ringModules.length;
+
+    ringModules.forEach((name, i) => {
+      placements.push({
+        name,
+        angleDeg: ring.offsetDeg + step * i,
+        radiusPct: ring.radiusPct,
+        ringIndex,
+        index: placements.length,
+      });
+    });
+  });
+
+  return placements;
 }
 
 function polarToHub(angleDeg: number, radiusFrac: number) {
@@ -82,8 +91,8 @@ function polarToHub(angleDeg: number, radiusFrac: number) {
   };
 }
 
-function signalEndpoints(angleDeg: number, radiusFrac: number) {
-  const outer = polarToHub(angleDeg, radiusFrac);
+function signalEndpoints(angleDeg: number, radiusPct: number) {
+  const outer = polarToHub(angleDeg, radiusPct / 100);
   const angleRad = (angleDeg * Math.PI) / 180;
   return {
     x1: HUB_CENTER + Math.cos(angleRad) * COIN_VIEWBOX_R,
@@ -93,123 +102,16 @@ function signalEndpoints(angleDeg: number, radiusFrac: number) {
   };
 }
 
-const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
-  left: `${6 + ((i * 31) % 88)}%`,
-  top: `${8 + ((i * 47) % 84)}%`,
-  delay: `${(i * 0.33) % 5}s`,
-  duration: `${3.5 + (i % 4)}s`,
-  size: 1 + (i % 3),
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  left: `${8 + ((i * 29) % 84)}%`,
+  top: `${10 + ((i * 41) % 80)}%`,
+  delay: `${(i * 0.41) % 4.5}s`,
+  duration: `${4 + (i % 3)}s`,
+  size: 1 + (i % 2),
 }));
 
-function OrbitRing({
-  layout,
-  globalOffset,
-}: {
-  layout: RingLayout;
-  globalOffset: number;
-}) {
-  const count = layout.modules.length;
-  const step = 360 / count;
-
-  return (
-    <div
-      className={cn('cyber-orbit-ring-layer', layout.reverse && 'cyber-orbit-ring-layer-reverse')}
-      style={
-        {
-          '--orbit-duration': `${layout.duration}s`,
-          '--orbit-radius': `${layout.radius * 50}%`,
-        } as React.CSSProperties
-      }
-    >
-      <svg
-        className="cyber-orbit-ring-signals absolute inset-0 h-full w-full"
-        viewBox={`0 0 ${HUB_SIZE} ${HUB_SIZE}`}
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden
-      >
-        {layout.modules.map((name, i) => {
-          const angle = layout.offsetDeg + step * i;
-          const { x1, y1, x2, y2 } = signalEndpoints(angle, layout.radius);
-          const delay = ((globalOffset + i) * 0.19) % 3.5;
-
-          return (
-            <g key={name}>
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                className="cyber-signal-line"
-                style={{ animationDelay: `${delay}s` }}
-              />
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                className="cyber-signal-pulse"
-                style={{ animationDelay: `${delay + 0.35}s` }}
-              />
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                className="cyber-signal-glow"
-                style={{ animationDelay: `${delay + 0.15}s` }}
-              />
-              <circle r="5" fill="#a5f3fc" className="cyber-signal-node">
-                <animateMotion
-                  dur={`${2.2 + (i % 3) * 0.5}s`}
-                  repeatCount="indefinite"
-                  path={`M ${x1} ${y1} L ${x2} ${y2}`}
-                  begin={`${delay}s`}
-                />
-              </circle>
-            </g>
-          );
-        })}
-      </svg>
-
-      {layout.modules.map((name, i) => {
-        const angle = layout.offsetDeg + step * i;
-        const delay = ((globalOffset + i) * 0.19) % 3.5;
-
-        return (
-          <div
-            key={name}
-            className={cn(
-              'cyber-orbit-chip-slot',
-              layout.ringIndex <= 1 ? 'cyber-orbit-chip-slot-inner' : 'cyber-orbit-chip-slot-outer',
-            )}
-            style={{ transform: `rotate(${angle}deg) translateY(calc(-1 * var(--orbit-radius)))` }}
-          >
-            <div
-              className="cyber-orbit-chip"
-              style={
-                {
-                  transform: `translate(-50%, -50%) rotate(${-angle}deg)`,
-                } as React.CSSProperties
-              }
-            >
-              <span
-                className="cyber-orbit-chip-label"
-                style={{ animationDelay: `${delay}s` }}
-              >
-                {name}
-              </span>
-              <span className="cyber-orbit-chip-ping" style={{ animationDelay: `${delay}s` }} />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
-  const ringLayouts = useMemo(() => buildRingLayouts(ECOSYSTEM_MODULES), []);
-  let moduleOffset = 0;
+  const chipPlacements = useMemo(() => buildChipPlacements(ECOSYSTEM_MODULES), []);
 
   return (
     <div
@@ -248,41 +150,83 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
         >
           <defs>
             <radialGradient id="signal-core-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.45)" />
+              <stop offset="0%" stopColor="rgba(34,211,238,0.35)" />
               <stop offset="100%" stopColor="rgba(34,211,238,0)" />
             </radialGradient>
           </defs>
-          <circle cx={HUB_CENTER} cy={HUB_CENTER} r={COIN_VIEWBOX_R + 24} fill="url(#signal-core-glow)" />
-          {ORBIT_RINGS.map((ring, i) => (
+
+          <circle cx={HUB_CENTER} cy={HUB_CENTER} r={COIN_VIEWBOX_R + 18} fill="url(#signal-core-glow)" />
+
+          {CHIP_RING_LAYOUT.map((ring, i) => (
             <ellipse
               key={i}
               cx={HUB_CENTER}
               cy={HUB_CENTER}
-              rx={ring.radius * (HUB_SIZE / 2)}
-              ry={ring.radius * (HUB_SIZE / 2) * 0.96}
-              className="cyber-orbit-track"
-              style={{ animationDelay: `${i * 0.8}s` }}
+              rx={(ring.radiusPct / 100) * (HUB_SIZE / 2)}
+              ry={(ring.radiusPct / 100) * (HUB_SIZE / 2)}
+              className="cyber-orbit-track cyber-orbit-track-static"
             />
           ))}
+
+          {chipPlacements.map((chip) => {
+            const { x1, y1, x2, y2 } = signalEndpoints(chip.angleDeg, chip.radiusPct);
+            const delay = (chip.index * 0.14) % 3.2;
+
+            return (
+              <g key={chip.name}>
+                <line x1={x1} y1={y1} x2={x2} y2={y2} className="cyber-signal-line" />
+                <line
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  className="cyber-signal-pulse"
+                  style={{ animationDelay: `${delay}s` }}
+                />
+                <circle r="3.5" fill="#a5f3fc" className="cyber-signal-node">
+                  <animateMotion
+                    dur={`${2.4 + (chip.index % 4) * 0.4}s`}
+                    repeatCount="indefinite"
+                    path={`M ${x1} ${y1} L ${x2} ${y2}`}
+                    begin={`${delay}s`}
+                  />
+                </circle>
+              </g>
+            );
+          })}
         </svg>
 
         <div
           className="cyber-coin-stage"
-          style={{ '--coin-diameter': 'min(324px, 34vw)' } as React.CSSProperties}
+          style={{ '--coin-diameter': 'min(243px, 25vw)' } as React.CSSProperties}
         >
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
               <div className="cyber-coin-face cyber-coin-face-front">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <EntelekronCoinLogo className="cyber-coin-logo-mark" />
+                  <Image
+                    src="/brand/entelekron-coin-face.png"
+                    alt=""
+                    width={512}
+                    height={512}
+                    className="cyber-coin-logo-mark"
+                    priority
+                  />
                 </div>
               </div>
 
               <div className="cyber-coin-face cyber-coin-face-back">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <TvkLabsCoinLogo className="cyber-coin-logo-mark cyber-coin-logo-mark-tvk" />
+                  <Image
+                    src="/brand/tvk-labs-logo-transparent.png"
+                    alt=""
+                    width={1024}
+                    height={1024}
+                    className="cyber-coin-logo-mark cyber-coin-logo-mark-tvk"
+                    priority
+                  />
                 </div>
               </div>
 
@@ -300,13 +244,38 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           <div className="cyber-coin-reflection" />
         </div>
 
-        {ringLayouts.map((layout) => {
-          const offset = moduleOffset;
-          moduleOffset += layout.modules.length;
-          return (
-            <OrbitRing key={layout.ringIndex} layout={layout} globalOffset={offset} />
-          );
-        })}
+        <div className="cyber-chip-field absolute inset-0">
+          {chipPlacements.map((chip) => {
+            const delay = (chip.index * 0.14) % 3.2;
+
+            return (
+              <div
+                key={chip.name}
+                className={cn(
+                  'cyber-chip-slot',
+                  chip.ringIndex === 0 && 'cyber-chip-slot-inner',
+                  chip.ringIndex === 1 && 'cyber-chip-slot-mid',
+                  chip.ringIndex === 2 && 'cyber-chip-slot-outer',
+                )}
+                style={
+                  {
+                    transform: `rotate(${chip.angleDeg}deg) translateY(-${chip.radiusPct}%)`,
+                  } as React.CSSProperties
+                }
+              >
+                <div
+                  className="cyber-orbit-chip"
+                  style={{ transform: `translate(-50%, -50%) rotate(${-chip.angleDeg}deg)` }}
+                >
+                  <span className="cyber-orbit-chip-label" style={{ animationDelay: `${delay}s` }}>
+                    {chip.name}
+                  </span>
+                  <span className="cyber-orbit-chip-ping" style={{ animationDelay: `${delay}s` }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
