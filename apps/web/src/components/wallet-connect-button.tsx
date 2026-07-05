@@ -7,7 +7,7 @@ import { useT } from '@/lib/i18n-context';
 import { useWalletUi } from '@/lib/web3-provider';
 import { isPreConnectAcknowledged } from '@/components/pre-connect-safety';
 import { PreConnectSafetyModal } from '@/components/pre-connect-safety-modal';
-import { cn } from '@entelewallet/utils';
+import { cn, truncateAddress } from '@entelewallet/utils';
 import { Button } from '@entelewallet/ui';
 
 const CONNECT_TIMEOUT_MS = 30_000;
@@ -34,8 +34,16 @@ function mapConnectError(message: string, t: (k: string) => string): string {
   if (lower.includes('timeout') || lower.includes('timed out')) {
     return t('connect.connectionTimedOut');
   }
-  if (lower.includes('no wallet') || lower.includes('not found') || lower.includes('provider')) {
-    return t('connect.noWalletDetected');
+  if (lower.includes('base account') || lower.includes('baseaccount')) {
+    return t('connect.baseDisabled');
+  }
+  if (
+    lower.includes('no wallet') ||
+    lower.includes('not found') ||
+    lower.includes('not available') ||
+    lower.includes('provider')
+  ) {
+    return t('connect.walletUnavailable');
   }
   return message;
 }
@@ -52,7 +60,7 @@ function ConnectButtonInner({
   connectModalOpen,
   mounted,
 }: WalletConnectButtonProps & {
-  account: { displayName: string } | undefined;
+  account: { displayName: string; address?: string } | undefined;
   chain: { id: number; name?: string } | undefined;
   openConnectModal: () => void;
   openAccountModal: () => void;
@@ -60,14 +68,15 @@ function ConnectButtonInner({
   mounted: boolean;
 }) {
   const t = useT();
-  const { isConnected, isConnecting, status } = useAccount();
+  const { isConnected, isConnecting, status, address } = useAccount();
   const { error: connectError, isPending: connectPending } = useConnect();
-  const { setUiState, setConnectError } = useWalletUi();
+  const { setUiState, connectError: uiError, setConnectError } = useWalletUi();
 
   const [acknowledged, setAcknowledged] = useState(false);
   const [userStartedConnect, setUserStartedConnect] = useState(false);
   const [showSafetyModal, setShowSafetyModal] = useState(false);
   const [safetyAcked, setSafetyAcked] = useState(false);
+  const [hadFailure, setHadFailure] = useState(false);
   const openModalRef = useRef<(() => void) | null>(null);
 
   const wagmiConnecting =
@@ -82,31 +91,56 @@ function ConnectButtonInner({
   useEffect(() => {
     if (isConnected) {
       setUserStartedConnect(false);
+      setHadFailure(false);
       setUiState('connected');
+      return;
+    }
+    if (showSafetyModal) {
+      setUiState('safety_required');
       return;
     }
     if (userStartedConnect && wagmiConnecting) {
       setUiState('connecting');
       return;
     }
-    if (userStartedConnect) {
-      setUiState('wallet_modal_open');
+    if (userStartedConnect && connectModalOpen) {
+      setUiState('modal_open');
+      return;
+    }
+    if (hadFailure) {
+      setUiState('connection_failed');
       return;
     }
     setUiState('idle');
-  }, [isConnected, wagmiConnecting, userStartedConnect, setUiState]);
+  }, [
+    isConnected,
+    wagmiConnecting,
+    userStartedConnect,
+    connectModalOpen,
+    showSafetyModal,
+    hadFailure,
+    setUiState,
+  ]);
 
   useEffect(() => {
     if (!connectError || !userStartedConnect) return;
-    setConnectError(mapConnectError(connectError.message, t));
-    setUiState('connection_failed');
+    const mapped = mapConnectError(connectError.message, t);
+    setConnectError(mapped);
+    setUiState(
+      connectError.message.toLowerCase().includes('reject') ||
+        connectError.message.toLowerCase().includes('denied')
+        ? 'connection_rejected'
+        : 'connection_failed',
+    );
     setUserStartedConnect(false);
+    setHadFailure(true);
   }, [connectError, userStartedConnect, setConnectError, setUiState, t]);
 
   useEffect(() => {
     if (!userStartedConnect || !wagmiConnecting) return;
     const timer = window.setTimeout(() => {
       setUserStartedConnect(false);
+      setHadFailure(true);
       setConnectError(t('connect.connectionTimedOut'));
       setUiState('connection_failed');
     }, CONNECT_TIMEOUT_MS);
@@ -122,12 +156,14 @@ function ConnectButtonInner({
   const beginConnect = useCallback(
     (open: () => void) => {
       setConnectError(null);
+      setHadFailure(false);
       setUserStartedConnect(true);
-      setUiState('wallet_modal_open');
+      setUiState('modal_open');
       try {
         open();
       } catch {
         setUserStartedConnect(false);
+        setHadFailure(true);
         setConnectError(t('connect.modalUnavailable'));
         setUiState('connection_failed');
       }
@@ -159,6 +195,17 @@ function ConnectButtonInner({
   const ready = mounted;
   const connected = ready && account && chain;
 
+  const getButtonLabel = () => {
+    if (connected) {
+      const label = address ? truncateAddress(address) : account!.displayName;
+      return `${t('connect.connectedLabel')}: ${label}`;
+    }
+    if (showConnectingLabel) return t('connect.connecting');
+    if (showSafetyModal && !skipAckRedirect) return t('connect.reviewSafetyNotice');
+    if (hadFailure || uiError) return t('connect.tryAgain');
+    return t('common.connectWallet');
+  };
+
   return (
     <>
       <div
@@ -181,7 +228,7 @@ function ConnectButtonInner({
             )}
           >
             <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-            {account!.displayName}
+            {getButtonLabel()}
           </button>
         ) : (
           <button
@@ -198,7 +245,7 @@ function ConnectButtonInner({
               className,
             )}
           >
-            {showConnectingLabel ? t('connect.connecting') : t('common.connectWallet')}
+            {getButtonLabel()}
           </button>
         )}
       </div>

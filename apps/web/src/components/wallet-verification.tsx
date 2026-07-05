@@ -12,7 +12,7 @@ import { ShieldCheck, Loader2 } from 'lucide-react';
 
 export function WalletVerification() {
   const t = useT();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, connector } = useAccount();
   const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
   const { verificationStatus, setVerificationStatus, isVerified, verifiedAt } = useWalletStatus();
@@ -87,6 +87,12 @@ export function WalletVerification() {
           <p className="text-sm text-slate-500">{t('connect.network')}</p>
           <p className="text-sm font-medium">{chain?.name ?? `Chain ${chainId}`}</p>
         </div>
+        {connector?.name && (
+          <div>
+            <p className="text-sm text-slate-500">{t('connect.walletType')}</p>
+            <p className="text-sm font-medium">{connector.name}</p>
+          </div>
+        )}
         <div>
           <p className="text-sm text-slate-500">{t('connect.verificationStatus')}</p>
           <Badge variant={badgeVariant}>{t(getVerificationBadgeKey(verificationStatus))}</Badge>

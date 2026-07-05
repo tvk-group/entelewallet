@@ -27,6 +27,8 @@ export const FEATURES = {
   ENABLE_BROWSER_EXTENSION: false,
   /** Requires security architecture, audit plan and legal approval before enabling. */
   ENABLE_ACCOUNT_ABSTRACTION: false,
+  /** Base Account wallet connector — disabled by default for EnteleWALLET Lite. */
+  ENABLE_BASE_ACCOUNT: false,
 } as const;
 
 export type FeatureFlag = keyof typeof FEATURES;

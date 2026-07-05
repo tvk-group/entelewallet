@@ -1,35 +1,30 @@
 'use client';
 
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { mainnet, base, sepolia } from 'wagmi/chains';
 import { ReactNode, useState, createContext, useContext, useMemo } from 'react';
 import { useI18n } from '@/lib/i18n-context';
 import type { LocaleCode } from '@entelewallet/i18n';
 import { CANONICAL_APP_URL } from '@entelewallet/config';
-
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID?.trim() || '';
-
-const chains =
-  process.env.NODE_ENV === 'development'
-    ? ([mainnet, base, sepolia] as const)
-    : ([mainnet, base] as const);
-
-const RK_LOCALE_MAP: Partial<Record<LocaleCode, string>> = {
-  en: 'en', de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', nl: 'nl',
-  ru: 'ru', ja: 'ja', ko: 'ko', zh: 'zh', tr: 'tr', ar: 'ar',
-};
+import {
+  createEnteleWagmiConfig,
+  isWalletConnectConfigured,
+  walletConnectProjectId,
+} from '@/lib/entele-wallets';
 
 export type WalletUiState =
   | 'idle'
-  | 'wallet_modal_open'
+  | 'safety_required'
+  | 'modal_open'
   | 'connecting'
   | 'connected'
+  | 'connection_rejected'
   | 'connection_failed'
-  | 'unsupported_wallet'
-  | 'wrong_network';
+  | 'walletconnect_missing_project_id'
+  | 'unsupported_network'
+  | 'verified'
+  | 'verification_failed';
 
 const WalletUiContext = createContext<{
   uiState: WalletUiState;
@@ -46,6 +41,11 @@ const WalletUiContext = createContext<{
 export function useWalletUi() {
   return useContext(WalletUiContext);
 }
+
+const RK_LOCALE_MAP: Partial<Record<LocaleCode, string>> = {
+  en: 'en', de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', nl: 'nl',
+  ru: 'ru', ja: 'ja', ko: 'ko', zh: 'zh', tr: 'tr', ar: 'ar',
+};
 
 function RainbowKitInner({ children }: { children: ReactNode }) {
   const { locale } = useI18n();
@@ -79,16 +79,7 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
 export function Web3Provider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
-  const config = useMemo(
-    () =>
-      getDefaultConfig({
-        appName: 'EnteleWALLET',
-        projectId: projectId || '00000000000000000000000000000000',
-        chains,
-        ssr: true,
-      }),
-    [],
-  );
+  const config = useMemo(() => createEnteleWagmiConfig(), []);
 
   return (
     <WagmiProvider config={config} reconnectOnMount={false}>
@@ -99,5 +90,4 @@ export function Web3Provider({ children }: { children: ReactNode }) {
   );
 }
 
-export const walletConnectProjectId = projectId;
-export const isWalletConnectConfigured = Boolean(projectId);
+export { isWalletConnectConfigured, walletConnectProjectId };

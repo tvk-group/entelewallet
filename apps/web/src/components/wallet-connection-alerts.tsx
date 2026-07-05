@@ -31,6 +31,10 @@ export function WalletConnectionAlerts() {
     alerts.push({ variant: 'error', message: t('connect.connectionFailed') });
   }
 
+  if (uiState === 'connection_rejected') {
+    alerts.push({ variant: 'warning', message: t('connect.walletRejected') });
+  }
+
   if (isConnected && chainId && !isSupportedChain(chainId)) {
     alerts.push({ variant: 'warning', message: t('connect.unsupportedNetwork') });
   }

@@ -4,6 +4,8 @@ import { PageLayout } from '@/components/page-layout';
 import { PreConnectSafetyPanel } from '@/components/pre-connect-safety';
 import { WalletConnectButton, ResetWalletUiButton } from '@/components/wallet-connect-button';
 import { WalletConnectionAlerts } from '@/components/wallet-connection-alerts';
+import { WalletConnectGuide } from '@/components/wallet-connect-guide';
+import { WalletDebugPanel } from '@/components/wallet-debug-panel';
 import { WalletVerification } from '@/components/wallet-verification';
 import { SignatureWarningBanner, SecurityBanner } from '@/components/security-banner';
 import { useT } from '@/lib/i18n-context';
@@ -19,6 +21,8 @@ export default function ConnectPage() {
   return (
     <PageLayout title={t('connect.title')} description={t('connect.description')}>
       <div className="mx-auto max-w-2xl space-y-6">
+        <WalletConnectGuide />
+
         <PreConnectSafetyPanel onAckChange={setCanConnect} />
 
         <WalletConnectionAlerts />
@@ -49,6 +53,8 @@ export default function ConnectPage() {
             </Card>
           </div>
         )}
+
+        <WalletDebugPanel />
       </div>
     </PageLayout>
   );
