@@ -1,30 +1,109 @@
 'use client';
 
-import Image from 'next/image';
+import { useMemo } from 'react';
 import { cn } from '@entelewallet/utils';
-import { EntelekronCoinLogo } from './entelekron-coin-logo';
+import { EntelekronCoinLogo, TvkCoinMark } from './entelekron-coin-logo';
+
+export const ECOSYSTEM_MODULES = [
+  'SOVRA',
+  'EnergieMIND ENM',
+  'EnteleWALLET',
+  'EnteleSCAN',
+  'EnteleLINK',
+  'EnteleLEDGER',
+  'EnteleCLOS',
+  'EnteleVAULT',
+  'TVKWALLET',
+  'TVK ID',
+  'TVK CyberLab',
+  'GraphVAULT',
+  'ChronoSEAL',
+  'KRON Payment Systems',
+  'KRON Ecosystem Assets',
+  'ALVINA',
+  'Ava Sante',
+  'Ava Sentient',
+  'Cerebthra',
+  'Cognethra',
+  'Sentient Signals',
+  'eKRON',
+  'SoviKRON',
+  'AlviKRON',
+  'MineKRON',
+  'WarpKRON',
+  'PuppyKRON',
+  'PuriKRON',
+] as const;
 
 interface EcosystemCyberCoinProps {
-  modules?: string[];
   className?: string;
 }
 
 const COIN_EDGE_COUNT = 36;
-const COIN_RADIUS = 108;
+const COIN_RADIUS = 90;
+const HUB_SIZE = 1000;
+const HUB_CENTER = HUB_SIZE / 2;
 
-const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
-  left: `${8 + ((i * 37) % 84)}%`,
-  top: `${10 + ((i * 53) % 75)}%`,
-  delay: `${(i * 0.41) % 6}s`,
-  duration: `${4 + (i % 5)}s`,
-  size: 2 + (i % 3),
+const ORBIT_RINGS = [
+  { radius: 0.28, offsetDeg: 0 },
+  { radius: 0.35, offsetDeg: 14 },
+  { radius: 0.41, offsetDeg: -10 },
+] as const;
+
+type OrbitNode = {
+  name: string;
+  x: number;
+  y: number;
+  angle: number;
+  radius: number;
+  ring: number;
+  delay: number;
+};
+
+function distributeModules(modules: readonly string[]): OrbitNode[] {
+  const perRing = Math.ceil(modules.length / ORBIT_RINGS.length);
+  const nodes: OrbitNode[] = [];
+
+  modules.forEach((name, index) => {
+    const ringIndex = Math.min(Math.floor(index / perRing), ORBIT_RINGS.length - 1);
+    const indexInRing = index - ringIndex * perRing;
+    const countInRing = Math.min(perRing, modules.length - ringIndex * perRing);
+    const ring = ORBIT_RINGS[ringIndex];
+    const angleDeg = ring.offsetDeg + (360 / countInRing) * indexInRing;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const r = ring.radius * (HUB_SIZE / 2);
+    const x = HUB_CENTER + Math.cos(angleRad) * r;
+    const y = HUB_CENTER + Math.sin(angleRad) * r;
+
+    nodes.push({
+      name,
+      x,
+      y,
+      angle: angleDeg,
+      radius: ring.radius,
+      ring: ringIndex,
+      delay: (index * 0.17) % 4,
+    });
+  });
+
+  return nodes;
+}
+
+const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
+  left: `${6 + ((i * 31) % 88)}%`,
+  top: `${8 + ((i * 47) % 84)}%`,
+  delay: `${(i * 0.33) % 5}s`,
+  duration: `${3.5 + (i % 4)}s`,
+  size: 1 + (i % 3),
 }));
 
-export function EcosystemCyberCoin({ modules = [], className }: EcosystemCyberCoinProps) {
+export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
+  const nodes = useMemo(() => distributeModules(ECOSYSTEM_MODULES), []);
+
   return (
     <div
       className={cn(
-        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-4xl overflow-hidden rounded-[2rem]',
+        'ecosystem-cyber-coin relative mx-auto mt-10 w-full max-w-6xl overflow-hidden rounded-[2rem]',
         className,
       )}
       aria-hidden
@@ -49,35 +128,82 @@ export function EcosystemCyberCoin({ modules = [], className }: EcosystemCyberCo
         />
       ))}
 
-      <div className="relative z-10 flex flex-col items-center px-4 py-10 sm:py-14">
+      <div className="cyber-ecosystem-hub relative z-10 mx-auto aspect-square w-full max-w-[min(100%,920px)]">
+        <svg
+          className="cyber-signal-layer absolute inset-0 h-full w-full"
+          viewBox={`0 0 ${HUB_SIZE} ${HUB_SIZE}`}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <radialGradient id="signal-core-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(34,211,238,0.35)" />
+              <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+            </radialGradient>
+            <linearGradient id="signal-line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="rgba(34,211,238,0.05)" />
+              <stop offset="45%" stopColor="rgba(34,211,238,0.45)" />
+              <stop offset="100%" stopColor="rgba(167,139,250,0.65)" />
+            </linearGradient>
+          </defs>
+
+          <circle cx={HUB_CENTER} cy={HUB_CENTER} r="120" fill="url(#signal-core-glow)" />
+
+          {ORBIT_RINGS.map((ring, i) => (
+            <ellipse
+              key={i}
+              cx={HUB_CENTER}
+              cy={HUB_CENTER}
+              rx={ring.radius * (HUB_SIZE / 2)}
+              ry={ring.radius * (HUB_SIZE / 2) * 0.92}
+              className="cyber-orbit-track"
+              style={{ animationDelay: `${i * 0.8}s` }}
+            />
+          ))}
+
+          {nodes.map((node, i) => (
+            <g key={node.name}>
+              <line
+                x1={HUB_CENTER}
+                y1={HUB_CENTER}
+                x2={node.x}
+                y2={node.y}
+                className="cyber-signal-line"
+                style={{ animationDelay: `${node.delay}s` }}
+              />
+              <line
+                x1={HUB_CENTER}
+                y1={HUB_CENTER}
+                x2={node.x}
+                y2={node.y}
+                className="cyber-signal-pulse"
+                style={{ animationDelay: `${node.delay + 0.4}s` }}
+              />
+              <circle r="3" fill="#67e8f9" className="cyber-signal-node">
+                <animateMotion
+                  dur={`${2.8 + (i % 3) * 0.6}s`}
+                  repeatCount="indefinite"
+                  path={`M ${HUB_CENTER} ${HUB_CENTER} L ${node.x} ${node.y}`}
+                  begin={`${node.delay}s`}
+                />
+              </circle>
+            </g>
+          ))}
+        </svg>
+
         <div className="cyber-coin-stage">
           <div className="cyber-coin-spinner">
             <div className="cyber-coin-body">
               <div className="cyber-coin-face cyber-coin-face-front">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <EntelekronCoinLogo className="h-24 w-24 sm:h-28 sm:w-28" />
-                  <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.35em] text-cyan-100/90 sm:text-xs">
-                    EnteleKRON
-                  </p>
+                  <EntelekronCoinLogo className="h-[5.5rem] w-[5.5rem] sm:h-28 sm:w-28" />
                 </div>
               </div>
 
               <div className="cyber-coin-face cyber-coin-face-back">
                 <div className="cyber-coin-shine" />
                 <div className="cyber-coin-face-inner">
-                  <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-cyan-400/40 sm:h-20 sm:w-20">
-                    <Image
-                      src="/icons/icon-512.png"
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  </div>
-                  <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.28em] text-violet-100/90 sm:text-xs">
-                    TVK Group
-                  </p>
+                  <TvkCoinMark />
                 </div>
               </div>
 
@@ -97,22 +223,23 @@ export function EcosystemCyberCoin({ modules = [], className }: EcosystemCyberCo
           <div className="cyber-coin-reflection" />
         </div>
 
-        <p className="mt-8 text-center text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300/80">
-          EnteleKRON · ENK
-        </p>
-
-        {modules.length > 0 && (
-          <ul className="mt-6 flex max-w-2xl flex-wrap justify-center gap-2">
-            {modules.map((name) => (
-              <li
-                key={name}
-                className="rounded-full border border-cyan-500/25 bg-slate-900/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-cyan-100/80 backdrop-blur-sm sm:text-xs"
-              >
-                {name}
-              </li>
-            ))}
-          </ul>
-        )}
+        {nodes.map((node) => (
+          <div
+            key={node.name}
+            className="cyber-orbit-chip"
+            style={
+              {
+                left: `${(node.x / HUB_SIZE) * 100}%`,
+                top: `${(node.y / HUB_SIZE) * 100}%`,
+                '--chip-delay': `${node.delay}s`,
+                '--chip-angle': `${node.angle}deg`,
+              } as React.CSSProperties
+            }
+          >
+            <span className="cyber-orbit-chip-label">{node.name}</span>
+            <span className="cyber-orbit-chip-ping" />
+          </div>
+        ))}
       </div>
     </div>
   );
