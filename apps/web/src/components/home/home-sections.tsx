@@ -119,17 +119,6 @@ export function HomeWhatItDoesNot() {
   );
 }
 
-const ECOSYSTEM_NODES = [
-  'EnteleKRON',
-  'ENK',
-  'SOVRA',
-  'EnergieMIND',
-  'EnteleSCAN',
-  'EnteleVAULT',
-  'TVK ID',
-  'TVK Group',
-];
-
 export function HomeEcosystemMap() {
   const t = useT();
 
@@ -148,7 +137,7 @@ export function HomeEcosystemMap() {
       <div className="relative z-10 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.ecosystemTitle')}</h2>
         <p className="mx-auto mt-2 max-w-2xl text-slate-600">{t('home.ecosystemSubtitle')}</p>
-        <EcosystemCyberCoin modules={ECOSYSTEM_NODES} />
+        <EcosystemCyberCoin />
       </div>
     </section>
   );

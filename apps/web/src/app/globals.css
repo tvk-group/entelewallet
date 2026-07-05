@@ -216,7 +216,11 @@ reown-modal {
   .cyber-coin-shine,
   .cyber-coin-halo,
   .cyber-coin-particle,
-  .cyber-coin-scanline {
+  .cyber-coin-scanline,
+  .cyber-orbit-track,
+  .cyber-signal-pulse,
+  .cyber-orbit-chip,
+  .cyber-orbit-chip-ping {
     animation: none !important;
   }
   .ecosystem-orbit .orbit-core {
@@ -296,11 +300,132 @@ reown-modal {
 /* Ecosystem cyber coin — EnteleKRON ENK token (ETH-style 3D coin) */
 .ecosystem-cyber-coin {
   contain: paint;
-  min-height: 420px;
+  min-height: min(92vw, 680px);
   border: 1px solid rgba(34, 211, 238, 0.2);
   box-shadow:
     0 0 0 1px rgba(30, 64, 175, 0.15) inset,
     0 24px 64px rgba(15, 23, 42, 0.35);
+}
+
+.cyber-ecosystem-hub {
+  min-height: min(88vw, 640px);
+  padding: 0.5rem;
+}
+
+.cyber-signal-layer {
+  pointer-events: none;
+  overflow: visible;
+}
+
+.cyber-orbit-track {
+  fill: none;
+  stroke: rgba(34, 211, 238, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 6 14;
+  transform-origin: center;
+  animation: cyberOrbitTrackSpin 48s linear infinite;
+}
+
+.cyber-signal-line {
+  stroke: rgba(34, 211, 238, 0.14);
+  stroke-width: 1;
+  stroke-dasharray: 3 10;
+}
+
+.cyber-signal-pulse {
+  stroke: url(#signal-line-gradient);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 18 120;
+  animation: cyberSignalPulse 2.6s linear infinite;
+}
+
+.cyber-signal-node {
+  opacity: 0.85;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.9));
+}
+
+.cyber-orbit-chip {
+  position: absolute;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+  animation: cyberChipFloat 5.5s ease-in-out infinite;
+  animation-delay: var(--chip-delay);
+  pointer-events: none;
+}
+
+.cyber-orbit-chip-label {
+  display: block;
+  max-width: 7.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: rgba(2, 6, 23, 0.82);
+  padding: 0.28rem 0.55rem;
+  text-align: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: rgba(224, 242, 254, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 14px rgba(34, 211, 238, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.cyber-orbit-chip-ping {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: -0.225rem 0 0 -0.225rem;
+  border-radius: 50%;
+  background: rgba(103, 232, 249, 0.9);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  animation: cyberChipPing 2.8s ease-out infinite;
+  animation-delay: var(--chip-delay);
+}
+
+@media (min-width: 640px) {
+  .cyber-orbit-chip-label {
+    max-width: 9rem;
+    padding: 0.32rem 0.65rem;
+    font-size: 0.62rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ecosystem-cyber-coin {
+    min-height: 680px;
+  }
+
+  .cyber-ecosystem-hub {
+    min-height: 640px;
+  }
+
+  .cyber-orbit-chip-label {
+    max-width: 10rem;
+    font-size: 0.65rem;
+  }
+}
+
+.cyber-coin-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 15;
+  width: min(220px, 28vw);
+  height: min(220px, 28vw);
+  min-width: 168px;
+  min-height: 168px;
+  transform: translate(-50%, -50%);
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
 }
 
 .cyber-coin-bg {
@@ -340,14 +465,6 @@ reown-modal {
   animation: cyberCoinParticle 5s ease-in-out infinite;
 }
 
-.cyber-coin-stage {
-  position: relative;
-  width: min(280px, 72vw);
-  height: min(280px, 72vw);
-  perspective: 1100px;
-  perspective-origin: 50% 42%;
-}
-
 .cyber-coin-spinner {
   position: absolute;
   inset: 0;
@@ -360,9 +477,9 @@ reown-modal {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 216px;
-  height: 216px;
-  margin: -108px 0 0 -108px;
+  width: 180px;
+  height: 180px;
+  margin: -90px 0 0 -90px;
   transform-style: preserve-3d;
 }
 
@@ -493,4 +610,26 @@ reown-modal {
   20% { opacity: 0.85; }
   50% { opacity: 0.4; transform: translateY(-24px) scale(1); }
   80% { opacity: 0; }
+}
+
+@keyframes cyberOrbitTrackSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cyberSignalPulse {
+  from { stroke-dashoffset: 140; opacity: 0.2; }
+  50% { opacity: 1; }
+  to { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+@keyframes cyberChipFloat {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-3px); }
+}
+
+@keyframes cyberChipPing {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  70% { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
 }
