@@ -1,46 +1,56 @@
 'use client';
 
 import { PageLayout } from '@/components/page-layout';
-import { SecurityBanner, SignatureWarningBanner } from '@/components/security-banner';
+import { PreConnectSafetyPanel } from '@/components/pre-connect-safety';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { WalletVerification } from '@/components/wallet-verification';
+import { SignatureWarningBanner, SecurityBanner } from '@/components/security-banner';
 import { useT } from '@/lib/i18n-context';
-import { walletConnectProjectId } from '@/lib/web3-provider';
+import { isWalletConnectConfigured } from '@/lib/web3-provider';
 import { Alert, Card, CardContent } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
+import { useState } from 'react';
 
 export default function ConnectPage() {
   const t = useT();
   const { isConnected } = useAccount();
-  const wcMissing = !walletConnectProjectId;
+  const [canConnect, setCanConnect] = useState(false);
+  const wcConfigured = isWalletConnectConfigured;
 
   return (
     <PageLayout title={t('connect.title')} description={t('connect.description')}>
       <div className="mx-auto max-w-2xl space-y-6">
-        <SecurityBanner />
+        <PreConnectSafetyPanel onAckChange={setCanConnect} />
 
-        {wcMissing && process.env.NODE_ENV === 'development' && (
-          <Alert variant="warning">{t('connect.walletConnectDevWarning')}</Alert>
+        {!wcConfigured && (
+          <Alert variant="warning">
+            {process.env.NODE_ENV === 'development'
+              ? t('connect.walletConnectDevWarning')
+              : t('connect.walletConnectUnavailable')}
+          </Alert>
         )}
 
+        <SecurityBanner />
+
         {!isConnected ? (
-          <Card>
+          <Card className="animate-slide-up">
             <CardContent className="flex flex-col items-center gap-4 p-8">
-              <WalletConnectButton />
-              <p className="text-center text-sm text-slate-500">
-                {t('connect.description')}
-              </p>
+              <WalletConnectButton size="lg" disabled={!canConnect} />
+              {!canConnect && (
+                <p className="text-center text-sm text-amber-700">{t('connect.ackRequired')}</p>
+              )}
+              <p className="text-center text-sm text-slate-500">{t('connect.description')}</p>
             </CardContent>
           </Card>
         ) : (
-          <>
+          <div className="space-y-4 animate-fade-in">
             <SignatureWarningBanner />
             <Card>
               <CardContent className="p-6">
                 <WalletVerification />
               </CardContent>
             </Card>
-          </>
+          </div>
         )}
       </div>
     </PageLayout>

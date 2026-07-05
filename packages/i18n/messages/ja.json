@@ -8,29 +8,50 @@
     "lite": "EnteleWALLET Lite"
   },
   "nav": {
-    "home": "ホーム",
-    "connect": "接続",
-    "overview": "概要",
-    "assets": "資産",
-    "transactions": "取引",
-    "vesting": "ベスティング",
-    "claims": "クレーム",
-    "security": "セキュリティ",
-    "transparency": "透明性",
-    "settings": "設定",
-    "account": "アカウント",
-    "support": "サポート",
-    "roadmap": "ロードマップ",
-    "legal": "法的情報"
+    "home": "Home",
+    "connect": "Connect",
+    "overview": "Overview",
+    "assets": "Assets",
+    "transactions": "Transactions",
+    "vesting": "Vesting",
+    "claims": "Claims",
+    "security": "Security",
+    "transparency": "Transparency",
+    "settings": "Settings",
+    "account": "Account",
+    "support": "Support",
+    "roadmap": "Roadmap",
+    "legal": "Legal",
+    "install": "Install",
+    "ecosystem": "Ecosystem",
+    "officialDomains": "Official Domains"
   },
   "common": {
-    "connectWallet": "ウォレットを接続",
-    "disconnect": "切断",
-    "verifyOwnership": "所有権を確認",
+    "connectWallet": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "verifyOwnership": "Verify Ownership",
+    "walletConnected": "Wallet connected",
+    "walletVerified": "Wallet verified",
+    "openApp": "Open Wallet App",
+    "installApp": "Install as Web App",
+    "securityCenter": "Security Center",
+    "transparencyCenter": "Transparency Center",
+    "selectLanguage": "Select language",
+    "searchLanguages": "Search languages…",
+    "menu": "Menu",
+    "purpose": "Purpose",
+    "category": "Category",
+    "status": "Status",
+    "internalOnly": "Internal only",
+    "notPublished": "Not published",
+    "chainLabel": "Chain",
+    "lastVerified": "Last verified",
+    "publicVisibility": "Public",
+    "providerLabel": "Submission channel",
     "copyAddress": "Copy Address",
     "copied": "Copied",
     "viewExplorer": "View on Explorer",
-    "loading": "読み込み中…",
+    "loading": "Loading…",
     "error": "Error",
     "retry": "Retry",
     "learnMore": "Learn More",
@@ -51,7 +72,7 @@
     "cancel": "Cancel",
     "save": "Save",
     "back": "Back",
-    "language": "言語"
+    "language": "Language"
   },
   "warnings": {
     "liteNotice": "EnteleWALLET Lite connects to your existing wallet. It does not store seed phrases, private keys or custody funds.",
@@ -73,7 +94,7 @@
     "roadmapBlock": "Full EnteleWALLET will be a future non-custodial wallet phase and requires security architecture, independent audits and legal review before private-key features are implemented."
   },
   "connect": {
-    "title": "接続 Wallet",
+    "title": "Connect Wallet",
     "description": "Connect your existing wallet and verify ownership securely.",
     "connectedAddress": "Connected Address",
     "network": "Network",
@@ -86,10 +107,28 @@
     "unsupportedNetwork": "This network is not supported",
     "walletConnectMissing": "WalletConnect is not configured. Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable.",
     "walletConnectDevWarning": "WalletConnect Project ID is missing. WalletConnect wallets will be unavailable.",
-    "notLinked": "This wallet is verified but not yet linked to an EnteleWALLET or EnteleKRON account."
+    "walletConnectUnavailable": "WalletConnect is temporarily unavailable. Injected wallets (MetaMask, Rabby) still work.",
+    "notLinked": "This wallet is verified but not yet linked to an EnteleWALLET or EnteleKRON account.",
+    "beforeConnectTitle": "Before you connect",
+    "ackCheckbox": "I understand that EnteleWALLET Lite does not custody funds, does not store seed phrases or private keys, and that wallet verification signatures do not authorize transfers or spending.",
+    "ackRequired": "Please confirm the safety notice before connecting.",
+    "noticeCustody": "EnteleWALLET Lite connects to existing wallets only. It does not store seed phrases, private keys or custody funds.",
+    "noticeSignature": "Wallet verification signatures do not transfer tokens, approve spending, or cost gas.",
+    "noticeNeverShare": "Never share seed phrase, private key, recovery phrase or wallet password.",
+    "noticeDomain": "Always verify the domain is app.entelewallet.com.",
+    "noticePayments": "Do not send funds unless the instruction appears inside your approved EnteleKRON investor dashboard.",
+    "noticeRisk": "Digital assets involve significant risk. EnteleWALLET does not guarantee token value, liquidity, listing or returns.",
+    "noticeUnderstand": "Never sign messages you do not understand.",
+    "connecting": "Connecting wallet…",
+    "connectionFailed": "Connection failed. Please try again.",
+    "modalOpen": "Wallet modal open"
+  },
+  "preConnect": {
+    "title": "Before you connect",
+    "subtitle": "Review these safety notices before connecting your wallet."
   },
   "overview": {
-    "title": "概要",
+    "title": "Wallet Overview",
     "description": "Your connected wallet dashboard and ecosystem status.",
     "address": "Address",
     "network": "Network",
@@ -103,7 +142,7 @@
     "notLinked": "No investor account linked"
   },
   "assets": {
-    "title": "資産",
+    "title": "Assets",
     "description": "View your ecosystem token balances.",
     "balance": "Balance",
     "network": "Network",
@@ -114,7 +153,7 @@
     "futureAsset": "Future TVK ecosystem asset"
   },
   "transactions": {
-    "title": "取引",
+    "title": "Transactions",
     "description": "Transaction history and explorer links.",
     "indexingFuture": "Detailed transaction indexing will be added in a future release.",
     "walletExplorer": "Wallet Explorer",
@@ -122,7 +161,7 @@
     "emptyState": "No transactions to display yet."
   },
   "vesting": {
-    "title": "ベスティング",
+    "title": "Vesting",
     "description": "View your ENK vesting schedule and unlock status.",
     "notLinked": "Link your verified EnteleKRON investor account to view vesting details.",
     "learnAboutVesting": "Learn about vesting",
@@ -137,7 +176,7 @@
     "schedule": "Schedule"
   },
   "claims": {
-    "title": "クレーム",
+    "title": "Claims",
     "description": "Token claim readiness and requirements.",
     "notOpen": "Token claims are not open yet.",
     "requirementsTitle": "Claim Requirements",
@@ -149,7 +188,7 @@
     "reqClaimPeriod": "Claim period active"
   },
   "security": {
-    "title": "セキュリティ Center",
+    "title": "Security Center",
     "description": "Security guidance, official domains and phishing protection.",
     "officialDomains": "Official Domains",
     "redirectDomains": "Redirect Domains",
@@ -165,19 +204,22 @@
     "futureRoadmap": "Future Security Roadmap"
   },
   "transparency": {
-    "title": "透明性 Center",
+    "title": "Transparency Center",
     "description": "Official EnteleKRON and EnteleWALLET transparency information.",
     "externalLink": "View full Transparency Center on EnteleKRON",
-    "enkContract": "ENK Contract",
-    "treasurySafe": "Treasury Safe",
-    "presaleSafe": "Presale Safe",
-    "liquiditySafe": "Liquidity Safe",
-    "vestingSafe": "Vesting Safe",
-    "ecosystemReserveSafe": "Ecosystem Reserve Safe",
-    "governanceSafe": "Governance Safe"
+    "safetyNotice": "Always verify official addresses inside EnteleWALLET or EnteleKRON official dashboards. Never trust wallet addresses sent through social media, Telegram, Discord, X, Instagram, WhatsApp, email or direct messages.",
+    "paymentWarning": "Do not send funds to any address unless the instruction appears inside your approved EnteleKRON investor dashboard.",
+    "verified": "Verified",
+    "pendingVerification": "Pending official verification",
+    "internalOnly": "Internal only — not published",
+    "notPublished": "Not published",
+    "purpose": "Purpose",
+    "safetyNote": "Safety note",
+    "maxSupply": "Max supply",
+    "decimals": "Decimals"
   },
   "settings": {
-    "title": "設定",
+    "title": "Settings",
     "description": "Manage connected wallets and verification settings.",
     "connectedWallets": "Connected Wallets",
     "verifiedWallets": "Verified Wallets",
@@ -189,7 +231,7 @@
     "securityWarnings": "Security Warnings"
   },
   "account": {
-    "title": "アカウント",
+    "title": "Account",
     "description": "Manage your EnteleWALLET account and linked wallets.",
     "guest": "Guest",
     "connectedWallet": "Connected Wallet",
@@ -202,25 +244,68 @@
     "noAccount": "No account linked yet"
   },
   "support": {
-    "title": "サポート",
+    "title": "Support",
     "description": "Report security concerns or get help.",
+    "channelNotice": "Security reports are sent to the EnteleWALLET security channel. Do not include seed phrases, private keys, recovery phrases, wallet passwords or personal secrets.",
     "reportPhishing": "Report Phishing",
     "reportFakeDomain": "Report Fake Domain",
     "reportSuspiciousSignature": "Report Suspicious Signature Request",
     "reportFakeSupport": "Report Fake Support Contact",
+    "walletConnectionIssue": "Wallet Connection Issue",
+    "transparencyConcern": "Transparency / Address Concern",
     "generalSupport": "General Support Request",
     "securityEmail": "Security Contact",
     "supportEmail": "Support Contact",
+    "formType": "Report type",
     "formSubject": "Subject",
     "formMessage": "Message",
     "formEmail": "Your Email",
     "formSeverity": "Severity",
     "formSubmit": "Submit Report",
-    "formSuccess": "Report submitted successfully",
-    "formFallback": "Email us directly at"
+    "formSuccess": "Report received. Our security/support team will review it. Never send seed phrases, private keys or wallet passwords.",
+    "formError": "Submission failed. Please use the email fallback below.",
+    "formFallback": "Email us directly",
+    "emailSecurity": "Email security@tvk.group",
+    "emailSupport": "Email support@tvk.group",
+    "providerSupabase": "Reports are stored securely via Supabase.",
+    "providerMailto": "Reports open your email client (mailto fallback)."
+  },
+  "install": {
+    "title": "Install EnteleWALLET",
+    "description": "Install app.entelewallet.com as a progressive web app on your device.",
+    "iphoneTitle": "iPhone (Safari)",
+    "iphoneSteps": "Open app.entelewallet.com in Safari → Share → Add to Home Screen.",
+    "androidTitle": "Android (Chrome)",
+    "androidSteps": "Open app.entelewallet.com in Chrome → Install app / Add to Home screen.",
+    "desktopTitle": "Desktop (Chrome / Edge)",
+    "desktopSteps": "Use the install icon in the address bar or bookmark app.entelewallet.com.",
+    "storeFuture": "App Store and Google Play listings are planned for a future phase after security and legal review. They are not available yet.",
+    "openWallet": "Open Wallet App",
+    "installWebApp": "Install as Web App"
+  },
+  "ecosystem": {
+    "title": "Ecosystem",
+    "description": "EnteleKRON sovereign intelligence ecosystem components.",
+    "statusLive": "Live",
+    "statusDevelopment": "In development",
+    "statusPlanned": "Planned",
+    "statusFuture": "Future"
+  },
+  "officialDomains": {
+    "title": "Official Domains",
+    "description": "Only connect your wallet on domains listed here.",
+    "warning": "If a domain is not listed here, do not connect your wallet or sign messages there.",
+    "app": "Primary EnteleWALLET app",
+    "marketing": "Official EnteleWALLET website",
+    "appRedirect": "App / PWA shortcut or redirect",
+    "trust": "Trust, security and documentation",
+    "ecosystemShortcut": "EnteleKRON ecosystem shortcut",
+    "entelekron": "Official EnteleKRON website and token sale platform",
+    "investorApp": "EnteleKRON investor app",
+    "tvkGroup": "TVK Group official website"
   },
   "roadmap": {
-    "title": "ロードマップ",
+    "title": "Roadmap",
     "description": "EnteleWALLET development phases and future features.",
     "activeNow": "Active Now",
     "activeWalletConnect": "Wallet connection",
@@ -247,7 +332,7 @@
     "futureNotice": "Future phase — not active in EnteleWALLET Lite."
   },
   "legal": {
-    "title": "法的情報",
+    "title": "Legal & Risk Notice",
     "description": "Important legal information about EnteleWALLET Lite.",
     "disclaimer": "EnteleWALLET Lite is a wallet connection and verification interface. It does not custody funds, store seed phrases, provide investment advice, provide legal or tax advice, or guarantee token value, liquidity, listing or returns.",
     "noCustody": "No Custody",
@@ -335,8 +420,29 @@
   },
   "footer": {
     "copyright": "© TVK Group. All rights reserved.",
+    "notice": "EnteleWALLET Lite does not custody funds, store seed phrases or private keys. Wallet verification signatures do not authorize transfers or spending.",
+    "appSection": "App",
+    "trustSection": "Trust",
+    "supportSection": "Support",
+    "ecosystemSection": "Ecosystem",
+    "reportPhishing": "Report phishing",
+    "reportFakeDomain": "Report fake domain",
+    "riskDisclosure": "Risk Disclosure",
+    "privacy": "Privacy",
+    "terms": "Terms",
     "security": "Security",
     "legal": "Legal",
-    "support": "Support"
+    "support": "Support",
+    "connectWallet": "Connect Wallet"
+  },
+  "legalPages": {
+    "privacyTitle": "Privacy Policy",
+    "privacyBody": "EnteleWALLET Lite collects minimal data required for wallet connection and verification. We do not store seed phrases or private keys. Wallet addresses may be logged for verification events when backend storage is enabled.",
+    "termsTitle": "Terms of Use",
+    "termsBody": "By using EnteleWALLET Lite you agree this is a wallet connection interface only. No custody, no investment advice, no guarantee of token value or returns.",
+    "riskTitle": "Risk Disclosure",
+    "riskBody": "Digital assets involve significant risk including total loss. Wallet connection does not equal investment approval. Token claims are not open unless officially announced.",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimerBody": "EnteleWALLET Lite provides no financial, legal or tax advice. All payments must follow approved EnteleKRON investor dashboard instructions only."
   }
 }

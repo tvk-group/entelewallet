@@ -1,10 +1,8 @@
 import type { TokenConfig } from '@entelewallet/types';
 
-/**
- * Central token registry — single source of truth for EnteleWALLET Lite.
- * Contract addresses must match the main EnteleKRON platform config.
- * Do not invent addresses. If unknown, mark pendingOfficialConfiguration.
- */
+const ENK_CONTRACT = '0xC95343B3f8A5af57a9b3B1acFf3D2a7654Fa28F6';
+
+/** Central token registry — single source of truth for EnteleWALLET Lite. */
 export const TOKEN_REGISTRY: TokenConfig[] = [
   {
     symbol: 'ETH',
@@ -22,9 +20,10 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     decimals: 18,
     network: 'Ethereum',
     chainId: 1,
+    contractAddress: ENK_CONTRACT,
     enabled: true,
-    pendingOfficialConfiguration: true,
-    explorerUrl: 'https://etherscan.io',
+    pendingOfficialConfiguration: false,
+    explorerUrl: `https://etherscan.io/token/${ENK_CONTRACT}`,
   },
   {
     symbol: 'USDT',
@@ -57,6 +56,11 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     explorerUrl: 'https://etherscan.io',
   },
 ];
+
+export const ENK_TOKEN_META = {
+  maxSupply: '100000000000',
+  status: 'verified' as const,
+};
 
 export function getTokenBySymbol(symbol: string): TokenConfig | undefined {
   return TOKEN_REGISTRY.find((t) => t.symbol === symbol);
