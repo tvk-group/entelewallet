@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useMemo } from 'react';
 import { cn } from '@entelewallet/utils';
 
@@ -186,49 +185,50 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
           })}
         </svg>
 
-        <div
-          className="cyber-coin-stage"
-          style={{ '--coin-diameter': 'min(221px, 61%)' } as React.CSSProperties}
-        >
-          <div className="cyber-coin-spinner">
-            <div className="cyber-coin-body">
-              <div className="cyber-coin-face cyber-coin-face-front" aria-hidden>
-                <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-plate" />
-                <div className="cyber-coin-face-inner">
-                  <Image
-                    src="/brand/entelekron-coin-face.png"
-                    alt=""
-                    width={512}
-                    height={512}
-                    className="cyber-coin-logo-mark cyber-coin-logo-enk"
-                    priority
-                  />
+        <div className="cyber-coin-stage">
+          <div className="cyber-coin-tilt">
+            <div className="cyber-coin-spinner">
+              <div className="cyber-coin-body">
+                <div className="cyber-coin-face cyber-coin-face-front" aria-hidden>
+                  <div className="cyber-coin-shine" />
+                  <div className="cyber-coin-face-plate" />
+                  <div className="cyber-coin-face-inner">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/brand/entelekron-coin-face.png"
+                      alt=""
+                      className="cyber-coin-logo-mark cyber-coin-logo-enk"
+                      draggable={false}
+                      loading="eager"
+                      decoding="sync"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
-                <div className="cyber-coin-shine" />
-                <div className="cyber-coin-face-plate" />
-                <div className="cyber-coin-face-inner">
-                  <Image
-                    src="/brand/tvk-labs-logo-transparent.png"
-                    alt=""
-                    width={512}
-                    height={512}
-                    className="cyber-coin-logo-mark cyber-coin-logo-tvk"
-                    priority
-                  />
+                <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
+                  <div className="cyber-coin-shine" />
+                  <div className="cyber-coin-face-plate" />
+                  <div className="cyber-coin-face-inner">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/brand/tvk-labs-logo-transparent.png"
+                      alt=""
+                      className="cyber-coin-logo-mark cyber-coin-logo-tvk"
+                      draggable={false}
+                      loading="eager"
+                      decoding="sync"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {Array.from({ length: COIN_EDGE_COUNT }, (_, i) => (
-                <div
-                  key={i}
-                  className="cyber-coin-edge"
-                  style={{ '--edge-angle': `${(360 / COIN_EDGE_COUNT) * i}deg` } as React.CSSProperties}
-                />
-              ))}
+                {Array.from({ length: COIN_EDGE_COUNT }, (_, i) => (
+                  <div
+                    key={i}
+                    className="cyber-coin-edge"
+                    style={{ '--edge-angle': `${(360 / COIN_EDGE_COUNT) * i}deg` } as React.CSSProperties}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 

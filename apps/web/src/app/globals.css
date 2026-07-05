@@ -229,7 +229,10 @@ reown-modal {
     transform: translate(-50%, -50%) !important;
   }
   .cyber-coin-spinner {
-    transform: rotateX(14deg) rotateY(35deg) !important;
+    transform: rotateY(35deg) !important;
+  }
+  .cyber-coin-tilt {
+    transform: rotateX(10deg) !important;
   }
 }
 
@@ -301,7 +304,6 @@ reown-modal {
 
 /* Ecosystem cyber coin — borderless, blends into homepage */
 .ecosystem-cyber-coin {
-  contain: paint;
   position: relative;
   width: 100%;
   max-width: 1200px;
@@ -318,6 +320,7 @@ reown-modal {
   filter: blur(48px);
   opacity: 0.55;
   animation: cyberCloudDrift 14s ease-in-out infinite;
+  z-index: 0;
 }
 
 .cyber-coin-cloud-a {
@@ -348,17 +351,19 @@ reown-modal {
 
 .cyber-coin-edge-fade {
   pointer-events: none;
+  z-index: 1;
   background:
-    linear-gradient(90deg, rgba(240, 249, 255, 0.95) 0%, transparent 12%, transparent 88%, rgba(248, 250, 252, 0.95) 100%),
-    linear-gradient(180deg, rgba(240, 249, 255, 0.85) 0%, transparent 18%, transparent 82%, rgba(241, 245, 249, 0.9) 100%);
-  mask-image: radial-gradient(ellipse 92% 78% at 50% 50%, black 42%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 92% 78% at 50% 50%, black 42%, transparent 100%);
+    linear-gradient(90deg, rgba(240, 249, 255, 0.7) 0%, transparent 10%, transparent 90%, rgba(248, 250, 252, 0.7) 100%),
+    linear-gradient(180deg, rgba(240, 249, 255, 0.6) 0%, transparent 14%, transparent 86%, rgba(241, 245, 249, 0.65) 100%);
+  mask-image: radial-gradient(ellipse 96% 82% at 50% 50%, black 55%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 96% 82% at 50% 50%, black 55%, transparent 100%);
 }
 
 .cyber-ecosystem-hub {
   position: absolute;
   inset: 0;
   overflow: visible;
+  z-index: 2;
 }
 
 .cyber-chip-field {
@@ -515,21 +520,31 @@ reown-modal {
 }
 
 .cyber-coin-stage {
+  --coin-size: clamp(190px, 22vw, 221px);
+  --coin-half-thickness: calc(var(--coin-size) * 0.065);
   position: absolute;
   left: 50%;
   top: 50%;
   z-index: 15;
-  width: var(--coin-diameter, 221px);
-  height: var(--coin-diameter, 221px);
-  transform: translate(-50%, -50%) rotateX(10deg);
-  transform-style: preserve-3d;
+  width: var(--coin-size);
+  height: var(--coin-size);
+  transform: translate(-50%, -50%);
   perspective: 1000px;
   perspective-origin: 50% 50%;
 }
 
+.cyber-coin-tilt {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(10deg);
+}
+
 .cyber-coin-logo-mark {
+  display: block;
   width: auto;
   height: auto;
+  max-width: 100%;
   object-fit: contain;
   pointer-events: none;
   user-select: none;
@@ -537,12 +552,10 @@ reown-modal {
 
 .cyber-coin-logo-enk {
   width: 78%;
-  max-width: 158px;
 }
 
 .cyber-coin-logo-tvk {
   width: 86%;
-  max-width: 176px;
 }
 
 .cyber-coin-particle {
@@ -556,15 +569,16 @@ reown-modal {
   inset: 0;
   transform-style: preserve-3d;
   animation: cyberCoinSpin 11s linear infinite;
+  will-change: transform;
 }
 
 .cyber-coin-body {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: var(--coin-diameter, 221px);
-  height: var(--coin-diameter, 221px);
-  margin: calc(var(--coin-diameter, 221px) / -2) 0 0 calc(var(--coin-diameter, 221px) / -2);
+  width: var(--coin-size);
+  height: var(--coin-size);
+  margin: calc(var(--coin-size) / -2) 0 0 calc(var(--coin-size) / -2);
   transform-style: preserve-3d;
 }
 
@@ -575,7 +589,6 @@ reown-modal {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transform-style: preserve-3d;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   overflow: hidden;
@@ -591,11 +604,11 @@ reown-modal {
 }
 
 .cyber-coin-face-front {
-  transform: rotateY(0deg) translateZ(calc(var(--coin-diameter, 221px) * 0.06));
+  transform: rotateY(0deg) translateZ(var(--coin-half-thickness));
 }
 
 .cyber-coin-face-back {
-  transform: rotateY(180deg) translateZ(calc(var(--coin-diameter, 221px) * 0.06));
+  transform: rotateY(180deg) translateZ(var(--coin-half-thickness));
   background:
     radial-gradient(circle at 68% 24%, rgba(255, 255, 255, 0.32) 0%, transparent 42%),
     linear-gradient(215deg, #312e81 0%, #0e7490 45%, #1e3a8a 100%);
@@ -603,12 +616,10 @@ reown-modal {
 
 .cyber-coin-face-plate {
   position: absolute;
-  inset: 8%;
+  inset: 10%;
   z-index: 1;
   border-radius: 50%;
   background: linear-gradient(145deg, #1a3478 0%, #0c6678 50%, #2a2570 100%);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 
 .cyber-coin-face-inner {
@@ -617,54 +628,42 @@ reown-modal {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 76%;
-  height: 76%;
-  border-radius: 50%;
-  transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  width: 74%;
+  height: 74%;
 }
 
 .cyber-coin-face-back .cyber-coin-face-inner {
   transform: rotateY(180deg);
 }
 
-.cyber-coin-face-front .cyber-coin-logo-enk,
-.cyber-coin-face-back .cyber-coin-logo-tvk {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(1px);
-}
-
 .cyber-coin-shine {
   position: absolute;
-  inset: -20%;
+  inset: -15%;
   z-index: 2;
   background: linear-gradient(
     105deg,
     transparent 38%,
-    rgba(255, 255, 255, 0.22) 48%,
-    rgba(255, 255, 255, 0.38) 50%,
-    rgba(255, 255, 255, 0.18) 52%,
+    rgba(255, 255, 255, 0.18) 48%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0.14) 52%,
     transparent 62%
   );
   animation: cyberCoinShine 3.5s ease-in-out infinite;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   pointer-events: none;
+  mix-blend-mode: soft-light;
 }
 
 .cyber-coin-edge {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(var(--coin-diameter, 221px) * 0.044);
-  height: calc(var(--coin-diameter, 221px) * 0.12);
-  margin: calc(var(--coin-diameter, 221px) * -0.06) 0 0 calc(var(--coin-diameter, 221px) * -0.022);
+  width: calc(var(--coin-size) * 0.044);
+  height: calc(var(--coin-size) * 0.13);
+  margin: calc(var(--coin-size) * -0.065) 0 0 calc(var(--coin-size) * -0.022);
   transform-origin: center center;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: rotateY(var(--edge-angle, 0deg)) translateZ(calc(var(--coin-diameter, 221px) / 2));
+  transform: rotateY(var(--edge-angle, 0deg)) translateZ(calc(var(--coin-size) / 2));
   background: linear-gradient(
     to bottom,
     #164e63 0%,
@@ -680,7 +679,7 @@ reown-modal {
   position: absolute;
   left: 50%;
   top: 50%;
-  z-index: -1;
+  z-index: 0;
   width: 130%;
   height: 130%;
   margin: -65% 0 0 -65%;
@@ -691,13 +690,14 @@ reown-modal {
     0 0 80px rgba(124, 58, 237, 0.1);
   animation: cyberCoinHalo 5s ease-in-out infinite;
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .cyber-coin-reflection {
   position: absolute;
   left: 50%;
   bottom: -8%;
-  z-index: -1;
+  z-index: 0;
   width: 55%;
   height: 12%;
   margin-left: -27.5%;
@@ -705,6 +705,7 @@ reown-modal {
   background: radial-gradient(ellipse, rgba(34, 211, 238, 0.2) 0%, transparent 70%);
   filter: blur(8px);
   opacity: 0.55;
+  transform: translateZ(0);
 }
 
 @keyframes cyberCoinSpin {
