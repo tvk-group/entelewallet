@@ -1,11 +1,13 @@
 {
-  "name": "EnteleWALLET Lite",
+  "name": "EnteleWALLET",
   "short_name": "EnteleWALLET",
   "description": "Secure wallet-connected dashboard for the EnteleKRON ecosystem",
-  "start_url": "/",
+  "start_url": "https://entelewallet.app/",
+  "scope": "https://entelewallet.app/",
+  "id": "https://entelewallet.app/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0ea5e9",
+  "theme_color": "#1e40af",
   "orientation": "portrait-primary",
   "icons": [
     {

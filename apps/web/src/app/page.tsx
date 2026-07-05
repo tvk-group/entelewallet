@@ -46,9 +46,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 text-lg text-slate-600">{t('home.heroSubtitle')}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={ROUTES.connect}>
-                <WalletConnectButton size="lg" />
-              </Link>
+              <WalletConnectButton size="lg" />
               <Link href={ROUTES.security}>
                 <Button variant="secondary" size="lg">
                   {t('common.securityCenter')}
