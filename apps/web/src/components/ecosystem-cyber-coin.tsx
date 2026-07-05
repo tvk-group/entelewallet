@@ -206,12 +206,11 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                 </div>
 
                 <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
-                  <div className="cyber-coin-shine" />
-                  <div className="cyber-coin-face-plate" />
-                  <div className="cyber-coin-face-inner">
+                  <div className="cyber-coin-shine cyber-coin-shine-back" />
+                  <div className="cyber-coin-face-inner cyber-coin-face-inner-tvk">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/brand/tvk-labs-logo-coin-back-512.png"
+                      src="/brand/tvk-labs-logo-original-512.png"
                       alt=""
                       className="cyber-coin-logo-mark cyber-coin-logo-tvk"
                       draggable={false}
