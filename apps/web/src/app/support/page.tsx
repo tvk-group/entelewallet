@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
 import { getActiveSupportProvider, SUPPORT_CONFIG } from '@entelewallet/config';
-import { Card, CardContent, CardHeader, CardTitle, Button, Alert, LtrSpan } from '@entelewallet/ui';
+import { Card, CardContent, CardHeader, CardTitle, Button, Alert } from '@entelewallet/ui';
 
 const REPORT_TYPES = [
   { value: 'report_phishing', key: 'support.reportPhishing' },

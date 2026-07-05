@@ -41,8 +41,8 @@ export function LanguageSelector({ className }: { className?: string }) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center bg-slate-900/40 p-4 pt-20 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-xl animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/50 p-4 pt-20 backdrop-blur-sm" onClick={() => setOpen(false)}>
+          <div className="w-full max-w-md rounded-2xl border border-slate-200/80 bg-white/95 shadow-2xl backdrop-blur-xl animate-fade-in" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
               <h3 className="font-semibold text-slate-900">{t('common.selectLanguage')}</h3>
               <button type="button" onClick={() => setOpen(false)} aria-label={t('common.cancel')}>

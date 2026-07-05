@@ -34,54 +34,88 @@ export function PreConnectSafetyPanel({
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (loaded) onAckChange?.(acknowledged);
-  }, [acknowledged, loaded, onAckChange]);
+    if (loaded) onAckChange?.(acknowledged || checked);
+  }, [acknowledged, checked, loaded, onAckChange]);
 
   if (!loaded) return null;
 
   if (acknowledged) {
     return (
       <Alert variant="info" className="animate-fade-in">
-        {t('connect.noticeCustody')}
+        {t('connect.noticeIntro')}
       </Alert>
     );
   }
 
-  const notices = [
-    'connect.noticeCustody',
-    'connect.noticeSignature',
-    'connect.noticeNeverShare',
-    'connect.noticeUnderstand',
-    'connect.noticeDomain',
-    'connect.noticePayments',
-    'connect.noticeRisk',
+  const doesNotItems = [
+    'connect.noticeNoSeed',
+    'connect.noticeNoKeys',
+    'connect.noticeNoCustody',
+    'connect.noticeNoTransfer',
+    'connect.noticeNoApprove',
+    'connect.noticeNoStaking',
+    'connect.noticeNoSwaps',
+    'connect.noticeNoValue',
+    'connect.noticeNoLiquidity',
+    'connect.noticeNoListing',
+    'connect.noticeNoReturns',
+  ] as const;
+
+  const signatureItems = [
+    'connect.noticeSigNoGas',
+    'connect.noticeSigNoTx',
+    'connect.noticeSigNoTransfer',
+    'connect.noticeSigNoApprove',
   ] as const;
 
   return (
-    <Card className="border-cyan-200/80 shadow-md animate-slide-up security-panel-glow">
+    <Card className="security-panel-glow animate-slide-up border-cyan-200/80 shadow-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <ShieldAlert className="h-5 w-5 text-cyan-600" />
           {t('connect.beforeConnectTitle')}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <ul className="space-y-2">
-          {notices.map((key) => (
-            <li key={key} className="flex gap-2 text-sm text-slate-700">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />
-              {t(key)}
-            </li>
-          ))}
-        </ul>
+      <CardContent className="space-y-5">
+        <p className="text-sm text-slate-700">{t('connect.noticeIntro')}</p>
+
+        <div>
+          <p className="mb-2 text-sm font-semibold text-slate-800">{t('connect.noticeDoesNotTitle')}</p>
+          <ul className="space-y-1.5">
+            {doesNotItems.map((key) => (
+              <li key={key} className="flex gap-2 text-sm text-slate-700">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+                {t(key)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="mb-2 text-sm font-semibold text-slate-800">{t('connect.noticeSignatureTitle')}</p>
+          <ul className="space-y-1.5">
+            {signatureItems.map((key) => (
+              <li key={key} className="flex gap-2 text-sm text-slate-700">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                {t(key)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <Alert variant="warning">{t('connect.noticeNeverShare')}</Alert>
+        <Alert variant="info">{t('connect.noticeDomain')}</Alert>
+        <p className="text-sm text-slate-600">{t('connect.noticePayments')}</p>
+
         <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
           <input
             type="checkbox"
             checked={checked}
             onChange={(e) => {
-              setChecked(e.target.checked);
-              if (e.target.checked) confirm();
-              onAckChange?.(e.target.checked);
+              const next = e.target.checked;
+              setChecked(next);
+              if (next) confirm();
+              onAckChange?.(next);
             }}
             className="mt-1 h-4 w-4 rounded border-slate-300 text-cyan-600"
           />

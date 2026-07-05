@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://app.entelewallet.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://entelewallet.app'),
   title: SEO_DEFAULT.title,
   description: SEO_DEFAULT.description,
   applicationName: 'EnteleWALLET',
@@ -26,7 +26,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body className={`app-shell-bg ${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <I18nProvider>
           <Web3Provider>
             <WalletProvider>{children}</WalletProvider>
