@@ -5,6 +5,23 @@
 - **Primary domain:** app.entelewallet.com
 - **Platform:** Vercel (recommended) or any Node.js host
 
+## Vercel (monorepo)
+
+This repo is a pnpm + Turborepo monorepo. The Next.js app lives in `apps/web`.
+
+In the Vercel project **Settings → General**:
+
+| Setting | Value |
+|---------|-------|
+| **Root Directory** | `apps/web` |
+| **Framework Preset** | Next.js |
+| **Install Command** | `cd ../.. && pnpm install` (or leave default if Root Directory is set) |
+| **Build Command** | `cd ../.. && pnpm turbo build --filter=@entelewallet/web` |
+
+`apps/web/vercel.json` encodes these commands for preview/production deploys.
+
+If Root Directory is left blank (repo root), the build will fail because there is no Next.js app at the repository root.
+
 ## Build
 
 ```bash
