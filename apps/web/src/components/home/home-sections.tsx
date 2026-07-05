@@ -123,22 +123,12 @@ export function HomeEcosystemMap() {
   const t = useT();
 
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-white/50 bg-gradient-to-br from-blue-50/80 via-white/60 to-violet-50/80 p-8 shadow-xl backdrop-blur-sm sm:p-12">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <svg className="absolute inset-0 h-full w-full opacity-[0.07]" aria-hidden>
-          <defs>
-            <pattern id="mesh" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#mesh)" className="text-blue-900" />
-        </svg>
-      </div>
+    <section className="relative space-y-6 py-4">
       <div className="relative z-10 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.ecosystemTitle')}</h2>
         <p className="mx-auto mt-2 max-w-2xl text-slate-600">{t('home.ecosystemSubtitle')}</p>
-        <EcosystemCyberCoin />
       </div>
+      <EcosystemCyberCoin />
     </section>
   );
 }
