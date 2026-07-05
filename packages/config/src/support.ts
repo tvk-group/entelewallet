@@ -1,12 +1,14 @@
+import { CONTACT } from './contact';
+
 export type SupportProvider = 'supabase' | 'formspree' | 'mailto';
 
 export const SUPPORT_CONFIG = {
   provider: (process.env.SUPPORT_PROVIDER ||
     process.env.NEXT_PUBLIC_SUPPORT_PROVIDER ||
     'supabase') as SupportProvider,
-  securityEmail: process.env.SECURITY_CONTACT_EMAIL || 'security@tvk.group',
-  supportEmail: process.env.SUPPORT_EMAIL || 'support@tvk.group',
-  generalEmail: process.env.GENERAL_CONTACT_EMAIL || 'contact@entelewallet.com',
+  securityEmail: CONTACT.security,
+  supportEmail: CONTACT.support,
+  generalEmail: CONTACT.contact,
   formspreeEndpoint: process.env.FORMSPREE_ENDPOINT || '',
 } as const;
 

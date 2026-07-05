@@ -6,6 +6,7 @@ import { useT } from '@/lib/i18n-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
 import { Smartphone, Monitor, Apple } from 'lucide-react';
+import { PwaInstallMockup } from '@/components/pwa-install-mockup';
 
 export default function InstallPage() {
   const t = useT();
@@ -19,6 +20,8 @@ export default function InstallPage() {
   return (
     <PageLayout title={t('install.title')} description={t('install.description')}>
       <div className="mx-auto max-w-2xl space-y-6">
+        <PwaInstallMockup />
+
         <div className="grid gap-4">
           {steps.map(({ icon: Icon, title, body }) => (
             <Card key={title} className="animate-slide-up">

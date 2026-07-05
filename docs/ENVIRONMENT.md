@@ -49,5 +49,7 @@ Until then, wallet connect, SIWE verification, and the dashboard work without Su
 
 | Variable | Default |
 |----------|---------|
-| `SECURITY_CONTACT_EMAIL` | security@tvk.group |
-| `SUPPORT_EMAIL` | support@tvk.group |
+| `GENERAL_CONTACT_EMAIL` | contact@entelewallet.com |
+| `SUPPORT_EMAIL` | support@entelewallet.com |
+| `SECURITY_CONTACT_EMAIL` | security@entelewallet.com |
+| `LEGAL_CONTACT_EMAIL` | legal@entelewallet.com |

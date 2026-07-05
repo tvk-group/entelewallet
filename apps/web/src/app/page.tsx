@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { SecurityBanner } from '@/components/security-banner';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
+import { HeroVisualCard } from '@/components/hero-visual-card';
 import { useT } from '@/lib/i18n-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
@@ -31,47 +32,40 @@ export default function HomePage() {
     t('home.featureRoadmap'),
   ];
 
-  const orbitItems = ['EnteleKRON', 'ENK', 'SOVRA', 'EnergieMIND', 'EnteleSCAN', 'EnteleVAULT', 'TVK ID'];
-
   return (
     <PageLayout title={t('home.heroTitle')} description={t('home.heroHeadline')}>
       <div className="space-y-16">
-        <section className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-blue-50 via-white to-violet-50 p-8 sm:p-12 animate-fade-in">
-          <div className="relative z-10 max-w-2xl">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-cyan-700">
-              {t('brand.lite')}
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              {t('home.heroHeadline')}
-            </h2>
-            <p className="mt-4 text-lg text-slate-600">{t('home.heroSubtitle')}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <WalletConnectButton size="lg" />
-              <Link href={ROUTES.security}>
-                <Button variant="secondary" size="lg">
-                  {t('common.securityCenter')}
-                </Button>
-              </Link>
-              <Link href={ROUTES.transparency}>
-                <Button variant="outline" size="lg">
-                  {t('common.transparencyCenter')}
-                </Button>
-              </Link>
-              <Link href={ROUTES.install}>
-                <Button variant="ghost" size="lg" className="gap-2">
-                  <Download className="h-4 w-4" />
-                  {t('common.installApp')}
-                </Button>
-              </Link>
+        <section className="animate-fade-in">
+          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+            <div className="relative z-10">
+              <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-cyan-700">
+                {t('brand.lite')}
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                {t('home.heroHeadline')}
+              </h2>
+              <p className="mt-4 text-lg text-slate-600">{t('home.heroSubtitle')}</p>
+              <div className="relative z-10 mt-8 flex flex-wrap gap-3">
+                <WalletConnectButton size="lg" />
+                <Link href={ROUTES.security}>
+                  <Button variant="secondary" size="lg">
+                    {t('common.securityCenter')}
+                  </Button>
+                </Link>
+                <Link href={ROUTES.transparency}>
+                  <Button variant="outline" size="lg">
+                    {t('common.transparencyCenter')}
+                  </Button>
+                </Link>
+                <Link href={ROUTES.install}>
+                  <Button variant="ghost" size="lg" className="gap-2">
+                    <Download className="h-4 w-4" />
+                    {t('common.installApp')}
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="ecosystem-orbit pointer-events-none absolute -right-8 top-1/2 hidden h-64 w-64 -translate-y-1/2 lg:block" aria-hidden>
-            <div className="orbit-core">ENK</div>
-            {orbitItems.map((item, i) => (
-              <span key={item} className="orbit-node" style={{ '--i': i } as React.CSSProperties}>
-                {item}
-              </span>
-            ))}
+            <HeroVisualCard />
           </div>
         </section>
 

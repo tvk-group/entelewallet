@@ -7,6 +7,7 @@ import {
   OFFICIAL_DOMAINS,
   REDIRECT_DOMAINS,
   CONTACT,
+  CANONICAL_APP_DOMAIN,
 } from '@entelewallet/config';
 import {
   SEED_PHRASE_WARNING,
@@ -39,7 +40,7 @@ export default function SecurityPage() {
           {REDIRECT_DOMAINS.map((d) => (
             <li key={d}>
               <LtrSpan className="text-sm text-slate-600">{d}</LtrSpan>
-              <span className="ml-2 text-xs text-slate-400">→ app.entelewallet.com</span>
+              <span className="ml-2 text-xs text-slate-400">→ {CANONICAL_APP_DOMAIN}</span>
             </li>
           ))}
         </ul>
@@ -89,9 +90,12 @@ export default function SecurityPage() {
     {
       title: t('security.reportConcern'),
       content: (
-        <p className="text-sm text-slate-600">
-          {CONTACT.security}
-        </p>
+        <div className="space-y-3 text-sm text-slate-600">
+          <p>{t('security.reportConcernIntro')}</p>
+          <a href={`mailto:${CONTACT.security}`} className="inline-flex items-center font-medium text-cyan-800 hover:text-cyan-950">
+            <LtrSpan>{CONTACT.security}</LtrSpan>
+          </a>
+        </div>
       ),
     },
   ];
