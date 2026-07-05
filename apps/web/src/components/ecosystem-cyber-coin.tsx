@@ -192,32 +192,11 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                 <div className="cyber-coin-face cyber-coin-face-front" aria-hidden>
                   <div className="cyber-coin-shine" />
                   <div className="cyber-coin-face-plate" />
-                  <div className="cyber-coin-face-inner">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/brand/entelekron-coin-face.png"
-                      alt=""
-                      className="cyber-coin-logo-mark cyber-coin-logo-enk"
-                      draggable={false}
-                      loading="eager"
-                      decoding="sync"
-                    />
-                  </div>
                 </div>
 
                 <div className="cyber-coin-face cyber-coin-face-back" aria-hidden>
                   <div className="cyber-coin-shine cyber-coin-shine-back" />
-                  <div className="cyber-coin-face-inner cyber-coin-face-inner-tvk">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/brand/tvk-labs-logo-original-512.png"
-                      alt=""
-                      className="cyber-coin-logo-mark cyber-coin-logo-tvk"
-                      draggable={false}
-                      loading="eager"
-                      decoding="sync"
-                    />
-                  </div>
+                  <div className="cyber-coin-face-plate cyber-coin-face-plate-back" />
                 </div>
 
                 {Array.from({ length: COIN_EDGE_COUNT }, (_, i) => (
@@ -231,9 +210,40 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
             </div>
           </div>
 
+          <div className="cyber-coin-logo-layer" dir="ltr">
+            <div className="cyber-coin-logo-badge cyber-coin-logo-badge-enk">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/entelekron-coin-face.png"
+                alt="EnteleKRON"
+                className="cyber-coin-logo-static cyber-coin-logo-static-enk"
+                draggable={false}
+                loading="eager"
+                decoding="sync"
+              />
+            </div>
+            <div className="cyber-coin-logo-badge cyber-coin-logo-badge-tvk">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/tvk-labs-logo-original-512.png"
+                alt="TVK Labs"
+                className="cyber-coin-logo-static cyber-coin-logo-static-tvk"
+                draggable={false}
+                loading="eager"
+                decoding="sync"
+              />
+            </div>
+          </div>
+
           <div className="cyber-coin-halo" />
           <div className="cyber-coin-reflection" />
         </div>
+
+        {process.env.NODE_ENV === 'development' && (
+          <p className="cyber-coin-readability-check pointer-events-none absolute bottom-1 left-1/2 z-30 -translate-x-1/2 text-[10px] tracking-wide text-slate-500">
+            TVK Labs Readability Check — T.V.K. LABS
+          </p>
+        )}
 
         <div className="cyber-chip-field absolute inset-0">
           {chipPlacements.map((chip) => {
