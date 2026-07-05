@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
 import { useWalletStatus } from '@/lib/wallet-context';
-import { ROUTES } from '@entelewallet/config';
+import { DOMAIN_CONFIG, ROUTES } from '@entelewallet/config';
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, LtrSpan } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
 import { truncateAddress } from '@entelewallet/utils';
+import { ExternalLink } from 'lucide-react';
 
 export default function AccountPage() {
   const t = useT();
@@ -45,9 +46,33 @@ export default function AccountPage() {
             )}
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <Button variant="primary">{t('common.createAccount')}</Button>
-              <Button variant="secondary">{t('common.signIn')}</Button>
-              <Button variant="outline">{t('common.linkInvestorAccount')}</Button>
+              <a
+                href={DOMAIN_CONFIG.investorAppDashboard}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="primary" className="gap-2">
+                  {t('common.createAccount')} <ExternalLink className="h-4 w-4" />
+                </Button>
+              </a>
+              <a
+                href={DOMAIN_CONFIG.investorAppDashboard}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="secondary" className="gap-2">
+                  {t('common.signIn')} <ExternalLink className="h-4 w-4" />
+                </Button>
+              </a>
+              <a
+                href={DOMAIN_CONFIG.investorAppDashboard}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="gap-2">
+                  {t('common.linkInvestorAccount')} <ExternalLink className="h-4 w-4" />
+                </Button>
+              </a>
               <Link href={ROUTES.support}>
                 <Button variant="ghost">{t('common.contactSupport')}</Button>
               </Link>
