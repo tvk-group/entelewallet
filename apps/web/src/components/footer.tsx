@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useT } from '@/lib/i18n-context';
 import { ROUTES, DOMAIN_CONFIG, PUBLIC_CONTACT_EMAILS } from '@entelewallet/config';
 import { Alert, LtrSpan } from '@entelewallet/ui';
+import { Shield } from 'lucide-react';
 
 export function Footer() {
   const t = useT();
@@ -50,21 +51,23 @@ export function Footer() {
     },
   ];
 
-  const footerEmails = PUBLIC_CONTACT_EMAILS.filter((e) =>
-    ['contact', 'support', 'security', 'legal'].includes(e.key),
-  );
-
   return (
-    <footer className="border-t border-slate-200 bg-gradient-to-b from-slate-50 to-white">
+    <footer className="relative border-t border-white/40 bg-gradient-to-b from-slate-50/80 via-white/90 to-white">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        <Alert variant="info" className="mb-8 text-xs">
-          {t('footer.notice')}
-        </Alert>
+        <div className="mb-8 flex items-start gap-3 rounded-2xl border border-cyan-200/40 bg-gradient-to-r from-cyan-50/60 via-white/80 to-violet-50/60 p-4 shadow-sm backdrop-blur-sm">
+          <Shield className="mt-0.5 h-5 w-5 shrink-0 text-cyan-700" />
+          <Alert variant="info" className="border-0 bg-transparent p-0 text-xs shadow-none">
+            {t('footer.notice')}
+          </Alert>
+        </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {sections.map((section) => (
             <div key={section.title}>
-              <h4 className="mb-3 text-sm font-semibold text-slate-900">{section.title}</h4>
+              <h4 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-900">
+                {section.title}
+              </h4>
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.href + link.label}>
@@ -73,12 +76,15 @@ export function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-slate-600 hover:text-cyan-700"
+                        className="text-sm text-slate-600 transition hover:text-cyan-700"
                       >
                         {link.label}
                       </a>
                     ) : (
-                      <Link href={link.href} className="text-sm text-slate-600 hover:text-cyan-700">
+                      <Link
+                        href={link.href}
+                        className="text-sm text-slate-600 transition hover:text-cyan-700"
+                      >
                         {link.label}
                       </Link>
                     )}
@@ -89,14 +95,17 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-slate-200 pt-8">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="mt-10 rounded-2xl border border-white/60 bg-white/50 p-6 backdrop-blur-sm">
+          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-500">
             {t('footer.contactSection')}
           </p>
-          <ul className="flex flex-wrap gap-x-4 gap-y-2">
-            {footerEmails.map(({ email }) => (
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {PUBLIC_CONTACT_EMAILS.map(({ email }) => (
               <li key={email}>
-                <a href={`mailto:${email}`} className="text-sm text-cyan-800 hover:text-cyan-950">
+                <a
+                  href={`mailto:${email}`}
+                  className="text-sm font-medium text-cyan-800 transition hover:text-violet-800"
+                >
                   <LtrSpan>{email}</LtrSpan>
                 </a>
               </li>
@@ -104,7 +113,13 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-200/60 pt-8 sm:flex-row">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-900 to-violet-600">
+              <Shield className="h-4 w-4 text-white" />
+            </div>
+            <p className="text-sm font-medium text-slate-600">{t('brand.lite')}</p>
+          </div>
           <p className="text-sm text-slate-500">{t('footer.copyright')}</p>
         </div>
       </div>

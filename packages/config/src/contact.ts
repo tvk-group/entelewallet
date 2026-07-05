@@ -24,4 +24,5 @@ export const PUBLIC_CONTACT_EMAILS = [
   { key: 'legal', email: CONTACT.legal, labelKey: 'support.emailLegal' },
   { key: 'privacy', email: CONTACT.privacy, labelKey: 'support.emailPrivacy' },
   { key: 'partners', email: CONTACT.partners, labelKey: 'support.emailPartners' },
+  { key: 'press', email: CONTACT.press, labelKey: 'support.emailPress' },
 ] as const;
