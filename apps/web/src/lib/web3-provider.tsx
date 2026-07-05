@@ -91,7 +91,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <WagmiProvider config={config} reconnectOnMount>
+    <WagmiProvider config={config} reconnectOnMount={false}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitInner>{children}</RainbowKitInner>
       </QueryClientProvider>
