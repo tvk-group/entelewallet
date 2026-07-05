@@ -80,3 +80,12 @@ export const SEO_DEFAULT = {
     'Connect, verify and monitor your EnteleKRON ecosystem wallet with EnteleWALLET Lite at entelewallet.app.',
   ogImage: '/og/entelewallet-lite-og.png',
 } as const;
+
+/** Origins that must be allowlisted in the WalletConnect / Reown Cloud dashboard. */
+export const WALLETCONNECT_ALLOWED_ORIGINS = [
+  'https://entelewallet.app',
+  'https://app.entelewallet.com',
+  'https://wallet.entelekron.io',
+  'http://localhost:3000',
+  'http://localhost:3001',
+] as const;

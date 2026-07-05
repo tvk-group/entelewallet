@@ -207,9 +207,18 @@
     "connectionFailed": "Wallet connection failed",
     "walletRejected": "Wallet rejected the connection request",
     "noWalletDetected": "No wallet detected in this browser",
-    "connectionTimedOut": "Connection timed out — please try again",
+    "connectionTimedOut": "Wallet connection timed out. Please try again.",
     "modalUnavailable": "Wallet modal unavailable — refresh the page",
-    "modalOpen": "Wallet modal open"
+    "modalOpen": "Wallet modal open",
+    "walletConnectQrFailed": "WalletConnect could not open. Please check the Project ID, allowed origins, browser popup restrictions, and network connection.",
+    "walletConnectOriginBlocked": "This domain is not allowlisted for WalletConnect. Contact support or use an official EnteleWALLET domain.",
+    "walletConnectOriginHint": "Add this origin in the Reown Cloud allowlist:",
+    "testWalletConnectTitle": "Test WalletConnect QR (development only)",
+    "testWalletConnectDesc": "Opens the WalletConnect modal connector directly to verify QR flow independent of the wallet list UI.",
+    "testWalletConnectButton": "Test WalletConnect QR",
+    "testWalletConnectOpening": "Opening WalletConnect…",
+    "testWalletConnectSuccess": "WalletConnect session established.",
+    "testWalletConnectNoConnector": "WalletConnect connector not found. Check NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID and restart the dev server."
   },
   "preConnect": {
     "title": "Before you connect",

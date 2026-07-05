@@ -6,6 +6,7 @@ import { WalletConnectButton, ResetWalletUiButton } from '@/components/wallet-co
 import { WalletConnectionAlerts } from '@/components/wallet-connection-alerts';
 import { WalletConnectGuide } from '@/components/wallet-connect-guide';
 import { WalletDebugPanel } from '@/components/wallet-debug-panel';
+import { WalletConnectTestButton } from '@/components/wallet-connect-test-button';
 import { WalletVerification } from '@/components/wallet-verification';
 import { SignatureWarningBanner, SecurityBanner } from '@/components/security-banner';
 import { useT } from '@/lib/i18n-context';
@@ -54,6 +55,7 @@ export default function ConnectPage() {
           </div>
         )}
 
+        <WalletConnectTestButton />
         <WalletDebugPanel />
       </div>
     </PageLayout>

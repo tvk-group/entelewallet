@@ -11,7 +11,7 @@ import {
   createEnteleWagmiConfig,
   isWalletConnectConfigured,
   walletConnectProjectId,
-} from '@/lib/entele-wallets';
+} from '@/lib/wagmi';
 
 export type WalletUiState =
   | 'idle'
