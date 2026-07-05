@@ -10,16 +10,13 @@
   }
   body {
     @apply overflow-x-hidden bg-white text-slate-900 antialiased;
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 200, 255, 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(167, 139, 250, 0.06), transparent);
     min-height: 100vh;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-cyan-600 to-violet-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-blue-800 via-cyan-600 to-violet-600 bg-clip-text text-transparent;
   }
 }
 
@@ -33,21 +30,62 @@ div[data-rk][style*="z-index"] {
   z-index: 99999 !important;
 }
 
+/* ─── Premium futuristic background system ─── */
+.app-futuristic-bg {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 60% at 0% 0%, rgba(6, 182, 212, 0.14), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 10%, rgba(124, 58, 237, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(30, 64, 175, 0.08), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 40%, rgba(248, 250, 252, 0.95), transparent),
+    linear-gradient(180deg, #f0f9ff 0%, #ffffff 35%, #f8fafc 70%, #f1f5f9 100%);
+}
+
+.app-futuristic-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(30, 64, 175, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 64, 175, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
+}
+
+.app-futuristic-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .glass-card {
   @apply rounded-2xl border border-white/60 bg-white/70 shadow-lg backdrop-blur-xl;
 }
 
-.app-shell-bg {
-  background:
-    radial-gradient(ellipse 120% 80% at 50% -30%, rgba(30, 64, 175, 0.08), transparent),
-    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(6, 182, 212, 0.06), transparent),
-    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(124, 58, 237, 0.05), transparent),
-    linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #f1f5f9 100%);
-  min-height: 100vh;
+.premium-card {
+  contain: paint;
+}
+
+.glass-btn {
+  @apply border-white/60 bg-white/70 shadow-sm backdrop-blur-md transition-all;
+}
+
+.glass-btn:hover {
+  @apply border-cyan-200/80 bg-white/90 shadow-md;
 }
 
 /* Bounded animation containers */
 .ecosystem-orbit-container,
+.wallet-preview-shell,
 .wallet-animation-card {
   contain: paint;
   overflow: hidden;
@@ -70,14 +108,56 @@ div[data-rk][style*="z-index"] {
     animation: fadeIn 0.4s ease-out both;
   }
   .animate-slide-up {
-    animation: slideUp 0.45s ease-out both;
+    animation: slideUp 0.5s ease-out both;
   }
+  .chip-fade-in {
+    animation: chipFadeIn 0.5s ease-out both;
+  }
+  .timeline-step {
+    animation: timelineReveal 0.55s ease-out both;
+  }
+  .timeline-step:nth-child(1) { animation-delay: 0.05s; }
+  .timeline-step:nth-child(2) { animation-delay: 0.12s; }
+  .timeline-step:nth-child(3) { animation-delay: 0.19s; }
+  .timeline-step:nth-child(4) { animation-delay: 0.26s; }
+  .timeline-step:nth-child(5) { animation-delay: 0.33s; }
+  .timeline-step:nth-child(6) { animation-delay: 0.4s; }
+
   .verified-glow {
     box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(16, 185, 129, 0.08);
   }
   .security-panel-glow {
     animation: subtleBorder 4s ease-in-out infinite;
   }
+
+  .hero-glow-drift {
+    animation: heroGlowDrift 14s ease-in-out infinite;
+  }
+
+  .wallet-float {
+    animation: walletFloat 5s ease-in-out infinite;
+  }
+
+  .shield-pulse {
+    animation: shieldPulse 3s ease-in-out infinite;
+  }
+
+  .enk-orb-spin {
+    animation: enkOrbSpin 20s linear infinite;
+  }
+
+  .btn-primary-glow {
+    position: relative;
+    overflow: hidden;
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  }
+
+  .btn-primary-glow:hover {
+    box-shadow: 0 6px 28px rgba(124, 58, 237, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+  }
+
   .ecosystem-orbit .orbit-core {
     @apply absolute left-1/2 top-1/2 flex items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-xs font-bold text-white shadow-lg;
     width: clamp(3rem, 18%, 4rem);
@@ -87,9 +167,9 @@ div[data-rk][style*="z-index"] {
   }
   .ecosystem-orbit .orbit-node {
     @apply absolute left-1/2 top-1/2 max-w-[5.5rem] truncate rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-slate-600 shadow-sm;
-    transform: rotate(calc(var(--i) * 51deg)) translateY(calc(-1 * var(--orbit-radius, 72px))) rotate(calc(var(--i) * -51deg));
-    animation: orbit 24s linear infinite;
-    animation-delay: calc(var(--i) * -2s);
+    transform: rotate(calc(var(--i) * 45deg)) translateY(calc(-1 * var(--orbit-radius, 72px))) rotate(calc(var(--i) * -45deg));
+    animation: orbit 28s linear infinite;
+    animation-delay: calc(var(--i) * -1.5s);
   }
   .wallet-animation {
     animation: walletFloat 4s ease-in-out infinite;
@@ -102,7 +182,14 @@ div[data-rk][style*="z-index"] {
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-slide-up,
+  .chip-fade-in,
+  .timeline-step,
   .security-panel-glow,
+  .hero-glow-drift,
+  .wallet-float,
+  .shield-pulse,
+  .enk-orb-spin,
+  .btn-primary-glow,
   .ecosystem-orbit .orbit-node,
   .ecosystem-orbit .orbit-core,
   .wallet-animation,
@@ -121,13 +208,44 @@ div[data-rk][style*="z-index"] {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chipFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes timelineReveal {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes subtleBorder {
   0%, 100% { box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.15); }
   50% { box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.2); }
+}
+
+@keyframes heroGlowDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.85; }
+  33% { transform: translate(12px, -8px) scale(1.05); opacity: 1; }
+  66% { transform: translate(-8px, 10px) scale(0.98); opacity: 0.9; }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shieldPulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3); }
+  50% { box-shadow: 0 4px 24px rgba(124, 58, 237, 0.35); }
+}
+
+@keyframes enkOrbSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes orbit {
@@ -142,7 +260,7 @@ div[data-rk][style*="z-index"] {
 
 @keyframes walletFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes orbDrift {

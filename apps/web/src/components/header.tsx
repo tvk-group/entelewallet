@@ -16,15 +16,20 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/20 bg-white/70 shadow-sm backdrop-blur-xl">
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+    <header className="sticky top-0 z-40 border-b border-white/30 bg-white/60 shadow-sm shadow-blue-900/5 backdrop-blur-2xl">
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
       <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href={ROUTES.home} className="group flex shrink-0 items-center gap-3">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-900 via-cyan-600 to-violet-600 shadow-lg ring-2 ring-white/50 transition group-hover:scale-105">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-900 via-cyan-600 to-violet-600 shadow-lg ring-2 ring-white/60 transition group-hover:scale-105 group-hover:shadow-cyan-500/25">
             <Shield className="h-5 w-5 text-white" />
           </div>
           <div className="hidden sm:block">
-            <span className="block text-base font-bold tracking-tight text-gradient">{t('brand.name')}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-base font-bold tracking-tight text-gradient">{t('brand.name')}</span>
+              <span className="rounded-md border border-cyan-200/80 bg-gradient-to-r from-cyan-50 to-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-blue-900">
+                Lite
+              </span>
+            </div>
             <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
               EnteleKRON · TVK
             </span>
@@ -37,10 +42,10 @@ export function Header() {
               key={route.href}
               href={route.href}
               className={cn(
-                'rounded-lg px-3 py-2 text-sm font-medium transition-all',
+                'rounded-xl px-3 py-2 text-sm font-medium transition-all',
                 pathname === route.href
-                  ? 'bg-gradient-to-r from-cyan-50 to-violet-50 text-blue-900 shadow-sm'
-                  : 'text-slate-600 hover:bg-white/80 hover:text-slate-900',
+                  ? 'bg-gradient-to-r from-cyan-50/90 to-violet-50/90 text-blue-900 shadow-sm ring-1 ring-cyan-200/50'
+                  : 'text-slate-600 hover:bg-white/70 hover:text-slate-900',
               )}
             >
               {t(route.key)}
@@ -50,10 +55,10 @@ export function Header() {
 
         <div className="flex items-center gap-2.5">
           <LanguageSelector className="hidden sm:inline-flex" />
-          <WalletConnectButton size="sm" />
+          <WalletConnectButton size="sm" className="btn-primary-glow !rounded-xl" />
           <button
             type="button"
-            className="rounded-xl border border-slate-200/80 bg-white/80 p-2.5 text-slate-600 backdrop-blur hover:bg-white xl:hidden"
+            className="rounded-xl border border-white/60 bg-white/70 p-2.5 text-slate-600 shadow-sm backdrop-blur hover:bg-white xl:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={t('common.menu')}
           >
@@ -63,7 +68,7 @@ export function Header() {
       </div>
 
       {mobileOpen && (
-        <nav className="border-t border-slate-100/80 bg-white/95 px-4 py-4 backdrop-blur-xl xl:hidden animate-fade-in">
+        <nav className="border-t border-white/40 bg-white/90 px-4 py-4 backdrop-blur-2xl xl:hidden animate-fade-in">
           <div className="mb-3 sm:hidden">
             <LanguageSelector className="w-full justify-center" />
           </div>
@@ -73,7 +78,7 @@ export function Header() {
               href={route.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                'block rounded-lg px-3 py-2.5 text-sm font-medium',
+                'block rounded-xl px-3 py-2.5 text-sm font-medium',
                 pathname === route.href ? 'bg-cyan-50 text-cyan-900' : 'text-slate-600',
               )}
             >

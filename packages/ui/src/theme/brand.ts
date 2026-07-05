@@ -16,10 +16,11 @@ export const brand = {
     info: '#0891b2',
   },
   gradients: {
-    hero: 'linear-gradient(135deg, #eff6ff 0%, #f0f9ff 35%, #f5f3ff 100%)',
-    primary: 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #7c3aed 100%)',
-    card: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)',
-    energy: 'linear-gradient(90deg, rgba(14,165,233,0.08) 0%, rgba(124,58,237,0.08) 100%)',
+    hero: 'linear-gradient(135deg, #dbeafe 0%, #ecfeff 30%, #f5f3ff 60%, #f8fafc 100%)',
+    primary: 'linear-gradient(135deg, #1e40af 0%, #0ea5e9 35%, #06b6d4 65%, #7c3aed 100%)',
+    card: 'linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(248,250,252,0.85) 100%)',
+    energy: 'linear-gradient(90deg, rgba(14,165,233,0.12) 0%, rgba(99,102,241,0.08) 50%, rgba(124,58,237,0.12) 100%)',
+    enk: 'linear-gradient(135deg, #1e3a8a 0%, #0891b2 50%, #6d28d9 100%)',
   },
   shadow: {
     sm: '0 1px 2px rgba(15, 23, 42, 0.05)',
