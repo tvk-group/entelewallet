@@ -3,6 +3,7 @@
 import { useAccount } from 'wagmi';
 import { useT } from '@/lib/i18n-context';
 import { useWalletUi, isWalletConnectConfigured } from '@/lib/web3-provider';
+import { getCurrentOrigin, isWalletConnectOriginAllowed } from '@/lib/walletconnect-utils';
 import { Alert } from '@entelewallet/ui';
 import { isSupportedChain } from '@entelewallet/config';
 
@@ -20,6 +21,17 @@ export function WalletConnectionAlerts() {
         process.env.NODE_ENV === 'development'
           ? 'Missing NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID'
           : t('connect.walletConnectUnavailable'),
+    });
+  }
+
+  if (
+    process.env.NODE_ENV === 'development' &&
+    isWalletConnectConfigured &&
+    !isWalletConnectOriginAllowed(getCurrentOrigin())
+  ) {
+    alerts.push({
+      variant: 'warning',
+      message: `${t('connect.walletConnectOriginBlocked')} (${getCurrentOrigin()})`,
     });
   }
 
@@ -43,8 +55,8 @@ export function WalletConnectionAlerts() {
 
   return (
     <div className="space-y-2">
-      {alerts.map((a) => (
-        <Alert key={a.message.slice(0, 40)} variant={a.variant}>
+      {alerts.map((a, i) => (
+        <Alert key={`${a.message.slice(0, 40)}-${i}`} variant={a.variant}>
           {a.message}
         </Alert>
       ))}

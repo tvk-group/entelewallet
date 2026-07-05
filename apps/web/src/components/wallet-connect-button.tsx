@@ -20,12 +20,6 @@ interface WalletConnectButtonProps {
   skipAckRedirect?: boolean;
 }
 
-const sizeClasses = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
-};
-
 function mapConnectError(message: string, t: (k: string) => string): string {
   const lower = message.toLowerCase();
   if (lower.includes('rejected') || lower.includes('denied') || lower.includes('cancel')) {
@@ -45,30 +39,29 @@ function mapConnectError(message: string, t: (k: string) => string): string {
   ) {
     return t('connect.walletUnavailable');
   }
+  if (lower.includes('origin') || lower.includes('allowlist') || lower.includes('403')) {
+    return t('connect.walletConnectOriginBlocked');
+  }
+  if (lower.includes('project id') || lower.includes('projectid')) {
+    return t('connect.walletConnectMissing');
+  }
   return message;
 }
 
-function ConnectButtonInner({
-  size,
+function SafetyGatedConnectTrigger({
   disabled,
   className,
   skipAckRedirect,
-  account,
-  chain,
   openConnectModal,
-  openAccountModal,
   connectModalOpen,
   mounted,
 }: WalletConnectButtonProps & {
-  account: { displayName: string; address?: string } | undefined;
-  chain: { id: number; name?: string } | undefined;
   openConnectModal: () => void;
-  openAccountModal: () => void;
   connectModalOpen: boolean;
   mounted: boolean;
 }) {
   const t = useT();
-  const { isConnected, isConnecting, status, address } = useAccount();
+  const { isConnected, isConnecting, status } = useAccount();
   const { error: connectError, isPending: connectPending } = useConnect();
   const { setUiState, connectError: uiError, setConnectError } = useWalletUi();
 
@@ -79,9 +72,7 @@ function ConnectButtonInner({
   const [hadFailure, setHadFailure] = useState(false);
   const openModalRef = useRef<(() => void) | null>(null);
 
-  const wagmiConnecting =
-    status === 'connecting' || isConnecting || connectPending;
-
+  const wagmiConnecting = status === 'connecting' || isConnecting || connectPending;
   const showConnectingLabel = userStartedConnect && wagmiConnecting;
 
   useEffect(() => {
@@ -99,12 +90,8 @@ function ConnectButtonInner({
       setUiState('safety_required');
       return;
     }
-    if (userStartedConnect && wagmiConnecting) {
-      setUiState('connecting');
-      return;
-    }
-    if (userStartedConnect && connectModalOpen) {
-      setUiState('modal_open');
+    if (userStartedConnect && (wagmiConnecting || connectModalOpen)) {
+      setUiState(wagmiConnecting ? 'connecting' : 'modal_open');
       return;
     }
     if (hadFailure) {
@@ -115,8 +102,8 @@ function ConnectButtonInner({
   }, [
     isConnected,
     wagmiConnecting,
-    userStartedConnect,
     connectModalOpen,
+    userStartedConnect,
     showSafetyModal,
     hadFailure,
     setUiState,
@@ -147,12 +134,6 @@ function ConnectButtonInner({
     return () => window.clearTimeout(timer);
   }, [userStartedConnect, wagmiConnecting, setConnectError, setUiState, t]);
 
-  useEffect(() => {
-    if (userStartedConnect && !connectModalOpen && !isConnected && !wagmiConnecting) {
-      setUserStartedConnect(false);
-    }
-  }, [connectModalOpen, isConnected, wagmiConnecting, userStartedConnect]);
-
   const beginConnect = useCallback(
     (open: () => void) => {
       setConnectError(null);
@@ -161,10 +142,11 @@ function ConnectButtonInner({
       setUiState('modal_open');
       try {
         open();
-      } catch {
+      } catch (err) {
         setUserStartedConnect(false);
         setHadFailure(true);
-        setConnectError(t('connect.modalUnavailable'));
+        const message = err instanceof Error ? err.message : t('connect.modalUnavailable');
+        setConnectError(mapConnectError(message, t));
         setUiState('connection_failed');
       }
     },
@@ -193,13 +175,7 @@ function ConnectButtonInner({
   };
 
   const ready = mounted;
-  const connected = ready && account && chain;
-
   const getButtonLabel = () => {
-    if (connected) {
-      const label = address ? truncateAddress(address) : account!.displayName;
-      return `${t('connect.connectedLabel')}: ${label}`;
-    }
     if (showConnectingLabel) return t('connect.connecting');
     if (showSafetyModal && !skipAckRedirect) return t('connect.reviewSafetyNotice');
     if (hadFailure || uiError) return t('connect.tryAgain');
@@ -214,40 +190,21 @@ function ConnectButtonInner({
           style: { opacity: 0, pointerEvents: 'none', userSelect: 'none' },
         })}
       >
-        {connected ? (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              openAccountModal();
-            }}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/80 px-3 py-2 text-sm font-semibold text-emerald-900 shadow-sm backdrop-blur transition hover:shadow-md',
-              className,
-            )}
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-            {getButtonLabel()}
-          </button>
-        ) : (
-          <button
-            type="button"
-            disabled={disabled || showConnectingLabel}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleConnectClick();
-            }}
-            className={cn(
-              'inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-800 via-cyan-600 to-violet-600 font-semibold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl disabled:pointer-events-none disabled:opacity-50',
-              sizeClasses[size ?? 'md'],
-              className,
-            )}
-          >
-            {getButtonLabel()}
-          </button>
-        )}
+        <button
+          type="button"
+          disabled={disabled || showConnectingLabel}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleConnectClick();
+          }}
+          className={cn(
+            'inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-800 via-cyan-600 to-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl disabled:pointer-events-none disabled:opacity-50',
+            className,
+          )}
+        >
+          {getButtonLabel()}
+        </button>
       </div>
 
       {!skipAckRedirect && (
@@ -266,16 +223,65 @@ function ConnectButtonInner({
   );
 }
 
+/** Uses RainbowKit's standard ConnectButton when safety is already acknowledged. */
 export function WalletConnectButton(props: WalletConnectButtonProps) {
+  const t = useT();
+  const { isConnected, address } = useAccount();
+  const { skipAckRedirect, disabled, className } = props;
+  const [useStandardButton, setUseStandardButton] = useState(false);
+
+  useEffect(() => {
+    setUseStandardButton(
+      !disabled && (skipAckRedirect || isPreConnectAcknowledged()),
+    );
+  }, [disabled, skipAckRedirect]);
+
+  if (isConnected) {
+    return (
+      <ConnectButton.Custom>
+        {({ account, openAccountModal, mounted }) => (
+          <div
+            {...(!mounted && {
+              'aria-hidden': true,
+              style: { opacity: 0, pointerEvents: 'none', userSelect: 'none' },
+            })}
+          >
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openAccountModal();
+              }}
+              className={cn(
+                'inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/80 px-3 py-2 text-sm font-semibold text-emerald-900 shadow-sm backdrop-blur transition hover:shadow-md',
+                className,
+              )}
+            >
+              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+              {t('connect.connectedLabel')}:{' '}
+              {address ? truncateAddress(address) : account?.displayName}
+            </button>
+          </div>
+        )}
+      </ConnectButton.Custom>
+    );
+  }
+
+  if (useStandardButton) {
+    return (
+      <div className={cn('wallet-connect-rk-button', className)}>
+        <ConnectButton showBalance={false} chainStatus="none" accountStatus="full" />
+      </div>
+    );
+  }
+
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openConnectModal, openAccountModal, connectModalOpen, mounted }) => (
-        <ConnectButtonInner
+      {({ openConnectModal, connectModalOpen, mounted }) => (
+        <SafetyGatedConnectTrigger
           {...props}
-          account={account}
-          chain={chain}
           openConnectModal={openConnectModal}
-          openAccountModal={openAccountModal}
           connectModalOpen={connectModalOpen}
           mounted={mounted}
         />

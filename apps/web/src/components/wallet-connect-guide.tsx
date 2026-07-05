@@ -2,7 +2,7 @@
 
 import { useT } from '@/lib/i18n-context';
 import { Alert, Card, CardContent } from '@entelewallet/ui';
-import { isWalletConnectConfigured } from '@/lib/web3-provider';
+import { isWalletConnectConfigured } from '@/lib/wagmi';
 
 export function WalletConnectGuide() {
   const t = useT();

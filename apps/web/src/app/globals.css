@@ -30,6 +30,24 @@ div[data-rk][style*="z-index"] {
   z-index: 99999 !important;
 }
 
+/* WalletConnect / Reown AppKit QR modal — above RainbowKit when showQrModal is active */
+w3m-modal,
+wcm-modal,
+wcm-overlay,
+#w3m-modal,
+#wcm-modal,
+[data-w3m],
+[data-wcm],
+#reown-app,
+reown-modal {
+  z-index: 100000 !important;
+}
+
+/* Standard RainbowKit ConnectButton wrapper on acknowledged sessions */
+.wallet-connect-rk-button [data-testid="rk-connect-button"] {
+  border-radius: 0.75rem;
+}
+
 /* ─── Premium futuristic background system ─── */
 .app-futuristic-bg {
   position: relative;
