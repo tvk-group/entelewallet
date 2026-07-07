@@ -24,6 +24,7 @@ const CHAIN_SOURCES = {
   arbitrum: 'arbitrum',
   optimism: 'optimism',
   avalanche: 'avalanchec',
+  // blockdag: not on Trust Wallet — use apps/web/public/icons/chains/blockdag.png
 };
 
 /** Token icon downloads: [outputName, blockchain, contractAddress] */

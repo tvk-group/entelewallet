@@ -230,7 +230,7 @@
     "nativeCurrency": { "name": "BlockDAG", "symbol": "BDAG", "decimals": 18 },
     "rpcUrls": ["https://rpc.bdagscan.com/"],
     "blockExplorerUrls": ["https://bdagscan.com/"],
-    "icon": "/icons/chains/blockdag.svg",
+    "icon": "/icons/chains/blockdag.png",
     "status": "experimental",
     "uiCategory": "experimental",
     "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],
