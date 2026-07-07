@@ -29,7 +29,9 @@ export function HomeHero() {
 
       <div className="relative z-10 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div className="space-y-6">
-          <BrandLogo variant="horizontal" className="max-w-[min(100%,320px)] sm:max-w-[380px]" priority />
+          <div className="overflow-hidden rounded-2xl bg-slate-950 p-4 shadow-lg ring-1 ring-slate-800/60 sm:p-5">
+            <BrandLogo variant="horizontal-dark" priority />
+          </div>
 
           <div className="chip-fade-in inline-flex items-center gap-2 rounded-full border border-cyan-200/60 bg-gradient-to-r from-cyan-50/90 to-violet-50/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-900 shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse" />

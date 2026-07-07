@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { BRAND_ASSETS } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 
-type BrandLogoVariant = 'horizontal' | 'icon';
+type BrandLogoVariant = 'horizontal' | 'horizontal-dark' | 'icon';
 
 interface BrandLogoProps {
   variant?: BrandLogoVariant;
@@ -12,27 +12,34 @@ interface BrandLogoProps {
   priority?: boolean;
 }
 
-export function BrandLogo({ variant = 'horizontal', className, priority }: BrandLogoProps) {
+export function BrandLogo({ variant = 'horizontal-dark', className, priority }: BrandLogoProps) {
   if (variant === 'icon') {
     return (
       <Image
         src={BRAND_ASSETS.icon512}
         alt="EnteleWALLET"
-        width={40}
-        height={40}
-        className={cn('h-10 w-10 rounded-xl object-cover shadow-sm ring-1 ring-white/60', className)}
+        width={44}
+        height={44}
+        className={cn('h-11 w-11 rounded-full object-cover shadow-md ring-2 ring-white/50', className)}
         priority={priority}
       />
     );
   }
 
+  const src =
+    variant === 'horizontal' ? BRAND_ASSETS.logoHorizontal : BRAND_ASSETS.logoDark;
+
   return (
     <Image
-      src={BRAND_ASSETS.logoHorizontal}
+      src={src}
       alt="EnteleWALLET — Secure • Intelligent • Connected"
-      width={240}
-      height={56}
-      className={cn('h-10 w-auto max-w-[220px] object-contain sm:h-11 sm:max-w-[260px]', className)}
+      width={320}
+      height={72}
+      className={cn(
+        'h-auto w-full max-w-[280px] object-contain sm:max-w-[320px]',
+        variant === 'horizontal-dark' && 'rounded-xl',
+        className,
+      )}
       priority={priority}
     />
   );

@@ -21,11 +21,9 @@ export function Header() {
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
       <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href={ROUTES.home} className="group flex shrink-0 items-center gap-3">
-          <div className="sm:hidden">
-            <BrandLogo variant="icon" priority />
-          </div>
-          <div className="hidden sm:block">
-            <BrandLogo variant="horizontal" priority />
+          <BrandLogo variant="icon" priority className="sm:hidden" />
+          <div className="hidden overflow-hidden rounded-xl bg-slate-950 px-3 py-1.5 shadow-sm ring-1 ring-slate-800/80 sm:block">
+            <BrandLogo variant="horizontal-dark" priority className="max-w-[220px] lg:max-w-[260px]" />
           </div>
           <span className="sr-only">{t('brand.name')}</span>
         </Link>
