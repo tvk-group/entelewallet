@@ -13,7 +13,7 @@ interface BrandLogoProps {
 }
 
 /** Official EnteleWALLET brand mark. */
-export function BrandLogo({ variant = 'lockup-dark', className, priority }: BrandLogoProps) {
+export function BrandLogo({ variant = 'lockup', className, priority }: BrandLogoProps) {
   if (variant === 'app-icon') {
     return (
       <Image
@@ -83,12 +83,12 @@ export function BrandLogo({ variant = 'lockup-dark', className, priority }: Bran
     return (
       <div className={cn('flex items-center gap-2.5', className)}>
         <Image
-          src={BRAND_ASSETS.iconMark}
+          src={BRAND_ASSETS.appIcon}
           alt=""
           width={40}
           height={40}
           aria-hidden
-          className="h-10 w-10 shrink-0 rounded-xl object-contain"
+          className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-sm ring-1 ring-slate-200/80"
           priority={priority}
         />
         <Image
