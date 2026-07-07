@@ -11,10 +11,11 @@ interface AssetCardProps {
   token: TokenConfig;
   balance?: bigint;
   loading?: boolean;
+  refreshing?: boolean;
   error?: string;
 }
 
-export function AssetCard({ token, balance, loading, error }: AssetCardProps) {
+export function AssetCard({ token, balance, loading, refreshing, error }: AssetCardProps) {
   const t = useT();
 
   const displayBalance =
@@ -56,7 +57,9 @@ export function AssetCard({ token, balance, loading, error }: AssetCardProps) {
         ) : error ? (
           <p className="text-xs text-red-600">{t('assets.failedToLoad')}</p>
         ) : displayBalance !== null ? (
-          <p className="text-sm font-semibold text-slate-900">
+          <p
+            className={`text-sm font-semibold text-slate-900 transition-opacity ${refreshing ? 'opacity-70' : ''}`}
+          >
             <LtrSpan>{displayBalance}</LtrSpan>
             <span className="ml-1 text-xs font-normal text-slate-500">{token.symbol}</span>
           </p>
