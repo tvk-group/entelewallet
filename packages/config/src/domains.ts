@@ -81,6 +81,7 @@ export const SEO_DEFAULT = {
   description:
     'Connect, verify and monitor your EnteleKRON ecosystem wallet with EnteleWALLET Lite at entelewallet.app.',
   ogImage: '/og/entelewallet-lite-og.png',
+  tagline: 'SECURE • INTELLIGENT • CONNECTED',
 } as const;
 
 /** Origins that must be allowlisted in the WalletConnect / Reown Cloud dashboard. */

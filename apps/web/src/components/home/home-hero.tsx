@@ -7,6 +7,7 @@ import { ROUTES } from '@entelewallet/config';
 import { Button } from '@entelewallet/ui';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { WalletAppPreview } from './wallet-app-preview';
+import { BrandLogo } from '@/components/brand-logo';
 
 const TRUST_CHIP_KEYS = [
   'home.trustChipNoSeed',
@@ -28,6 +29,8 @@ export function HomeHero() {
 
       <div className="relative z-10 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div className="space-y-6">
+          <BrandLogo variant="horizontal" className="max-w-[min(100%,320px)] sm:max-w-[380px]" priority />
+
           <div className="chip-fade-in inline-flex items-center gap-2 rounded-full border border-cyan-200/60 bg-gradient-to-r from-cyan-50/90 to-violet-50/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-900 shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse" />
             {t('home.heroBadge')}

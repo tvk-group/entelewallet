@@ -1,8 +1,31 @@
 # EnteleWALLET
 
-**EnteleWALLET Lite** — Secure wallet-connected dashboard for the EnteleKRON ecosystem.
+<p align="center">
+  <img src=".github/assets/entelewallet-logo-horizontal.png" alt="EnteleWALLET — Secure • Intelligent • Connected" width="560" />
+</p>
+
+<p align="center">
+  <strong>EnteleWALLET Lite</strong> — Secure wallet-connected dashboard for the EnteleKRON ecosystem.
+</p>
+
+<p align="center">
+  <img src=".github/assets/entelewallet-icon-512.png" alt="EnteleWALLET app icon" width="96" />
+</p>
 
 Repository: [tvk-group/entelewallet](https://github.com/tvk-group/entelewallet)
+
+## Brand Assets
+
+Official logos and banners live in:
+
+| Asset | Path |
+|-------|------|
+| Horizontal logo | `.github/assets/entelewallet-logo-horizontal.png` |
+| App icon (512) | `.github/assets/entelewallet-icon-512.png` |
+| Social preview / OG | `.github/assets/social-preview.png` |
+| Website copies | `apps/web/public/brand/` and `apps/web/public/og/` |
+
+Tagline: **SECURE • INTELLIGENT • CONNECTED**
 
 ## Current Phase
 

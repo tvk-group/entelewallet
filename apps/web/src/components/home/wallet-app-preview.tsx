@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import {
-  Shield,
   ShieldCheck,
   Wallet,
   FileCheck,
@@ -16,6 +15,7 @@ import { useAccount } from 'wagmi';
 import { useWalletStatus } from '@/lib/wallet-context';
 import { ROUTES } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
+import { BrandLogo } from '@/components/brand-logo';
 
 function StatusChip({
   label,
@@ -86,9 +86,7 @@ export function WalletAppPreview() {
       <div className="wallet-float relative z-10 p-5 sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="shield-pulse flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-900 via-cyan-600 to-violet-600 shadow-lg ring-2 ring-white/60">
-              <Shield className="h-5 w-5 text-white" />
-            </div>
+            <BrandLogo variant="icon" className="h-11 w-11" />
             <div>
               <p className="text-sm font-bold text-slate-900">{t('brand.name')}</p>
               <p className="text-[10px] font-medium uppercase tracking-widest text-cyan-700">

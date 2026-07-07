@@ -3,7 +3,7 @@ import { Web3Provider } from '@/lib/web3-provider';
 import { I18nProvider } from '@/lib/i18n-context';
 import { WalletProvider } from '@/lib/wallet-context';
 import { NetworkViewProvider } from '@/lib/network-view-context';
-import { SEO_DEFAULT } from '@entelewallet/config';
+import { SEO_DEFAULT, BRAND_ASSETS } from '@entelewallet/config';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -17,10 +17,25 @@ export const metadata = {
   appleWebApp: { capable: true, title: 'EnteleWALLET' },
   themeColor: '#0ea5e9',
   manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      { url: BRAND_ASSETS.favicon16, sizes: '16x16', type: 'image/png' },
+      { url: BRAND_ASSETS.favicon32, sizes: '32x32', type: 'image/png' },
+      { url: BRAND_ASSETS.icon192, sizes: '192x192', type: 'image/png' },
+    ],
+    apple: BRAND_ASSETS.appleTouchIcon,
+    shortcut: BRAND_ASSETS.favicon32,
+  },
   openGraph: {
     title: SEO_DEFAULT.title,
     description: SEO_DEFAULT.description,
-    images: [{ url: SEO_DEFAULT.ogImage, width: 1200, height: 630 }],
+    images: [{ url: SEO_DEFAULT.ogImage, width: 1200, height: 630, alt: 'EnteleWALLET' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SEO_DEFAULT.title,
+    description: SEO_DEFAULT.description,
+    images: [SEO_DEFAULT.ogImage],
   },
 };
 

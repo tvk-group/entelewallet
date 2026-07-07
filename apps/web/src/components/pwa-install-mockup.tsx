@@ -1,6 +1,7 @@
 'use client';
 
-import { Smartphone } from 'lucide-react';
+import Image from 'next/image';
+import { BRAND_ASSETS } from '@entelewallet/config';
 import { useT } from '@/lib/i18n-context';
 
 export function PwaInstallMockup() {
@@ -17,7 +18,13 @@ export function PwaInstallMockup() {
             <div className="h-1.5 w-12 rounded-full bg-slate-700" />
           </div>
           <div className="rounded-2xl bg-gradient-to-br from-blue-900 via-cyan-700 to-violet-700 p-4 text-center">
-            <Smartphone className="mx-auto mb-2 h-8 w-8 text-white/90" />
+            <Image
+              src={BRAND_ASSETS.icon512}
+              alt="EnteleWALLET"
+              width={56}
+              height={56}
+              className="mx-auto mb-2 h-14 w-14 rounded-2xl shadow-lg ring-2 ring-white/30"
+            />
             <p className="text-xs font-bold text-white">EnteleWALLET</p>
             <p className="mt-1 text-[10px] text-white/80">entelewallet.app</p>
           </div>
