@@ -2,6 +2,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Web3Provider } from '@/lib/web3-provider';
 import { I18nProvider } from '@/lib/i18n-context';
 import { WalletProvider } from '@/lib/wallet-context';
+import { NetworkViewProvider } from '@/lib/network-view-context';
 import { SEO_DEFAULT } from '@entelewallet/config';
 import './globals.css';
 
@@ -29,7 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`app-shell-bg ${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <I18nProvider>
           <Web3Provider>
-            <WalletProvider>{children}</WalletProvider>
+            <WalletProvider>
+              <NetworkViewProvider>{children}</NetworkViewProvider>
+            </WalletProvider>
           </Web3Provider>
         </I18nProvider>
       </body>

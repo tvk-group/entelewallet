@@ -46,15 +46,43 @@ export function getRegistrySections(): Array<{
   })).filter((section) => section.chains.length > 0 || section.modules.length > 0);
 }
 
-export function getWalletConnectChains(options?: { includeTestnets?: boolean }): ChainDefinition[] {
+function filterConnectableChains(
+  chains: ChainDefinition[],
+  options?: { includeTestnets?: boolean },
+): ChainDefinition[] {
   const includeTestnets = options?.includeTestnets ?? process.env.NODE_ENV === 'development';
 
-  return loadChains().filter((chain) => {
+  return chains.filter((chain) => {
     if (!chain.capabilities.walletConnect || !chain.rpcUrls.length) return false;
     if (chain.status === 'testnet' && !includeTestnets) return false;
     if (chain.status === 'planned') return false;
     return true;
   });
+}
+
+/** All networks shown in the wallet UI (may include multiple views per chain ID, e.g. EnteleKRON + Ethereum). */
+export function getDisplayNetworks(options?: { includeTestnets?: boolean }): ChainDefinition[] {
+  return filterConnectableChains(loadChains(), options);
+}
+
+/** Unique EVM chains for wagmi / WalletConnect (one entry per chainId). */
+export function getWalletConnectChains(options?: { includeTestnets?: boolean }): ChainDefinition[] {
+  const seen = new Set<number>();
+  return filterConnectableChains(loadChains(), options).filter((chain) => {
+    if (seen.has(chain.chainId)) return false;
+    seen.add(chain.chainId);
+    return true;
+  });
+}
+
+export function getDisplayNetworkById(id: string): ChainDefinition | undefined {
+  return getDisplayNetworks().find((chain) => chain.id === id);
+}
+
+export function getDefaultNetworkViewId(chainId: number): string {
+  const networks = getDisplayNetworks().filter((chain) => chain.chainId === chainId);
+  const ecosystem = networks.find((chain) => chain.uiCategory === 'tvk-ecosystem');
+  return ecosystem?.id ?? networks[0]?.id ?? String(chainId);
 }
 
 export function getSupportedChainIds(options?: { includeTestnets?: boolean }): number[] {

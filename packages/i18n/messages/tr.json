@@ -247,7 +247,14 @@
     "symbol": "Symbol",
     "failedToLoad": "Failed to load balance",
     "nativeAsset": "Native asset",
-    "futureAsset": "Future TVK ecosystem asset"
+    "futureAsset": "Future TVK ecosystem asset",
+    "noTokensForNetwork": "No tokens configured for this network yet.",
+    "tokens": "Tokens",
+    "refresh": "Refresh",
+    "balanceFetchWarning": "Some balances could not be loaded. Check your network connection and try refreshing.",
+    "connectedWallet": "Connected wallet",
+    "addressCopied": "Address copied",
+    "activeNetwork": "Active network"
   },
   "transactions": {
     "title": "Transactions",
@@ -554,6 +561,12 @@
     "title": "Networks",
     "switchHint": "Select a network to view balances",
     "experimental": "Experimental",
-    "testnet": "Testnet"
+    "testnet": "Testnet",
+    "category": {
+      "tvk-ecosystem": "TVK Ecosystem",
+      "active": "Mainnets",
+      "experimental": "Experimental",
+      "testnet": "Testnets"
+    }
   }
 }
