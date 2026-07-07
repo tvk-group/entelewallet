@@ -60,17 +60,17 @@ export function NetworkChainPicker({ className }: { className?: string }) {
         aria-haspopup="listbox"
       >
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-900 to-cyan-600 shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200 shadow-sm">
             {activeNetwork?.icon ? (
               <Image
                 src={activeNetwork.icon}
                 alt=""
-                width={24}
-                height={24}
-                className="h-6 w-6 rounded-full"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-cover"
               />
             ) : (
-              <Globe2 className="h-5 w-5 text-white" />
+              <Globe2 className="h-5 w-5 text-slate-400" />
             )}
           </div>
           <div className="min-w-0 text-left">
@@ -116,13 +116,15 @@ export function NetworkChainPicker({ className }: { className?: string }) {
                         role="option"
                         aria-selected={selected}
                       >
-                        <Image
-                          src={network.icon}
-                          alt=""
-                          width={28}
-                          height={28}
-                          className="h-7 w-7 rounded-full ring-1 ring-slate-200"
-                        />
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
+                          <Image
+                            src={network.icon}
+                            alt=""
+                            width={28}
+                            height={28}
+                            className="h-7 w-7 object-cover"
+                          />
+                        </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium">{network.name}</p>
                           <p className="text-xs text-slate-500">

@@ -6,16 +6,27 @@ import { useT } from '@/lib/i18n-context';
 import type { TokenConfig } from '@entelewallet/types';
 import { ExternalLink, Loader2 } from 'lucide-react';
 import { formatUnits } from 'viem';
+import { formatUsd } from '@/hooks/use-token-prices';
 
 interface AssetCardProps {
   token: TokenConfig;
   balance?: bigint;
+  fiatUsd?: number;
   loading?: boolean;
   refreshing?: boolean;
+  pricesLoading?: boolean;
   error?: string;
 }
 
-export function AssetCard({ token, balance, loading, refreshing, error }: AssetCardProps) {
+export function AssetCard({
+  token,
+  balance,
+  fiatUsd,
+  loading,
+  refreshing,
+  pricesLoading,
+  error,
+}: AssetCardProps) {
   const t = useT();
 
   const displayBalance =
@@ -25,13 +36,19 @@ export function AssetCard({ token, balance, loading, refreshing, error }: AssetC
         })
       : null;
 
-  const showZero = balance !== undefined && displayBalance === '0';
+  const fiatLabel = formatUsd(fiatUsd);
 
   return (
-    <div className="flex items-center gap-4 px-4 py-3.5 transition hover:bg-slate-50/80">
-      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-slate-100 to-slate-200 ring-1 ring-slate-200/80">
+    <div className="flex items-center gap-3.5 px-4 py-3.5 transition hover:bg-slate-50/90">
+      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200/90 shadow-sm">
         {token.logo ? (
-          <Image src={token.logo} alt="" width={44} height={44} className="h-11 w-11 object-cover" />
+          <Image
+            src={token.logo}
+            alt=""
+            width={44}
+            height={44}
+            className="h-11 w-11 object-cover"
+          />
         ) : (
           <span className="text-xs font-bold text-slate-700">{token.symbol.slice(0, 3)}</span>
         )}
@@ -57,17 +74,19 @@ export function AssetCard({ token, balance, loading, refreshing, error }: AssetC
         ) : error ? (
           <p className="text-xs text-red-600">{t('assets.failedToLoad')}</p>
         ) : displayBalance !== null ? (
-          <p
-            className={`text-sm font-semibold text-slate-900 transition-opacity ${refreshing ? 'opacity-70' : ''}`}
-          >
-            <LtrSpan>{displayBalance}</LtrSpan>
-            <span className="ml-1 text-xs font-normal text-slate-500">{token.symbol}</span>
-          </p>
-        ) : showZero ? (
-          <p className="text-sm font-semibold text-slate-900">
-            <LtrSpan>0</LtrSpan>
-            <span className="ml-1 text-xs font-normal text-slate-500">{token.symbol}</span>
-          </p>
+          <>
+            <p
+              className={`text-sm font-semibold tabular-nums text-slate-900 transition-opacity ${refreshing ? 'opacity-70' : ''}`}
+            >
+              <LtrSpan>{displayBalance}</LtrSpan>
+              <span className="ml-1 text-xs font-normal text-slate-500">{token.symbol}</span>
+            </p>
+            {pricesLoading && fiatUsd === undefined ? (
+              <p className="mt-0.5 text-[11px] text-slate-400">{t('assets.priceLoading')}</p>
+            ) : fiatLabel ? (
+              <p className="mt-0.5 text-xs tabular-nums text-slate-500">{fiatLabel}</p>
+            ) : null}
+          </>
         ) : (
           <p className="text-xs text-slate-400">—</p>
         )}

@@ -2,6 +2,7 @@ export * from './features';
 export * from './chains';
 export * from './tokens';
 export * from './brand';
+export * from './price-metadata';
 export * from './domains';
 export * from './contact';
 export * from './officialAddresses';

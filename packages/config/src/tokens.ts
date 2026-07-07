@@ -26,6 +26,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 1,
     contractAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     enabled: true,
+    logo: '/icons/tokens/usdt-ethereum.png',
+    coingeckoId: 'tether',
     explorerUrl: 'https://etherscan.io/token/0xdAC17F958D2ee523a2206206994597C13D831ec7',
     networkViews: ['entelekron', 'ethereum'],
   },
@@ -62,6 +64,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 8453,
     contractAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
     enabled: true,
+    logo: '/icons/tokens/usdc-base.png',
+    coingeckoId: 'usd-coin',
     explorerUrl: 'https://basescan.org/token/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
   },
   // Polygon
@@ -73,6 +77,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 137,
     contractAddress: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
     enabled: true,
+    logo: '/icons/tokens/usdc-polygon.png',
+    coingeckoId: 'usd-coin',
     explorerUrl: 'https://polygonscan.com/token/0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
   },
   // BNB Chain
@@ -84,6 +90,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 56,
     contractAddress: '0x55d398326f99059fF775485246999027B3197955',
     enabled: true,
+    logo: '/icons/tokens/usdt-bnb.png',
+    coingeckoId: 'tether',
     explorerUrl: 'https://bscscan.com/token/0x55d398326f99059fF775485246999027B3197955',
   },
   // Arbitrum
@@ -95,6 +103,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 42161,
     contractAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
     enabled: true,
+    logo: '/icons/tokens/usdc-arbitrum.png',
+    coingeckoId: 'usd-coin',
     explorerUrl: 'https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
   },
   // Optimism
@@ -106,6 +116,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 10,
     contractAddress: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
     enabled: true,
+    logo: '/icons/tokens/usdc-optimism.png',
+    coingeckoId: 'usd-coin',
     explorerUrl: 'https://optimistic.etherscan.io/token/0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
   },
   // Avalanche
@@ -117,6 +129,8 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     chainId: 43114,
     contractAddress: '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E',
     enabled: true,
+    logo: '/icons/tokens/usdc-avalanche.png',
+    coingeckoId: 'usd-coin',
     explorerUrl: 'https://snowtrace.io/token/0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E',
   },
 ];
