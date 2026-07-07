@@ -40,6 +40,8 @@ export interface TokenConfig {
   contractAddress?: string;
   explorerUrl?: string;
   logo?: string;
+  /** CoinGecko API id for USD price quotes (optional). */
+  coingeckoId?: string;
   enabled: boolean;
   pendingOfficialConfiguration?: boolean;
   isNative?: boolean;

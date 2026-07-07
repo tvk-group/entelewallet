@@ -13,6 +13,7 @@
     "i18n:check": "node scripts/check-i18n.mjs",
     "security:check": "node scripts/security-check.mjs",
     "ecosystem:export": "node scripts/build-ecosystem-animation-export.mjs",
+    "icons:sync": "node scripts/sync-chain-icons.mjs",
     "test": "echo \"Tests placeholder — add test suite in future release\" && exit 0"
   },
   "devDependencies": {
