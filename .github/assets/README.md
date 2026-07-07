@@ -12,7 +12,8 @@ Official EnteleWALLET logos and banners.
 
 ## Website paths
 
-- `apps/web/public/brand/entelewallet-logo-full.png`
+- `apps/web/public/brand/entelewallet-app-icon.png` + `entelewallet-wordmark.png` (header lockup)
+- `apps/web/public/brand/entelewallet-logo-dark.png` (hero banner)
 - `apps/web/public/brand/entelewallet-icon-mark.png`
 - `apps/web/public/icons/icon-192.png`, `icon-512.png`, `apple-touch-icon.png`
 - `apps/web/public/og/entelewallet-lite-og.png`
