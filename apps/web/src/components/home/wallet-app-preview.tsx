@@ -86,7 +86,7 @@ export function WalletAppPreview() {
       <div className="wallet-float relative z-10 p-5 sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <BrandLogo variant="icon" className="h-11 w-11" />
+            <BrandLogo variant="app-icon" className="h-11 w-11" />
             <div>
               <p className="text-sm font-bold text-slate-900">{t('brand.name')}</p>
               <p className="text-[10px] font-medium uppercase tracking-widest text-cyan-700">

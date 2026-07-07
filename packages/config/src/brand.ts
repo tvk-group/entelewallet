@@ -6,8 +6,10 @@ export const BRAND_ASSETS = {
   logoDark: '/brand/entelewallet-logo-dark.png',
   /** Text-only wordmark on white — header on light backgrounds */
   wordmark: '/brand/entelewallet-wordmark.png',
-  /** Icon mark on white — header, footer, UI */
+  /** Icon mark on white — header lockup on light backgrounds */
   iconMark: '/brand/entelewallet-icon-mark.png',
+  /** Circular app icon on dark blue — PWA, favicon, dark UI surfaces */
+  appIcon: '/brand/entelewallet-app-icon.png',
   /** Primary app icon source (512) */
   icon512: '/brand/entelewallet-icon-512.png',
   icon192: '/icons/icon-192.png',

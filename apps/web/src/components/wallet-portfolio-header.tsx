@@ -30,7 +30,7 @@ export function WalletPortfolioHeader() {
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white/15 ring-1 ring-white/20">
             <Image
-              src={BRAND_ASSETS.iconMark}
+              src={BRAND_ASSETS.appIcon}
               alt=""
               width={44}
               height={44}

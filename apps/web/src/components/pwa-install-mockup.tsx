@@ -19,11 +19,11 @@ export function PwaInstallMockup() {
           </div>
           <div className="rounded-2xl bg-gradient-to-br from-blue-900 via-cyan-700 to-violet-700 p-4 text-center">
             <Image
-              src={BRAND_ASSETS.iconMark}
+              src={BRAND_ASSETS.appIcon}
               alt="EnteleWALLET"
               width={56}
               height={56}
-              className="mx-auto mb-2 h-14 w-14 rounded-2xl shadow-lg ring-2 ring-white/30"
+              className="mx-auto mb-2 h-14 w-14 rounded-full object-cover shadow-lg ring-2 ring-white/30"
             />
             <p className="text-xs font-bold text-white">EnteleWALLET</p>
             <p className="mt-1 text-[10px] text-white/80">entelewallet.app</p>

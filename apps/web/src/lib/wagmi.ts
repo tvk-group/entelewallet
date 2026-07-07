@@ -39,7 +39,7 @@ function walletConnectMetadata() {
     name: 'EnteleWALLET',
     description: 'EnteleWALLET Lite — verified wallet access for the EnteleKRON ecosystem.',
     url: baseUrl,
-    icons: [`${baseUrl}${BRAND_ASSETS.icon512Pwa}`],
+    icons: [`${baseUrl}${BRAND_ASSETS.appIcon}`],
   };
 }
 

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { BRAND_ASSETS } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 
-type BrandLogoVariant = 'lockup' | 'wordmark' | 'icon' | 'banner-dark';
+type BrandLogoVariant = 'lockup' | 'wordmark' | 'icon' | 'app-icon' | 'banner-dark';
 
 interface BrandLogoProps {
   variant?: BrandLogoVariant;
@@ -22,6 +22,19 @@ export function BrandLogo({ variant = 'lockup', className, priority }: BrandLogo
         width={44}
         height={44}
         className={cn('h-11 w-11 rounded-xl object-contain', className)}
+        priority={priority}
+      />
+    );
+  }
+
+  if (variant === 'app-icon') {
+    return (
+      <Image
+        src={BRAND_ASSETS.appIcon}
+        alt="EnteleWALLET"
+        width={44}
+        height={44}
+        className={cn('h-11 w-11 rounded-full object-cover shadow-md ring-2 ring-cyan-400/30', className)}
         priority={priority}
       />
     );
