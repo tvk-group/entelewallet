@@ -9,7 +9,9 @@
 </p>
 
 <p align="center">
-  <img src=".github/assets/entelewallet-icon-512.png" alt="EnteleWALLET app icon" width="96" />
+  <img src=".github/assets/entelewallet-icon-512.png" alt="EnteleWALLET icon" width="88" />
+  &nbsp;
+  <img src=".github/assets/entelewallet-wordmark.png" alt="ENTELEΞWALLET" width="260" />
 </p>
 
 Repository: [tvk-group/entelewallet](https://github.com/tvk-group/entelewallet)
@@ -20,8 +22,9 @@ Official logos and banners live in:
 
 | Asset | Path |
 |-------|------|
-| Horizontal logo | `.github/assets/entelewallet-logo-horizontal.png` |
-| App icon (512) | `.github/assets/entelewallet-icon-512.png` |
+| Wordmark (white bg) | `.github/assets/entelewallet-wordmark.png` |
+| Icon mark (white bg) | `.github/assets/entelewallet-icon-512.png` |
+| Dark banner | `.github/assets/entelewallet-logo-horizontal.png` |
 | Social preview / OG | `.github/assets/social-preview.png` |
 | Website copies | `apps/web/public/brand/` and `apps/web/public/og/` |
 

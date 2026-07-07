@@ -20,11 +20,8 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-white/30 bg-white/60 shadow-sm shadow-blue-900/5 backdrop-blur-2xl">
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
       <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href={ROUTES.home} className="group flex shrink-0 items-center gap-3">
-          <BrandLogo variant="icon" priority className="sm:hidden" />
-          <div className="hidden overflow-hidden rounded-xl bg-slate-950 px-3 py-1.5 shadow-sm ring-1 ring-slate-800/80 sm:block">
-            <BrandLogo variant="horizontal-dark" priority className="max-w-[220px] lg:max-w-[260px]" />
-          </div>
+        <Link href={ROUTES.home} className="group flex shrink-0 items-center">
+          <BrandLogo variant="lockup" priority />
           <span className="sr-only">{t('brand.name')}</span>
         </Link>
 

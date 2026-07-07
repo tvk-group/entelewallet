@@ -19,7 +19,7 @@ export function PwaInstallMockup() {
           </div>
           <div className="rounded-2xl bg-gradient-to-br from-blue-900 via-cyan-700 to-violet-700 p-4 text-center">
             <Image
-              src={BRAND_ASSETS.icon512}
+              src={BRAND_ASSETS.iconMark}
               alt="EnteleWALLET"
               width={56}
               height={56}
