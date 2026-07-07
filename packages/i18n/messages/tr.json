@@ -257,6 +257,8 @@
     "hideZero": "Hide zero",
     "showZero": "Show zero",
     "noVisibleTokens": "No tokens with a balance on this network.",
+    "noMarketPrice": "Not listed — no USD estimate",
+    "listedAssetsOnly": "Total reflects listed assets only. ENK and ecosystem tokens are not quoted.",
     "balanceFetchWarning": "Some balances could not be loaded. Check your network connection and try refreshing.",
     "connectedWallet": "Connected wallet",
     "addressCopied": "Address copied",
@@ -565,6 +567,8 @@
   },
   "networks": {
     "title": "Networks",
+    "switchNetwork": "Switch network",
+    "connectToSwitchChain": "Connect your wallet to switch chains. You can still preview networks here.",
     "switchHint": "Select a network to view balances",
     "experimental": "Experimental",
     "testnet": "Testnet",

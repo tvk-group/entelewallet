@@ -29,7 +29,7 @@
     "nativeCurrency": { "name": "Ether", "symbol": "ETH", "decimals": 18 },
     "rpcUrls": ["https://ethereum.publicnode.com", "https://rpc.ankr.com/eth"],
     "blockExplorerUrls": ["https://etherscan.io"],
-    "icon": "/icons/chains/entelekron.svg",
+    "icon": "/icons/chains/entelekron.png",
     "status": "active",
     "uiCategory": "tvk-ecosystem",
     "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],

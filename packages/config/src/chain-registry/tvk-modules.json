@@ -6,7 +6,7 @@
     "description": "Trust infrastructure platform organizing identity, verification, integrity, and interoperability across the TVK ecosystem.",
     "status": "active",
     "uiCategory": "tvk-ecosystem",
-    "icon": "/icons/chains/entelekron.svg",
+    "icon": "/icons/chains/entelekron.png",
     "supportedChains": ["ethereum"],
     "riskFlag": "low",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
@@ -19,7 +19,7 @@
     "description": "Intelligence layer coordinating modules, trust workflows, and future AI-assisted wallet guidance.",
     "status": "active",
     "uiCategory": "tvk-ecosystem",
-    "icon": "/icons/chains/sovra.svg",
+    "icon": "/icons/chains/sovra.png",
     "supportedChains": ["ethereum"],
     "riskFlag": "low",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false }
@@ -31,7 +31,7 @@
     "description": "Energy infrastructure module connected to the broader TVK and EnteleKRON ecosystem architecture.",
     "status": "active",
     "uiCategory": "tvk-ecosystem",
-    "icon": "/icons/chains/energiemind.svg",
+    "icon": "/icons/chains/energiemind.png",
     "supportedChains": ["ethereum"],
     "riskFlag": "medium",
     "capabilities": { "watchOnly": true, "walletConnect": false, "transactions": false }

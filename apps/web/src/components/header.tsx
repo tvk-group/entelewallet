@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { WalletConnectButton } from './wallet-connect-button';
 import { LanguageSelector } from './language-selector';
 import { BrandLogo } from './brand-logo';
+import { NetworkChainPicker } from './network-chain-picker';
 
 export function Header() {
   const t = useT();
@@ -42,7 +43,8 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <NetworkChainPicker variant="header" className="hidden md:block" />
           <LanguageSelector className="hidden sm:inline-flex" />
           <WalletConnectButton className="btn-primary-glow !rounded-xl" />
           <button
@@ -58,6 +60,9 @@ export function Header() {
 
       {mobileOpen && (
         <nav className="border-t border-white/40 bg-white/90 px-4 py-4 backdrop-blur-2xl xl:hidden animate-fade-in">
+          <div className="mb-3 md:hidden">
+            <NetworkChainPicker variant="header" className="w-full" />
+          </div>
           <div className="mb-3 sm:hidden">
             <LanguageSelector className="w-full justify-center" />
           </div>

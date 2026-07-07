@@ -42,6 +42,11 @@ export interface TokenConfig {
   logo?: string;
   /** CoinGecko API id for USD price quotes (optional). */
   coingeckoId?: string;
+  /**
+   * Fiat display policy. `none` = show token amount only (no listing/sale price quotes).
+   * Use for unlisted ecosystem tokens such as ENK.
+   */
+  fiatQuotePolicy?: 'market' | 'none';
   enabled: boolean;
   pendingOfficialConfiguration?: boolean;
   isNative?: boolean;
