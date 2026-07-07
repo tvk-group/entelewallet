@@ -22,8 +22,8 @@ Official logos and banners live in:
 
 | Asset | Path |
 |-------|------|
-| Wordmark (white bg) | `.github/assets/entelewallet-wordmark.png` |
-| Icon mark (white bg) | `.github/assets/entelewallet-icon-512.png` |
+| Wordmark (dark navy) | `.github/assets/entelewallet-wordmark.png` |
+| App icon (gradient) | `.github/assets/entelewallet-icon-512.png` |
 | Dark banner | `.github/assets/entelewallet-logo-horizontal.png` |
 | Social preview / OG | `.github/assets/social-preview.png` |
 | Website copies | `apps/web/public/brand/` and `apps/web/public/og/` |
