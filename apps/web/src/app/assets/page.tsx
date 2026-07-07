@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { AssetGrid } from '@/components/asset-grid';
 import { NetworkChainPicker } from '@/components/network-chain-picker';
+import { WalletPortfolioHeader } from '@/components/wallet-portfolio-header';
 import { useT } from '@/lib/i18n-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
@@ -31,7 +32,8 @@ export default function AssetsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-6">
+        <div className="mx-auto max-w-2xl space-y-4">
+          <WalletPortfolioHeader />
           <NetworkChainPicker />
           <AssetGrid />
         </div>

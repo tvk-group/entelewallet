@@ -7,7 +7,7 @@ import { useWalletStatus } from '@/lib/wallet-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, LtrSpan } from '@entelewallet/ui';
 import { useAccount, useChainId } from 'wagmi';
-import { getChainConfig } from '@entelewallet/config';
+import { useNetworkView } from '@/lib/network-view-context';
 import { getVerificationBadgeKey } from '@entelewallet/wallet-core';
 import { ExternalLink } from 'lucide-react';
 import { getExplorerAddressUrl } from '@entelewallet/blockchain';
@@ -18,7 +18,7 @@ export default function OverviewPage() {
   const { address, isConnected, status } = useAccount();
   const chainId = useChainId();
   const { verificationStatus, isVerified } = useWalletStatus();
-  const chain = getChainConfig(chainId);
+  const { activeNetwork } = useNetworkView();
 
   if (status === 'reconnecting') {
     return (
@@ -49,7 +49,7 @@ export default function OverviewPage() {
 
   const kpis = [
     { label: t('overview.verification'), value: t(getVerificationBadgeKey(verificationStatus)) },
-    { label: t('overview.network'), value: chain?.name ?? `Chain ${chainId}` },
+    { label: t('overview.network'), value: activeNetwork?.name ?? `Chain ${chainId}` },
     { label: t('overview.vestingStatus'), value: t('overview.notLinked') },
     { label: t('overview.claimStatus'), value: t('claims.notOpen') },
   ];

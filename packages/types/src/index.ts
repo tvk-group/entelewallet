@@ -43,6 +43,8 @@ export interface TokenConfig {
   enabled: boolean;
   pendingOfficialConfiguration?: boolean;
   isNative?: boolean;
+  /** Network view IDs (from chain registry) where this token appears. */
+  networkViews?: string[];
 }
 
 export interface ChainConfig {

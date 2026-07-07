@@ -22,6 +22,29 @@
     }
   },
   {
+    "id": "entelekron",
+    "chainId": 1,
+    "name": "EnteleKRON",
+    "shortName": "ENK",
+    "nativeCurrency": { "name": "Ether", "symbol": "ETH", "decimals": 18 },
+    "rpcUrls": ["https://ethereum.publicnode.com", "https://rpc.ankr.com/eth"],
+    "blockExplorerUrls": ["https://etherscan.io"],
+    "icon": "/icons/chains/entelekron.svg",
+    "status": "active",
+    "uiCategory": "tvk-ecosystem",
+    "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],
+    "riskFlag": "low",
+    "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
+    "verification": {
+      "rpcVerified": true,
+      "explorerVerified": true,
+      "signingTested": true,
+      "balanceDetectionTested": true,
+      "tokenDetectionTested": true
+    },
+    "notes": "EnteleKRON ecosystem network — ENK and verified ecosystem tokens on Ethereum mainnet (chain ID 1)."
+  },
+  {
     "id": "base",
     "chainId": 8453,
     "name": "Base",
@@ -202,7 +225,7 @@
   {
     "id": "blockdag",
     "chainId": 1404,
-    "name": "BlockDAG Mainnet",
+    "name": "BlockDAG",
     "shortName": "BDAG",
     "nativeCurrency": { "name": "BlockDAG", "symbol": "BDAG", "decimals": 18 },
     "rpcUrls": ["https://rpc.bdagscan.com/"],
@@ -220,6 +243,6 @@
       "balanceDetectionTested": false,
       "tokenDetectionTested": false
     },
-    "notes": "Official BlockDAG Mainnet (EVM-compatible, chain ID 1404). Watch-only and portfolio tracking until RPC, explorer, signing, and balance/token detection tests pass. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
+    "notes": "Official BlockDAG network (EVM-compatible, chain ID 1404). Watch-only and portfolio tracking until RPC, explorer, signing, and balance/token detection tests pass. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
   }
 ]
