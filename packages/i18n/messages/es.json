@@ -251,6 +251,7 @@
     "noTokensForNetwork": "No tokens configured for this network yet.",
     "tokens": "Tokens",
     "refresh": "Refresh",
+    "updating": "Updating",
     "balanceFetchWarning": "Some balances could not be loaded. Check your network connection and try refreshing.",
     "connectedWallet": "Connected wallet",
     "addressCopied": "Address copied",

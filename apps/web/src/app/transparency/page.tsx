@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
 import { getPublicOfficialAddresses } from '@entelewallet/config';
-import { DOMAIN_CONFIG } from '@entelewallet/config';
 import {
   Card,
   CardContent,
@@ -43,15 +42,6 @@ export default function TransparencyPage() {
           {t('transparency.safetyNotice')}
         </Alert>
         <Alert variant="info">{t('transparency.paymentWarning')}</Alert>
-
-        <a
-          href={DOMAIN_CONFIG.transparency}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-200 bg-gradient-to-r from-cyan-50 to-violet-50 px-5 py-3 text-sm font-medium text-cyan-900 transition hover:shadow-md"
-        >
-          {t('transparency.externalLink')} <ExternalLink className="h-4 w-4" />
-        </a>
 
         <div className="grid gap-4 lg:grid-cols-2">
           {addresses.map((item, i) => {

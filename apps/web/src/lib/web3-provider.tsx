@@ -1,7 +1,8 @@
 'use client';
 
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { createEnteleQueryClient } from '@/lib/query-client';
 import { WagmiProvider } from 'wagmi';
 import { ReactNode, useState, createContext, useContext, useMemo, useEffect } from 'react';
 import { useI18n } from '@/lib/i18n-context';
@@ -109,7 +110,7 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
 
 /** Wallet provider stack — RainbowKit + wagmi + React Query only. */
 export function WalletProviders({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => createEnteleQueryClient());
   const config = useMemo(() => createEnteleWagmiConfig(), []);
 
   return (

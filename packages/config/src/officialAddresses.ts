@@ -110,7 +110,7 @@ export const OFFICIAL_ADDRESSES: OfficialAddress[] = [
     status: 'pending_verification',
     publicVisibility: true,
     purpose: 'Ecosystem reserve multisig — pending official publication.',
-    safetyNote: 'Verify on entelekron.io/transparency when published.',
+    safetyNote: 'Verify in the EnteleWALLET Transparency Center when published.',
   },
   {
     id: 'governance_safe',

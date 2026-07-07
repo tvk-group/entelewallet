@@ -32,7 +32,8 @@ export const DOMAIN_CONFIG = {
   marketing: process.env.NEXT_PUBLIC_MARKETING_URL || 'https://entelewallet.com',
   security: process.env.NEXT_PUBLIC_SECURITY_URL || 'https://entelewallet.org',
   entelekron: process.env.NEXT_PUBLIC_ENTELEKRON_URL || 'https://entelekron.io',
-  transparency: 'https://entelekron.io/transparency',
+  /** Official transparency center — served by EnteleWALLET Lite (entelekron.io/transparency is not deployed). */
+  transparency: `${CANONICAL_APP_URL.replace(/\/$/, '')}/transparency`,
   investorApp: 'https://entelekron.app',
   /** Investor portal sign-in and wallet linking (EnteleKRON PWA dashboard). */
   investorAppDashboard: 'https://entelekron.app/dashboard',
