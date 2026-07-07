@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Badge, LtrSpan } from '@entelewallet/ui';
 import { useT } from '@/lib/i18n-context';
 import type { TokenConfig } from '@entelewallet/types';
+import { hasMarketQuote } from '@entelewallet/config';
 import { ExternalLink, Loader2 } from 'lucide-react';
 import { formatUnits } from 'viem';
 import { formatUsd } from '@/hooks/use-token-prices';
@@ -37,6 +38,7 @@ export function AssetCard({
       : null;
 
   const fiatLabel = formatUsd(fiatUsd);
+  const showUnlisted = !hasMarketQuote(token) && balance !== undefined && !token.pendingOfficialConfiguration;
 
   return (
     <div className="flex items-center gap-3.5 px-4 py-3.5 transition hover:bg-slate-50/90">
@@ -47,7 +49,7 @@ export function AssetCard({
             alt=""
             width={44}
             height={44}
-            className="h-11 w-11 object-cover"
+            className="h-11 w-11 object-contain p-0.5"
           />
         ) : (
           <span className="text-xs font-bold text-slate-700">{token.symbol.slice(0, 3)}</span>
@@ -81,7 +83,9 @@ export function AssetCard({
               <LtrSpan>{displayBalance}</LtrSpan>
               <span className="ml-1 text-xs font-normal text-slate-500">{token.symbol}</span>
             </p>
-            {pricesLoading && fiatUsd === undefined ? (
+            {showUnlisted ? (
+              <p className="mt-0.5 text-[11px] text-slate-400">{t('assets.noMarketPrice')}</p>
+            ) : pricesLoading && fiatUsd === undefined ? (
               <p className="mt-0.5 text-[11px] text-slate-400">{t('assets.priceLoading')}</p>
             ) : fiatLabel ? (
               <p className="mt-0.5 text-xs tabular-nums text-slate-500">{fiatLabel}</p>

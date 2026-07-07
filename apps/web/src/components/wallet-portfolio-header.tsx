@@ -15,7 +15,7 @@ export function WalletPortfolioHeader() {
   const t = useT();
   const { address } = useAccount();
   const { activeNetwork } = useNetworkView();
-  const { formatted: totalUsd } = usePortfolioTotalUsd();
+  const { formatted: totalUsd, isPartialTotal } = usePortfolioTotalUsd();
   const [copied, setCopied] = useState(false);
 
   if (!address) return null;
@@ -38,6 +38,11 @@ export function WalletPortfolioHeader() {
             <p className="mt-0.5 text-2xl font-bold tabular-nums tracking-tight">
               {totalUsd ?? '—'}
             </p>
+            {isPartialTotal && (
+              <p className="mt-1 max-w-[14rem] text-[10px] leading-snug text-cyan-100/80">
+                {t('assets.listedAssetsOnly')}
+              </p>
+            )}
             <button
               type="button"
               onClick={() => void copyAddress()}
@@ -61,7 +66,7 @@ export function WalletPortfolioHeader() {
                 alt=""
                 width={22}
                 height={22}
-                className="h-[22px] w-[22px] rounded-full ring-1 ring-white/20"
+                className="h-[22px] w-[22px] rounded-full object-contain p-0.5 ring-1 ring-white/20"
               />
             ) : null}
             <div className="text-right">
