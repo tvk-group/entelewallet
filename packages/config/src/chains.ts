@@ -1,41 +1,52 @@
 import type { ChainConfig } from '@entelewallet/types';
+import {
+  getChainByChainId,
+  getSupportedChainIds,
+  getWalletConnectChains,
+  loadChains,
+} from './chain-registry';
 
-const isDev = process.env.NODE_ENV === 'development';
+export {
+  getChainByChainId,
+  getChainById,
+  getChainsByUiCategory,
+  getRegistrySections,
+  getSupportedChainIds,
+  getWalletConnectChains,
+  loadChains,
+  loadTvkModules,
+} from './chain-registry';
 
-const BASE_CHAINS: Record<number, ChainConfig> = {
-  1: {
-    id: 1,
-    name: 'Ethereum',
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrls: [process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL || 'https://ethereum.publicnode.com'],
-    blockExplorers: { default: { name: 'Etherscan', url: 'https://etherscan.io' } },
-  },
-  8453: {
-    id: 8453,
-    name: 'Base',
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrls: [process.env.NEXT_PUBLIC_BASE_RPC_URL || 'https://mainnet.base.org'],
-    blockExplorers: { default: { name: 'Basescan', url: 'https://basescan.org' } },
-  },
-};
+export type { ChainDefinition, TvkModule, UiCategory } from './chain-registry';
 
-const SEPOLIA_CHAIN: ChainConfig = {
-  id: 11155111,
-  name: 'Sepolia',
-  nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: ['https://rpc.sepolia.org'],
-  blockExplorers: { default: { name: 'Etherscan', url: 'https://sepolia.etherscan.io' } },
-  testnet: true,
-};
+function toChainConfig(chain: ReturnType<typeof loadChains>[number]): ChainConfig {
+  const explorer = chain.blockExplorerUrls[0] ?? '';
+  const explorerName = explorer.includes('etherscan')
+    ? 'Etherscan'
+    : chain.name;
 
-export const SUPPORTED_CHAIN_IDS: number[] = isDev ? [1, 8453, 11155111] : [1, 8453];
+  return {
+    id: chain.chainId,
+    name: chain.name,
+    nativeCurrency: chain.nativeCurrency,
+    rpcUrls: chain.rpcUrls,
+    blockExplorers: {
+      default: { name: explorerName, url: explorer },
+    },
+    testnet: chain.status === 'testnet',
+  };
+}
 
-export const CHAINS: Record<number, ChainConfig> = isDev
-  ? { ...BASE_CHAINS, 11155111: SEPOLIA_CHAIN }
-  : BASE_CHAINS;
+export const SUPPORTED_CHAIN_IDS: number[] = getSupportedChainIds();
+
+export const CHAINS: Record<number, ChainConfig> = Object.fromEntries(
+  getWalletConnectChains().map((chain) => [chain.chainId, toChainConfig(chain)]),
+);
 
 export function getChainConfig(chainId: number): ChainConfig | undefined {
-  return CHAINS[chainId];
+  const fromRegistry = getChainByChainId(chainId);
+  if (!fromRegistry) return CHAINS[chainId];
+  return toChainConfig(fromRegistry);
 }
 
 export function isSupportedChain(chainId: number): boolean {

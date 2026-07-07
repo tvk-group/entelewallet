@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { AssetGrid } from '@/components/asset-grid';
+import { NetworkChainPicker } from '@/components/network-chain-picker';
 import { useT } from '@/lib/i18n-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
@@ -10,11 +11,17 @@ import { useAccount } from 'wagmi';
 
 export default function AssetsPage() {
   const t = useT();
-  const { isConnected } = useAccount();
+  const { isConnected, status } = useAccount();
 
   return (
     <PageLayout title={t('assets.title')} description={t('assets.description')}>
-      {!isConnected ? (
+      {status === 'reconnecting' ? (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-slate-500">{t('common.loading')}</p>
+          </CardContent>
+        </Card>
+      ) : !isConnected ? (
         <Card>
           <CardContent className="p-8 text-center">
             <p className="text-slate-500">{t('common.connectToView')}</p>
@@ -24,7 +31,10 @@ export default function AssetsPage() {
           </CardContent>
         </Card>
       ) : (
-        <AssetGrid />
+        <div className="space-y-6">
+          <NetworkChainPicker />
+          <AssetGrid />
+        </div>
       )}
     </PageLayout>
   );

@@ -74,7 +74,7 @@ If the test button fails, check:
 - ✅ `@tanstack/react-query`
 - ❌ Do not add Reown AppKit alongside RainbowKit for the same connect flow
 - ❌ Do not call `openConnectModal()` in `useEffect` on page load
-- ✅ `reconnectOnMount={false}` on `WagmiProvider`
+- ✅ `reconnectOnMount` on `WagmiProvider` (default) — wallet stays connected across page refresh until disconnect
 
 ## 6. Honest wallet list
 

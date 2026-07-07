@@ -249,6 +249,12 @@
     "nativeAsset": "Native asset",
     "futureAsset": "Future TVK ecosystem asset"
   },
+  "networks": {
+    "title": "Networks",
+    "switchHint": "Select a network to view balances",
+    "experimental": "Experimental",
+    "testnet": "Testnet"
+  },
   "transactions": {
     "title": "Transactions",
     "description": "Transaction history and explorer links.",

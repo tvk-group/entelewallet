@@ -549,5 +549,11 @@
     "riskBody": "Digital assets involve significant risk including total loss. Wallet connection does not equal investment approval. Token claims are not open unless officially announced.",
     "disclaimerTitle": "Disclaimer",
     "disclaimerBody": "EnteleWALLET Lite provides no financial, legal or tax advice. All payments must follow approved EnteleKRON investor dashboard instructions only."
+  },
+  "networks": {
+    "title": "Networks",
+    "switchHint": "Select a network to view balances",
+    "experimental": "Experimental",
+    "testnet": "Testnet"
   }
 }

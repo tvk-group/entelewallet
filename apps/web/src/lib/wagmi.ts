@@ -8,9 +8,10 @@ import {
   rabbyWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { mainnet, base, sepolia } from 'wagmi/chains';
+import { mainnet } from 'wagmi/chains';
 import { createConfig, http, type Config } from 'wagmi';
 import { CANONICAL_APP_URL } from '@entelewallet/config';
+import { getEnteleViemChains } from '@/lib/entele-chains';
 
 /**
  * RainbowKit requires a projectId string even when WalletConnect is disabled in the UI.
@@ -28,10 +29,7 @@ export function isValidWalletConnectProjectId(projectId: string): boolean {
 
 export const isWalletConnectConfigured = isValidWalletConnectProjectId(walletConnectProjectId);
 
-export const enteleChains =
-  process.env.NODE_ENV === 'development'
-    ? ([mainnet, base, sepolia] as const)
-    : ([mainnet, base] as const);
+export const enteleChains = getEnteleViemChains();
 
 function walletConnectMetadata() {
   // Use canonical URL for SSR-safe config; both production domains must be Reown-allowlisted.
