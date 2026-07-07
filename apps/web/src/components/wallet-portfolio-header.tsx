@@ -1,11 +1,13 @@
 'use client';
 
+import Image from 'next/image';
+import { BRAND_ASSETS } from '@entelewallet/config';
 import { truncateAddress } from '@entelewallet/utils';
 import { LtrSpan } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
 import { useNetworkView } from '@/lib/network-view-context';
 import { useT } from '@/lib/i18n-context';
-import { Copy, Wallet } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { useState } from 'react';
 
 export function WalletPortfolioHeader() {
@@ -26,8 +28,14 @@ export function WalletPortfolioHeader() {
     <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-blue-950 via-blue-900 to-cyan-800 p-5 text-white shadow-lg">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20">
-            <Wallet className="h-5 w-5" />
+          <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white/15 ring-1 ring-white/20">
+            <Image
+              src={BRAND_ASSETS.appIcon}
+              alt=""
+              width={44}
+              height={44}
+              className="h-11 w-11 object-cover"
+            />
           </div>
           <div>
             <p className="text-[10px] font-medium uppercase tracking-widest text-cyan-100/80">

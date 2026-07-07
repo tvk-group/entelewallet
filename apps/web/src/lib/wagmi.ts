@@ -10,7 +10,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { mainnet } from 'wagmi/chains';
 import { createConfig, http, type Config } from 'wagmi';
-import { CANONICAL_APP_URL } from '@entelewallet/config';
+import { CANONICAL_APP_URL, BRAND_ASSETS } from '@entelewallet/config';
 import { getEnteleViemChains } from '@/lib/entele-chains';
 
 /**
@@ -39,7 +39,7 @@ function walletConnectMetadata() {
     name: 'EnteleWALLET',
     description: 'EnteleWALLET Lite — verified wallet access for the EnteleKRON ecosystem.',
     url: baseUrl,
-    icons: [`${baseUrl}/icons/icon-512.png`],
+    icons: [`${baseUrl}${BRAND_ASSETS.appIcon}`],
   };
 }
 

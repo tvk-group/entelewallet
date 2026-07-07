@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation';
 import { useT } from '@/lib/i18n-context';
 import { NAV_ROUTES, ROUTES } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
-import { Menu, X, Shield } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { WalletConnectButton } from './wallet-connect-button';
 import { LanguageSelector } from './language-selector';
+import { BrandLogo } from './brand-logo';
 
 export function Header() {
   const t = useT();
@@ -19,21 +20,9 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-white/30 bg-white/60 shadow-sm shadow-blue-900/5 backdrop-blur-2xl">
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
       <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href={ROUTES.home} className="group flex shrink-0 items-center gap-3">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-900 via-cyan-600 to-violet-600 shadow-lg ring-2 ring-white/60 transition group-hover:scale-105 group-hover:shadow-cyan-500/25">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <div className="hidden sm:block">
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold tracking-tight text-gradient">{t('brand.name')}</span>
-              <span className="rounded-md border border-cyan-200/80 bg-gradient-to-r from-cyan-50 to-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-blue-900">
-                Lite
-              </span>
-            </div>
-            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
-              EnteleKRON · TVK
-            </span>
-          </div>
+        <Link href={ROUTES.home} className="group flex shrink-0 items-center">
+          <BrandLogo variant="lockup" priority />
+          <span className="sr-only">{t('brand.name')}</span>
         </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex">

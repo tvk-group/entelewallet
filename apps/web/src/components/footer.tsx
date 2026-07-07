@@ -5,6 +5,7 @@ import { useT } from '@/lib/i18n-context';
 import { ROUTES, DOMAIN_CONFIG, PUBLIC_CONTACT_EMAILS } from '@entelewallet/config';
 import { Alert, LtrSpan } from '@entelewallet/ui';
 import { Shield } from 'lucide-react';
+import { BrandLogo } from './brand-logo';
 
 export function Footer() {
   const t = useT();
@@ -114,10 +115,8 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-200/60 pt-8 sm:flex-row">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-900 to-violet-600">
-              <Shield className="h-4 w-4 text-white" />
-            </div>
+          <div className="flex items-center gap-3">
+            <BrandLogo variant="icon" className="h-8 w-8" />
             <p className="text-sm font-medium text-slate-600">{t('brand.lite')}</p>
           </div>
           <p className="text-sm text-slate-500">{t('footer.copyright')}</p>
