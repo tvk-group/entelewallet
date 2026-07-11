@@ -37,6 +37,10 @@ export const DOMAIN_CONFIG = {
   investorApp: 'https://entelekron.app',
   /** Investor portal sign-in and wallet linking (EnteleKRON PWA dashboard). */
   investorAppDashboard: 'https://entelekron.app/dashboard',
+  /** Presale investor dashboard — return target when opened via ?source=entelekron embed. */
+  entelekronInvestorDashboard:
+    process.env.NEXT_PUBLIC_ENTELEKRON_INVESTOR_RETURN_URL ||
+    'https://www.entelekron.io/presale/en/dashboard/investor',
 } as const;
 
 /** @deprecated Use officialAddresses.ts — kept for backward compat */

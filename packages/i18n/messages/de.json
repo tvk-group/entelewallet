@@ -264,6 +264,20 @@
     "addressCopied": "Address copied",
     "activeNetwork": "Active network"
   },
+  "networks": {
+    "title": "Networks",
+    "switchNetwork": "Switch network",
+    "connectToSwitchChain": "Connect your wallet to switch chains. You can still preview networks here.",
+    "switchHint": "Select a network to view balances",
+    "experimental": "Experimental",
+    "testnet": "Testnet",
+    "category": {
+      "tvk-ecosystem": "TVK Ecosystem",
+      "active": "Mainnets",
+      "experimental": "Experimental",
+      "testnet": "Testnets"
+    }
+  },
   "transactions": {
     "title": "Transactions",
     "description": "Transaction history and explorer links.",
@@ -537,6 +551,18 @@
       "description": "Legal and risk notice for EnteleWALLET Lite."
     }
   },
+  "integration": {
+    "openedFromEntelekron": "Opened from EnteleKRON",
+    "backToEntelekron": "Back to EnteleKRON",
+    "embedWalletTitle": "Wallet",
+    "embedSecurityTitle": "Security",
+    "embedTransparencyTitle": "Transparency",
+    "embedConnectHint": "Connect your wallet to view balances and verify ownership.",
+    "embedPlaceholderBalance": "—",
+    "embedNetworks": "Networks",
+    "embedBalances": "Balances",
+    "embedReadOnlyNotice": "Read-only · No custody · No seed phrases stored"
+  },
   "footer": {
     "copyright": "© TVK Group. All rights reserved.",
     "notice": "EnteleWALLET Lite does not custody funds, store seed phrases or private keys. Wallet verification signatures do not authorize transfers or spending.",
@@ -564,19 +590,5 @@
     "riskBody": "Digital assets involve significant risk including total loss. Wallet connection does not equal investment approval. Token claims are not open unless officially announced.",
     "disclaimerTitle": "Disclaimer",
     "disclaimerBody": "EnteleWALLET Lite provides no financial, legal or tax advice. All payments must follow approved EnteleKRON investor dashboard instructions only."
-  },
-  "networks": {
-    "title": "Networks",
-    "switchNetwork": "Switch network",
-    "connectToSwitchChain": "Connect your wallet to switch chains. You can still preview networks here.",
-    "switchHint": "Select a network to view balances",
-    "experimental": "Experimental",
-    "testnet": "Testnet",
-    "category": {
-      "tvk-ecosystem": "TVK Ecosystem",
-      "active": "Mainnets",
-      "experimental": "Experimental",
-      "testnet": "Testnets"
-    }
   }
 }

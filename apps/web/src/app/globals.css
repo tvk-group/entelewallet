@@ -801,3 +801,30 @@ reown-modal {
   70% { transform: scale(2.2); opacity: 0; }
   100% { transform: scale(2.2); opacity: 0; }
 }
+
+/* ─── EnteleKRON dashboard embed (?view= / ?source=entelekron) ─── */
+.embed-mode-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(20, 184, 166, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(30, 47, 72, 0.9), transparent 50%),
+    #1e2f48;
+}
+
+.wallet-phone-screen {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 184, 166, 0.35) transparent;
+}
+
+.wallet-phone-screen::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wallet-phone-screen::-webkit-scrollbar-thumb {
+  background: rgba(20, 184, 166, 0.35);
+  border-radius: 4px;
+}
+
+.embed-source-banner a:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}

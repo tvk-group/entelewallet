@@ -1,30 +1,18 @@
-'use client';
+import { Suspense } from 'react';
+import { HomePageContent } from './home-page-content';
 
-import { PageLayout } from '@/components/page-layout';
-import { HomeHero } from '@/components/home/home-hero';
-import {
-  HomeSafetyBar,
-  HomeWhatItDoes,
-  HomeWhatItDoesNot,
-  HomeEcosystemMap,
-  HomeSecurityTimeline,
-  HomeEnkPreview,
-  HomePwaSection,
-} from '@/components/home/home-sections';
+function HomePageFallback() {
+  return (
+    <div className="embed-mode-bg flex min-h-[50vh] items-center justify-center">
+      <div className="h-8 w-8 animate-pulse rounded-full bg-accent/30" />
+    </div>
+  );
+}
 
 export default function HomePage() {
   return (
-    <PageLayout hideTitle fullWidth>
-      <div className="space-y-20 pb-8 lg:space-y-28">
-        <HomeHero />
-        <HomeSafetyBar />
-        <HomeWhatItDoes />
-        <HomeWhatItDoesNot />
-        <HomeEcosystemMap />
-        <HomeSecurityTimeline />
-        <HomeEnkPreview />
-        <HomePwaSection />
-      </div>
-    </PageLayout>
+    <Suspense fallback={<HomePageFallback />}>
+      <HomePageContent />
+    </Suspense>
   );
 }

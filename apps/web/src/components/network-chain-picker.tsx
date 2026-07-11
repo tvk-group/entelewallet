@@ -9,7 +9,7 @@ import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { Check, ChevronDown, Globe2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-type NetworkChainPickerVariant = 'panel' | 'header';
+type NetworkChainPickerVariant = 'panel' | 'header' | 'embed';
 
 interface NetworkChainPickerProps {
   className?: string;
@@ -27,6 +27,7 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
 
   const networks = useMemo(() => getDisplayNetworks(), []);
   const isHeader = variant === 'header';
+  const isEmbed = variant === 'embed';
 
   const grouped = useMemo(() => {
     const order = ['tvk-ecosystem', 'active', 'experimental', 'testnet'] as const;
@@ -78,7 +79,9 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
         onClick={() => setOpen((value) => !value)}
         className={cn(
           'flex items-center gap-2 transition',
-          isHeader
+          isEmbed
+            ? 'w-full justify-between gap-3 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-left hover:border-accent/40 hover:bg-white/10'
+            : isHeader
             ? 'max-w-[11rem] rounded-xl border border-slate-200/80 bg-white/80 px-2.5 py-1.5 text-left shadow-sm hover:border-cyan-200 hover:bg-white sm:max-w-[13rem]'
             : 'w-full justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm hover:border-cyan-200 hover:shadow-md',
         )}
@@ -95,14 +98,20 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
           {networkIcon}
         </div>
         <div className={cn('min-w-0 flex-1', isHeader ? 'hidden sm:block' : 'text-left')}>
-          {!isHeader && (
+          {!isHeader && !isEmbed && (
             <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">
               {t('networks.title')}
             </p>
           )}
+          {isEmbed && (
+            <p className="text-[10px] font-medium uppercase tracking-wider text-white/45">
+              {t('integration.embedNetworks')}
+            </p>
+          )}
           <p
             className={cn(
-              'truncate font-semibold text-slate-900',
+              'truncate font-semibold',
+              isEmbed ? 'text-sm text-white' : 'text-slate-900',
               isHeader ? 'text-xs' : 'text-sm',
             )}
           >

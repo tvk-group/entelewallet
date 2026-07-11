@@ -11,6 +11,9 @@ module.exports = {
           cyan: '#0891b2',
           violet: '#7c3aed',
         },
+        /** EnteleKRON dashboard embed palette */
+        void: '#1e2f48',
+        accent: '#14b8a6',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],

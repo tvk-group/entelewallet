@@ -551,6 +551,18 @@
       "description": "Legal and risk notice for EnteleWALLET Lite."
     }
   },
+  "integration": {
+    "openedFromEntelekron": "Opened from EnteleKRON",
+    "backToEntelekron": "Back to EnteleKRON",
+    "embedWalletTitle": "Wallet",
+    "embedSecurityTitle": "Security",
+    "embedTransparencyTitle": "Transparency",
+    "embedConnectHint": "Connect your wallet to view balances and verify ownership.",
+    "embedPlaceholderBalance": "—",
+    "embedNetworks": "Networks",
+    "embedBalances": "Balances",
+    "embedReadOnlyNotice": "Read-only · No custody · No seed phrases stored"
+  },
   "footer": {
     "copyright": "© TVK Group. All rights reserved.",
     "notice": "EnteleWALLET Lite does not custody funds, store seed phrases or private keys. Wallet verification signatures do not authorize transfers or spending.",
