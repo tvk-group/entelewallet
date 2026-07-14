@@ -4,6 +4,7 @@ import { CANONICAL_APP_DOMAIN } from '@entelewallet/config';
 import { normalizeAddress, hashString } from '@entelewallet/utils';
 import { z } from 'zod';
 import { nonceStore } from '@/lib/nonce-store';
+import { recordAuthEvent } from '@/lib/wallet-connections-server';
 
 const schema = z.object({
   message: z.string(),
@@ -60,21 +61,30 @@ export async function POST(request: NextRequest) {
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Log verification event (dev: console, prod: Supabase)
+    const verifiedAt = new Date().toISOString();
+
+    await recordAuthEvent({
+      walletAddress: normalized,
+      chainId,
+      eventType: 'verification_success',
+      ipHash: hashString(ip),
+      userAgentHash: hashString(userAgent),
+    });
+
     console.info('[wallet_auth_event]', {
       event_type: 'verification_success',
       wallet_address: normalized,
       chain_id: chainId,
       ip_hash: hashString(ip),
       user_agent_hash: hashString(userAgent),
-      timestamp: new Date().toISOString(),
+      timestamp: verifiedAt,
     });
 
     return NextResponse.json({
       success: true,
       address: normalized,
       chainId,
-      verifiedAt: new Date().toISOString(),
+      verifiedAt,
     });
   } catch (err) {
     return NextResponse.json(

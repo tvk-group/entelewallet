@@ -11,14 +11,17 @@
 - Security center
 - 25-language support
 
-## Phase 2: Account Layer
+## Phase 2: Account Layer (In Progress)
 
-- TVK ID integration
-- EnteleVAULT recovery preparation
-- Investor account linking
-- Risk scoring
-- Malicious approval warnings
-- Notification center
+- Supabase magic-link sign-in (`/sign-in`, `/auth/callback`)
+- Investor wallet linking (SIWE verify → link to Supabase account)
+- Wallet connection persistence (`wallet_connections`, `wallet_auth_events`)
+- Best-effort sync to EnteleKRON `/api/wallet/link`
+- TVK ID integration (planned)
+- EnteleVAULT recovery preparation (planned)
+- Risk scoring (planned)
+- Malicious approval warnings (planned)
+- Notification center (planned)
 
 ## Phase 3: Full Non-Custodial EnteleWALLET
 
