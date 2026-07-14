@@ -17,28 +17,35 @@ import type { Address } from 'viem';
 const balanceQueryOptions = {
   staleTime: BALANCE_STALE_MS,
   gcTime: BALANCE_GC_MS,
-  refetchOnWindowFocus: true,
-  refetchOnReconnect: true,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
   placeholderData: <T,>(previous: T | undefined) => previous,
 } as const;
 
+/**
+ * Read-only portfolio balances for the selected network view.
+ * Uses public RPC — does not require the wallet to be on the viewed chain.
+ */
 export function usePortfolioBalances() {
   const { address } = useAccount();
-  const chainId = useChainId();
+  const walletChainId = useChainId();
   const { networkViewId, activeNetwork } = useNetworkView();
+
+  const viewChainId = activeNetwork?.chainId ?? walletChainId;
+
   const tokens = useMemo(
-    () => getTokensForChain(chainId, networkViewId),
-    [chainId, networkViewId],
+    () => getTokensForChain(viewChainId, networkViewId),
+    [viewChainId, networkViewId],
   );
 
   const cacheKey =
-    address && chainId ? balanceCacheKey(address, chainId, networkViewId) : null;
+    address && viewChainId ? balanceCacheKey(address, viewChainId, networkViewId) : null;
   const cached = useMemo(
     () => (cacheKey ? readBalanceCache(cacheKey) : null),
     [cacheKey],
   );
 
-  const chainConfig = getChainConfig(chainId);
+  const chainConfig = getChainConfig(viewChainId);
   const nativeSymbol = chainConfig?.nativeCurrency.symbol ?? 'ETH';
   const nativeDecimals = chainConfig?.nativeCurrency.decimals ?? 18;
 
@@ -60,10 +67,10 @@ export function usePortfolioBalances() {
     refetch: refetchNative,
   } = useBalance({
     address,
-    chainId,
+    chainId: viewChainId,
     query: {
       ...balanceQueryOptions,
-      enabled: !!address && !!chainId,
+      enabled: !!address && !!viewChainId,
       ...(nativeInitial
         ? { initialData: nativeInitial, initialDataUpdatedAt: cached?.updatedAt }
         : {}),
@@ -82,9 +89,9 @@ export function usePortfolioBalances() {
         abi: ERC20_ABI,
         functionName: 'balanceOf' as const,
         args: [address as Address],
-        chainId,
+        chainId: viewChainId,
       })),
-    [erc20Tokens, address, chainId],
+    [erc20Tokens, address, viewChainId],
   );
 
   const {
@@ -98,7 +105,7 @@ export function usePortfolioBalances() {
     allowFailure: true,
     query: {
       ...balanceQueryOptions,
-      enabled: !!address && !!chainId && contracts.length > 0,
+      enabled: !!address && !!viewChainId && contracts.length > 0,
     },
   });
 
@@ -178,6 +185,8 @@ export function usePortfolioBalances() {
   return {
     tokens,
     activeNetwork,
+    viewChainId,
+    walletChainId,
     nativeValue,
     erc20Balances,
     isInitialLoading,

@@ -8,15 +8,15 @@ export const BRAND_ASSETS = {
   wordmark: '/brand/entelewallet-wordmark.png',
   /** Text-only wordmark on dark navy */
   wordmarkDark: '/brand/entelewallet-wordmark-dark.png',
-  /** Icon mark on white — header lockup on light backgrounds */
+  /** Icon mark on white — PWA, favicon, app icon */
   iconMark: '/brand/entelewallet-icon-mark.png',
-  /** Circular app icon on dark blue — PWA, favicon, dark UI surfaces */
+  /** Circular app icon on dark blue — legacy dark UI surfaces */
   appIcon: '/brand/entelewallet-app-icon.png',
-  /** PWA icon set for entelewallet.app (blue, "APP" badge) */
+  /** PWA icon set for entelewallet.app (brand mark on white) */
   pwaAppIcon192: '/icons/pwa-app-192.png',
   pwaAppIcon512: '/icons/pwa-app-512.png',
   pwaAppAppleTouch: '/icons/pwa-app-180.png',
-  /** PWA icon set for entelewallet.com (teal, ".COM" badge) */
+  /** PWA icon set for entelewallet.com (brand mark on white) */
   pwaComIcon192: '/icons/pwa-com-192.png',
   pwaComIcon512: '/icons/pwa-com-512.png',
   pwaComAppleTouch: '/icons/pwa-com-180.png',

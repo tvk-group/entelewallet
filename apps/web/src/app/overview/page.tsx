@@ -15,22 +15,10 @@ import { truncateAddress } from '@entelewallet/utils';
 
 export default function OverviewPage() {
   const t = useT();
-  const { address, isConnected, status } = useAccount();
+  const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { verificationStatus, isVerified } = useWalletStatus();
   const { activeNetwork } = useNetworkView();
-
-  if (status === 'reconnecting') {
-    return (
-      <PageLayout title={t('overview.title')} description={t('overview.description')}>
-        <Card>
-          <CardContent className="p-8 text-center">
-            <p className="text-slate-500">{t('common.loading')}</p>
-          </CardContent>
-        </Card>
-      </PageLayout>
-    );
-  }
 
   if (!isConnected) {
     return (

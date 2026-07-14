@@ -7,10 +7,8 @@ import { getDisplayNetworkById } from '@entelewallet/config';
 import type { PortfolioAsset, PortfolioResponse, EcosystemAsset } from '@entelewallet/types';
 import { EntelekronApiError, fetchPortfolio } from '@/lib/entelekron-api';
 import { formatAssetBalance } from '@/lib/multi-chain-balances';
-import {
-  loadSyncedPreferences,
-  patchLocalPreferences,
-} from '@/lib/wallet-preferences-sync';
+import { readPortfolioPreferences } from '@/lib/portfolio-preferences';
+import { loadSyncedPreferences, patchLocalPreferences } from '@/lib/wallet-preferences-sync';
 import { usePortfolioBalances } from '@/hooks/use-portfolio-balances';
 import { useMultiChainPortfolio } from '@/hooks/use-multi-chain-portfolio';
 import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
@@ -86,7 +84,9 @@ export function useEntelekronPortfolio() {
   const { networkViewId } = useNetworkView();
   const { isLinkedToAccount } = useWalletStatus();
   const queryClient = useQueryClient();
-  const [preferences, setPreferences] = useState<WalletPreferences | null>(null);
+  const [preferences, setPreferences] = useState<WalletPreferences | null>(() =>
+    typeof window !== 'undefined' ? readPortfolioPreferences() : null,
+  );
 
   const {
     tokens,
@@ -259,7 +259,13 @@ export function useEntelekronPortfolio() {
 
   const updatePreferences = useCallback(
     async (patch: Partial<WalletPreferences>) => {
-      const next = await patchLocalPreferences({ ...patch, networkViewId, chainId });
+      const view = getDisplayNetworkById(networkViewId);
+      const viewChainId = view?.chainId ?? chainId;
+      const next = await patchLocalPreferences({
+        ...patch,
+        networkViewId,
+        chainId: viewChainId,
+      });
       setPreferences(next);
     },
     [networkViewId, chainId],

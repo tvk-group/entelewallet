@@ -24,7 +24,7 @@ import { Loader2, RefreshCw } from 'lucide-react';
 
 function AssetsPortfolioContent() {
   const t = useT();
-  const { isConnected, status } = useAccount();
+  const { isConnected } = useAccount();
   const {
     preferences,
     updatePreferences,
@@ -42,16 +42,6 @@ function AssetsPortfolioContent() {
     dismissDiscoveredToken,
   } = useEntelekronPortfolio();
 
-  if (status === 'reconnecting' || !preferences) {
-    return (
-      <Card>
-        <CardContent className="p-8 text-center">
-          <p className="text-slate-500">{t('common.loading')}</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   if (!isConnected) {
     return (
       <Card>
@@ -65,7 +55,7 @@ function AssetsPortfolioContent() {
     );
   }
 
-  const showMarketFirst = preferences.displayMode === 'all-market';
+  const showMarketFirst = (preferences?.displayMode ?? 'all-market') === 'all-market';
   const isEmpty = holdingsWithBalance.length === 0 && !isLoading;
 
   return (
@@ -77,7 +67,7 @@ function AssetsPortfolioContent() {
       <WalletPortfolioHeader
         totalUsd={totalUsd.totalUsd}
         isPartialTotal={totalUsd.isPartialTotal}
-        displayMode={preferences.displayMode}
+        displayMode={preferences?.displayMode ?? 'all-market'}
         onDisplayModeChange={(mode) => void updatePreferences({ displayMode: mode })}
         isRefreshing={isRefreshing}
         isEmpty={isEmpty}
@@ -107,7 +97,7 @@ function AssetsPortfolioContent() {
           action={
             <div className="flex items-center gap-2">
               <PortfolioDisplayModeSelect
-                value={preferences.displayMode}
+                value={preferences?.displayMode ?? 'all-market'}
                 onChange={(mode) => void updatePreferences({ displayMode: mode })}
               />
               <RefreshButton isRefreshing={isRefreshing} onRefresh={() => void syncPortfolio()} />
@@ -137,7 +127,7 @@ function AssetsPortfolioContent() {
             description={t('portfolio.marketDescription')}
             action={
               <PortfolioDisplayModeSelect
-                value={preferences.displayMode}
+                value={preferences?.displayMode ?? 'all-market'}
                 onChange={(mode) => void updatePreferences({ displayMode: mode })}
               />
             }
@@ -153,7 +143,7 @@ function AssetsPortfolioContent() {
       >
         <PortfolioDiscoveredSection
           discovered={discovered}
-          enabled={preferences.autoDiscoverEnabled}
+          enabled={preferences?.autoDiscoverEnabled ?? true}
           loading={isLoading}
           formatBalance={formatBalance}
           onDismiss={dismissDiscoveredToken}
