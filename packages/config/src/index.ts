@@ -14,5 +14,6 @@ export * from './portfolio-display';
 export * from './wagmi-chains';
 export * from './alchemy';
 export * from './coingecko-platform';
+export * from './cmc-platform';
 export * from './token-logos';
 export * from './chain-logos';
