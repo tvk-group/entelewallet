@@ -7,8 +7,7 @@ import {
   getWatchlistCatalogItem,
   WATCHLIST_CATALOG,
 } from '@entelewallet/config';
-import type { WatchlistEntry } from '@entelewallet/types';
-import { EntelekronApiError, fetchWatchlist, putWatchlist } from '@/lib/entelekron-api';
+import type { WatchlistEntry, WatchlistResponse } from '@entelewallet/types';
 import {
   readWatchlistSymbols,
   symbolsToWatchlistEntries,
@@ -16,6 +15,29 @@ import {
 } from '@/lib/watchlist-storage';
 import { useTokenPrices } from '@/hooks/use-token-prices';
 import type { TokenConfig } from '@entelewallet/types';
+
+async function fetchWatchlistBff(): Promise<WatchlistResponse | null> {
+  try {
+    const res = await fetch('/api/user/watchlist', { credentials: 'include' });
+    if (res.ok) return (await res.json()) as WatchlistResponse;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+async function putWatchlistBff(symbols: string[]): Promise<void> {
+  try {
+    await fetch('/api/user/watchlist', {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symbols }),
+    });
+  } catch {
+    /* local fallback only */
+  }
+}
 
 function entriesToPriceTokens(entries: WatchlistEntry[]): TokenConfig[] {
   return entries.map((entry) => {
@@ -38,7 +60,7 @@ export function useWatchlist() {
 
   const apiQuery = useQuery({
     queryKey: ['entelekron-watchlist'],
-    queryFn: () => fetchWatchlist(),
+    queryFn: fetchWatchlistBff,
     retry: false,
     staleTime: 60_000,
   });
@@ -51,10 +73,7 @@ export function useWatchlist() {
     }
   }, [apiQuery.data]);
 
-  const entries = useMemo(
-    () => symbolsToWatchlistEntries(symbols),
-    [symbols],
-  );
+  const entries = useMemo(() => symbolsToWatchlistEntries(symbols), [symbols]);
 
   const priceTokens = useMemo(() => entriesToPriceTokens(entries), [entries]);
   const { prices, isLoading: pricesLoading } = useTokenPrices(priceTokens);
@@ -63,31 +82,23 @@ export function useWatchlist() {
     return entries.map((entry) => {
       const catalog = getWatchlistCatalogItem(entry.symbol);
       const priceUsd = prices[entry.coingeckoId];
-      return {
-        entry,
-        catalog,
-        priceUsd,
-      };
+      return { entry, catalog, priceUsd };
     });
   }, [entries, prices]);
+
+  const syncSymbols = useCallback(async (next: string[]) => {
+    setSymbols(next);
+    writeWatchlistSymbols(next);
+    await putWatchlistBff(next);
+  }, []);
 
   const addSymbol = useCallback(
     async (symbol: string) => {
       const upper = symbol.toUpperCase();
       if (symbols.includes(upper)) return;
-      const next = [...symbols, upper];
-      setSymbols(next);
-      writeWatchlistSymbols(next);
-
-      try {
-        await putWatchlist(next);
-      } catch (error) {
-        if (!(error instanceof EntelekronApiError && error.status === 401)) {
-          console.warn('[EnteleWALLET] watchlist sync failed', error);
-        }
-      }
+      await syncSymbols([...symbols, upper]);
     },
-    [symbols],
+    [symbols, syncSymbols],
   );
 
   const removeSymbol = useCallback(
@@ -95,30 +106,15 @@ export function useWatchlist() {
       const upper = symbol.toUpperCase();
       const next = symbols.filter((s) => s !== upper);
       if (next.length === 0) return;
-      setSymbols(next);
-      writeWatchlistSymbols(next);
-
-      try {
-        await putWatchlist(next);
-      } catch (error) {
-        if (!(error instanceof EntelekronApiError && error.status === 401)) {
-          console.warn('[EnteleWALLET] watchlist sync failed', error);
-        }
-      }
+      await syncSymbols(next);
     },
-    [symbols],
+    [symbols, syncSymbols],
   );
 
   const resetToDefault = useCallback(async () => {
     const defaults = DEFAULT_WATCHLIST_ENTRIES.map((e) => e.symbol);
-    setSymbols(defaults);
-    writeWatchlistSymbols(defaults);
-    try {
-      await putWatchlist(defaults);
-    } catch {
-      /* local fallback */
-    }
-  }, []);
+    await syncSymbols(defaults);
+  }, [syncSymbols]);
 
   return {
     symbols,
@@ -126,7 +122,7 @@ export function useWatchlist() {
     rows,
     catalog: WATCHLIST_CATALOG,
     pricesLoading,
-    isApiSynced: apiQuery.isSuccess,
+    isApiSynced: apiQuery.isSuccess && !!apiQuery.data?.items?.length,
     addSymbol,
     removeSymbol,
     resetToDefault,

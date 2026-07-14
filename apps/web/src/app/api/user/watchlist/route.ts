@@ -1,0 +1,32 @@
+import { NextResponse } from 'next/server';
+import { proxyEntelekron } from '@/lib/entelekron-proxy';
+
+export async function GET(request: Request) {
+  try {
+    const res = await proxyEntelekron('/api/user/watchlist', request);
+    if (res.ok) {
+      return NextResponse.json(await res.json());
+    }
+    return NextResponse.json({ error: 'unauthenticated' }, { status: res.status });
+  } catch {
+    return NextResponse.json({ error: 'upstream_unavailable' }, { status: 503 });
+  }
+}
+
+export async function PUT(request: Request) {
+  const body = await request.json();
+
+  try {
+    const res = await proxyEntelekron('/api/user/watchlist', request, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    });
+    if (res.ok) {
+      return NextResponse.json(await res.json());
+    }
+  } catch {
+    /* fall through */
+  }
+
+  return NextResponse.json({ items: [], catalog: [], ...body });
+}

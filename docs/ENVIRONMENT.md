@@ -32,8 +32,17 @@ Until then, wallet connect, SIWE verification, and the dashboard work without Su
 |----------|-------------|
 | `NEXT_PUBLIC_ETHEREUM_RPC_URL` | Private Ethereum RPC endpoint |
 | `NEXT_PUBLIC_BASE_RPC_URL` | Private Base RPC endpoint |
+| `ALCHEMY_API_KEY` | Server-only Alchemy key for ERC-20 auto-discovery and multi-network token balances |
 
-## Feature Flags
+## Portfolio (Phases B–E)
+
+| Variable | Description |
+|----------|-------------|
+| `ALCHEMY_API_KEY` | Required for auto-discovered ERC-20 tokens (`/api/portfolio/discover`). Set in Vercel for all preview/production environments. Never expose as `NEXT_PUBLIC_*`. |
+| `NEXT_PUBLIC_ENTELEKRON_URL` | EnteleKRON platform base for preferences/watchlist sync (default `https://entelekron.io`) |
+
+Preferences and watchlist sync via `/api/user/*` BFF routes when an EnteleKRON session cookie or Bearer token is present; otherwise localStorage fallback applies.
+
 
 | Variable | Default | Description |
 |----------|---------|-------------|
