@@ -77,6 +77,8 @@ export interface TransparencyAddress {
   pendingOfficialVerification?: boolean;
 }
 
+export * from './portfolio';
+
 export interface WalletConnectionRecord {
   id: string;
   userId?: string;

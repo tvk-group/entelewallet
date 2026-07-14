@@ -6,6 +6,10 @@ const NATIVE_COINGECKO: Record<string, string> = {
   POL: 'polygon-ecosystem-token',
   BNB: 'binancecoin',
   AVAX: 'avalanche-2',
+  MNT: 'mantle',
+  SUI: 'sui',
+  ADA: 'cardano',
+  BDAG: 'blockdag',
 };
 
 /** Resolve CoinGecko id for portfolio pricing. */

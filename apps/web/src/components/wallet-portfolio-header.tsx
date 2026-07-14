@@ -6,16 +6,33 @@ import { LtrSpan } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
 import { useNetworkView } from '@/lib/network-view-context';
 import { useT } from '@/lib/i18n-context';
-import { Copy } from 'lucide-react';
+import { Copy, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { WalletIdenticon } from './wallet-identicon';
-import { usePortfolioTotalUsd } from '@/hooks/use-portfolio-summary';
+import { formatUsd } from '@/hooks/use-token-prices';
+import { PortfolioDisplayModeSelect } from './portfolio/portfolio-display-mode';
+import type { PortfolioDisplayMode } from '@entelewallet/types';
 
-export function WalletPortfolioHeader() {
+interface WalletPortfolioHeaderProps {
+  totalUsd?: number;
+  isPartialTotal?: boolean;
+  displayMode: PortfolioDisplayMode;
+  onDisplayModeChange: (mode: PortfolioDisplayMode) => void;
+  isRefreshing?: boolean;
+  isEmpty?: boolean;
+}
+
+export function WalletPortfolioHeader({
+  totalUsd,
+  isPartialTotal,
+  displayMode,
+  onDisplayModeChange,
+  isRefreshing,
+  isEmpty,
+}: WalletPortfolioHeaderProps) {
   const t = useT();
   const { address } = useAccount();
   const { activeNetwork } = useNetworkView();
-  const { formatted: totalUsd, isPartialTotal } = usePortfolioTotalUsd();
   const [copied, setCopied] = useState(false);
 
   if (!address) return null;
@@ -26,19 +43,31 @@ export function WalletPortfolioHeader() {
     window.setTimeout(() => setCopied(false), 1500);
   };
 
+  const formattedTotal = formatUsd(totalUsd);
+
   return (
     <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#0b1220] via-blue-950 to-cyan-900 p-5 text-white shadow-xl ring-1 ring-white/10">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <WalletIdenticon address={address} size={48} className="shadow-md" />
           <div className="min-w-0">
-            <p className="text-[10px] font-medium uppercase tracking-widest text-cyan-100/75">
-              {t('assets.totalBalance')}
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-cyan-100/75">
+                {t('assets.totalBalance')}
+              </p>
+              {isRefreshing && (
+                <Loader2 className="h-3 w-3 animate-spin text-cyan-100/70" aria-hidden />
+              )}
+            </div>
             <p className="mt-0.5 text-2xl font-bold tabular-nums tracking-tight">
-              {totalUsd ?? '—'}
+              {isEmpty ? '—' : (formattedTotal ?? '—')}
             </p>
-            {isPartialTotal && (
+            {isEmpty && (
+              <p className="mt-1 max-w-[16rem] text-[10px] leading-snug text-cyan-100/80">
+                {t('portfolio.walletEmpty')}
+              </p>
+            )}
+            {isPartialTotal && !isEmpty && (
               <p className="mt-1 max-w-[14rem] text-[10px] leading-snug text-cyan-100/80">
                 {t('assets.listedAssetsOnly')}
               </p>
@@ -59,6 +88,11 @@ export function WalletPortfolioHeader() {
           </div>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2">
+          <PortfolioDisplayModeSelect
+            value={displayMode}
+            onChange={onDisplayModeChange}
+            variant="header"
+          />
           <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 ring-1 ring-white/15">
             {activeNetwork?.icon ? (
               <Image

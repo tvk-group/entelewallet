@@ -48,9 +48,9 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
 
-  const handleSelect = (networkId: string, targetChainId: number) => {
+  const handleSelect = (networkId: string, targetChainId: number, priceOnly: boolean) => {
     setNetworkViewId(networkId);
-    if (isConnected && targetChainId !== chainId) {
+    if (!priceOnly && isConnected && targetChainId !== chainId) {
       switchChain({ chainId: targetChainId });
     }
     setOpen(false);
@@ -139,12 +139,13 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
               <ul className="space-y-1">
                 {group.items.map((network) => {
                   const selected = network.id === networkViewId;
+                  const priceOnly = network.portfolioTier === 'price-only';
                   return (
                     <li key={network.id}>
                       <button
                         type="button"
                         disabled={isPending}
-                        onClick={() => handleSelect(network.id, network.chainId)}
+                        onClick={() => handleSelect(network.id, network.chainId, priceOnly)}
                         className={cn(
                           'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition',
                           selected
@@ -178,6 +179,11 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
                         {network.status === 'testnet' && (
                           <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-slate-600">
                             {t('networks.testnet')}
+                          </span>
+                        )}
+                        {priceOnly && (
+                          <span className="rounded bg-violet-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-violet-800">
+                            {t('networks.priceOnly')}
                           </span>
                         )}
                         {selected && <Check className="h-4 w-4 shrink-0 text-cyan-700" />}

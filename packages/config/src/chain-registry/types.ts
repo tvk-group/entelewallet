@@ -19,11 +19,14 @@ export type ChainVerification = {
   tokenDetectionTested: boolean;
 };
 
+export type PortfolioTier = 'full' | 'price-only';
+
 export type ChainCapabilities = {
   watchOnly: boolean;
   walletConnect: boolean;
   transactions: boolean;
 };
+
 
 export type ChainDefinition = {
   id: string;
@@ -43,6 +46,8 @@ export type ChainDefinition = {
   tokenStandards: TokenStandard[];
   riskFlag: RiskFlag;
   capabilities: ChainCapabilities;
+  /** Portfolio balance support tier. Defaults to `full`. */
+  portfolioTier?: PortfolioTier;
   verification: ChainVerification;
   notes?: string;
 };
