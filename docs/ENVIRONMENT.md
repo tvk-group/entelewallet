@@ -9,22 +9,28 @@ See `.env.example` for the full list.
 | `NEXT_PUBLIC_APP_URL` | Canonical app URL (https://app.entelewallet.com) |
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud project ID |
 
-## Supabase (optional for Lite phase)
+## Supabase (account linking & auth)
 
-Supabase is **not required** to merge the PR, run locally, or pass Vercel build checks.
+Supabase is **optional** for local development and preview builds. Without it, wallet connect, SIWE verification, and the portfolio dashboard still work.
 
-EnteleWALLET Lite currently uses an **in-memory nonce store** for wallet verification in development/preview. The SQL migrations in `supabase/migrations/` are prepared for production but are **not wired into the app yet**.
+When Supabase is configured, the app enables:
 
-Create a Supabase project when you are ready for production persistence:
+- Magic-link sign-in at `/sign-in`
+- Persisted SIWE verification events (`wallet_auth_events`)
+- Investor wallet linking (`wallet_connections`)
+- Session refresh via middleware
+
+Setup:
 
 1. Create a project at [supabase.com](https://supabase.com) (e.g. name: `EnteleWALLET`)
 2. Run the migration: `supabase/migrations/20260101000000_initial_schema.sql` in the SQL Editor
 3. Add env vars to Vercel and `apps/web/.env.local`:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (server only)
+   - `SUPABASE_SERVICE_ROLE_KEY` (server only — required for wallet linking persistence)
+4. In Supabase Auth → URL Configuration, add redirect URL: `https://entelewallet.app/auth/callback`
 
-Until then, wallet connect, SIWE verification, and the dashboard work without Supabase.
+Until Supabase is configured, wallet linking UI shows a configuration notice and link API returns `503`.
 
 ## Recommended
 

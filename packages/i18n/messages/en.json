@@ -346,6 +346,8 @@
     "title": "Vesting",
     "description": "View your ENK vesting schedule and unlock status.",
     "notLinked": "Link your verified EnteleKRON investor account to view vesting details.",
+    "linked": "Your wallet is linked. Open the EnteleKRON investor app for your full vesting schedule.",
+    "viewSchedule": "View Vesting Schedule",
     "learnAboutVesting": "Learn about vesting",
     "allocationCategory": "Allocation Category",
     "totalAllocated": "Total Allocated ENK",
@@ -565,6 +567,23 @@
       "linkedToOtherAccount": "Linked to Other Account",
       "revoked": "Revoked"
     }
+  },
+  "walletLink": {
+    "title": "Link to EnteleWALLET Account",
+    "signInPrompt": "Sign in with your email to link this verified wallet to your investor account.",
+    "signInRequired": "Sign in required to link your wallet.",
+    "signedInAs": "Signed in as",
+    "signOut": "Sign Out",
+    "connectFirst": "Connect and verify your wallet first.",
+    "verificationRequired": "Verify wallet ownership before linking.",
+    "readyToLink": "Your wallet is verified. Link it to your EnteleWALLET account to unlock investor features.",
+    "linkWallet": "Link Wallet to Account",
+    "linking": "Linking…",
+    "linkFailed": "Could not link wallet. Please try again.",
+    "linkedDescription": "This wallet is linked to your EnteleWALLET account.",
+    "linkedAt": "Linked at",
+    "linkedToOtherAccount": "This wallet is already linked to another account.",
+    "notConfigured": "Account linking requires Supabase configuration in production."
   },
   "pages": {
     "connect": {

@@ -8,6 +8,7 @@ import { useWalletStatus } from '@/lib/wallet-context';
 import { getChainConfig } from '@entelewallet/config';
 import { getVerificationBadgeKey } from '@entelewallet/wallet-core';
 import { SignatureWarningBanner } from './security-banner';
+import { WalletLinkPanel } from './wallet-link-panel';
 import { ShieldCheck, Loader2 } from 'lucide-react';
 
 export function WalletVerification() {
@@ -15,7 +16,8 @@ export function WalletVerification() {
   const { address, isConnected, connector } = useAccount();
   const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
-  const { verificationStatus, setVerificationStatus, isVerified, verifiedAt } = useWalletStatus();
+  const { verificationStatus, setVerificationStatus, isVerified, isLinkedToAccount, verifiedAt } =
+    useWalletStatus();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -131,11 +133,21 @@ export function WalletVerification() {
         </Alert>
       )}
 
-      {error && <Alert variant="error">{error}</Alert>}
-
-      {isVerified && (
-        <Alert variant="warning">{t('connect.notLinked')}</Alert>
+      {isVerified && !isLinkedToAccount && (
+        <div className="space-y-3 border-t border-slate-100 pt-4">
+          <p className="text-sm font-medium text-slate-700">{t('walletLink.title')}</p>
+          <WalletLinkPanel compact />
+        </div>
       )}
+
+      {isLinkedToAccount && (
+        <Alert variant="info">
+          <ShieldCheck className="mr-2 inline h-4 w-4" />
+          {t('walletLink.linkedDescription')}
+        </Alert>
+      )}
+
+      {error && <Alert variant="error">{error}</Alert>}
     </div>
   );
 }

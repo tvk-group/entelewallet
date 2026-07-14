@@ -4,8 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { SecurityBanner } from '@/components/security-banner';
+import { WalletLinkPanel } from '@/components/wallet-link-panel';
 import { useT } from '@/lib/i18n-context';
 import { useWalletStatus } from '@/lib/wallet-context';
+import { unlinkWalletFromAccount } from '@/lib/wallet-link-api';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, LtrSpan } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
@@ -16,8 +18,27 @@ import { PortfolioSettingsCard } from '@/components/portfolio/portfolio-settings
 export default function SettingsPage() {
   const t = useT();
   const { address, isConnected } = useAccount();
-  const { verificationStatus, verifiedAt } = useWalletStatus();
+  const {
+    verificationStatus,
+    verifiedAt,
+    isLinkedToAccount,
+    refreshLinkStatus,
+    setVerificationStatus,
+  } = useWalletStatus();
   const [showUnlinkConfirm, setShowUnlinkConfirm] = useState(false);
+  const [unlinking, setUnlinking] = useState(false);
+
+  async function handleUnlink() {
+    if (!address) return;
+    setUnlinking(true);
+    const ok = await unlinkWalletFromAccount(address);
+    setUnlinking(false);
+    if (ok) {
+      setShowUnlinkConfirm(false);
+      setVerificationStatus('verified');
+      await refreshLinkStatus();
+    }
+  }
 
   if (!isConnected) {
     return (
@@ -49,7 +70,11 @@ export default function SettingsPage() {
                 <LtrSpan className="font-mono text-sm">{truncateAddress(address!)}</LtrSpan>
                 <div className="mt-1 flex gap-2">
                   <Badge variant="info">{t('settings.setPrimary')}</Badge>
-                  <Badge variant={verificationStatus === 'verified' ? 'success' : 'warning'}>
+                  <Badge
+                    variant={
+                      isLinkedToAccount || verificationStatus === 'verified' ? 'success' : 'warning'
+                    }
+                  >
                     {t(getVerificationBadgeKey(verificationStatus))}
                   </Badge>
                 </div>
@@ -63,23 +88,31 @@ export default function SettingsPage() {
               </p>
             )}
 
-            {!showUnlinkConfirm ? (
-              <Button variant="danger" size="sm" onClick={() => setShowUnlinkConfirm(true)}>
-                {t('settings.unlinkWallet')}
-              </Button>
-            ) : (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-                <p className="text-sm text-red-800">{t('settings.unlinkConfirm')}</p>
-                <div className="mt-3 flex gap-2">
-                  <Button variant="danger" size="sm">
-                    {t('common.confirm')}
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={() => setShowUnlinkConfirm(false)}>
-                    {t('common.cancel')}
-                  </Button>
+            <WalletLinkPanel compact />
+
+            {isLinkedToAccount &&
+              (!showUnlinkConfirm ? (
+                <Button variant="danger" size="sm" onClick={() => setShowUnlinkConfirm(true)}>
+                  {t('settings.unlinkWallet')}
+                </Button>
+              ) : (
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+                  <p className="text-sm text-red-800">{t('settings.unlinkConfirm')}</p>
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => void handleUnlink()}
+                      disabled={unlinking}
+                    >
+                      {unlinking ? t('common.loading') : t('common.confirm')}
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={() => setShowUnlinkConfirm(false)}>
+                      {t('common.cancel')}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
           </CardContent>
         </Card>
 

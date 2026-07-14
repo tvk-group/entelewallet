@@ -1,6 +1,7 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Web3Provider } from '@/lib/web3-provider';
 import { I18nProvider } from '@/lib/i18n-context';
+import { AuthProvider } from '@/lib/auth-context';
 import { WalletProvider } from '@/lib/wallet-context';
 import { NetworkViewProvider } from '@/lib/network-view-context';
 import { SEO_DEFAULT, BRAND_ASSETS } from '@entelewallet/config';
@@ -45,9 +46,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`app-shell-bg ${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <I18nProvider>
           <Web3Provider>
-            <WalletProvider>
-              <NetworkViewProvider>{children}</NetworkViewProvider>
-            </WalletProvider>
+            <AuthProvider>
+              <WalletProvider>
+                <NetworkViewProvider>{children}</NetworkViewProvider>
+              </WalletProvider>
+            </AuthProvider>
           </Web3Provider>
         </I18nProvider>
       </body>

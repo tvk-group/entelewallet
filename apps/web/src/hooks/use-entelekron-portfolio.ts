@@ -17,6 +17,7 @@ import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
 import { useLinkedAddresses } from '@/hooks/use-linked-addresses';
 import { getTokenUsdValue, useTokenPrices } from '@/hooks/use-token-prices';
 import { useNetworkView } from '@/lib/network-view-context';
+import { useWalletStatus } from '@/lib/wallet-context';
 import type { TokenConfig } from '@entelewallet/types';
 import type { WalletPreferences } from '@entelewallet/types';
 
@@ -26,6 +27,7 @@ function buildActiveNetworkSlice(
   nativeValue: bigint | undefined,
   erc20Balances: Map<string, bigint>,
   prices: Record<string, number>,
+  vestingLinked: boolean,
 ): Pick<PortfolioResponse, 'holdings' | 'marketCatalog' | 'ecosystem'> {
   const holdings: PortfolioAsset[] = [];
   const marketCatalog: PortfolioAsset[] = [];
@@ -68,7 +70,7 @@ function buildActiveNetworkSlice(
         name: token.name,
         balance: balance?.toString(),
         valueUsd,
-        vestingLinked: false,
+        vestingLinked,
         logo: token.logo,
         pendingOfficialConfiguration: token.pendingOfficialConfiguration,
       });
@@ -82,6 +84,7 @@ export function useEntelekronPortfolio() {
   const { address } = useAccount();
   const chainId = useChainId();
   const { networkViewId } = useNetworkView();
+  const { isLinkedToAccount } = useWalletStatus();
   const queryClient = useQueryClient();
   const [preferences, setPreferences] = useState<WalletPreferences | null>(null);
 
@@ -128,8 +131,9 @@ export function useEntelekronPortfolio() {
       nativeValue,
       erc20Balances,
       prices,
+      isLinkedToAccount,
     );
-  }, [address, networkViewId, tokens, nativeValue, erc20Balances, prices]);
+  }, [address, networkViewId, tokens, nativeValue, erc20Balances, prices, isLinkedToAccount]);
 
   const apiQuery = useQuery({
     queryKey: ['entelekron-portfolio', address],
@@ -181,6 +185,10 @@ export function useEntelekronPortfolio() {
         discovered: apiQuery.data.discovered ?? discoveredTokens,
         networkBreakdown: apiQuery.data.networkBreakdown ?? networkBreakdown,
         crossChainTotalUsd: apiQuery.data.crossChainTotalUsd ?? crossChainTotalUsd,
+        ecosystem: (apiQuery.data.ecosystem ?? []).map((asset) => ({
+          ...asset,
+          vestingLinked: isLinkedToAccount || asset.vestingLinked,
+        })),
       };
     }
 
@@ -210,6 +218,7 @@ export function useEntelekronPortfolio() {
     activeSlice,
     networkViewId,
     chainId,
+    isLinkedToAccount,
   ]);
 
   const isLoading =
