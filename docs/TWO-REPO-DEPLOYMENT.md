@@ -63,11 +63,15 @@ Deploy each repo as a separate Vercel project:
 
 | Setting | Value |
 |---------|-------|
-| Root Directory | `apps/web` |
+| Root Directory | `apps/web` *(recommended)* or repo root with root `vercel.json` |
+| Framework Preset | Next.js |
+| Output Directory | *(blank — do not use `public`)* |
 | Production Domain | `entelewallet.app` |
 | Alias Domains | `www.entelewallet.app`, `app.entelewallet.com`, `www.app.entelewallet.com` |
 
 Environment: see `apps/web/.env.example`
+
+If deploy fails with **No Output Directory named "public"**, set Root Directory to `apps/web` and clear Output Directory in Vercel project settings. See [DEPLOYMENT.md](./DEPLOYMENT.md#troubleshooting-no-output-directory-named-public).
 
 ### entelewallet-site
 

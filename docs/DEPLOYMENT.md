@@ -2,12 +2,14 @@
 
 ## Target
 
-- **Primary domain:** app.entelewallet.com
+- **Primary domain:** entelewallet.app
 - **Platform:** Vercel (recommended) or any Node.js host
 
 ## Vercel (monorepo)
 
 This repo is a pnpm + Turborepo monorepo. The Next.js app lives in `apps/web`.
+
+### Recommended: Root Directory = `apps/web`
 
 In the Vercel project **Settings → General**:
 
@@ -15,12 +17,24 @@ In the Vercel project **Settings → General**:
 |---------|-------|
 | **Root Directory** | `apps/web` |
 | **Framework Preset** | Next.js |
-| **Install Command** | `cd ../.. && pnpm install` (or leave default if Root Directory is set) |
+| **Output Directory** | *(leave blank — Next.js default)* |
+| **Install Command** | `cd ../.. && pnpm install` |
 | **Build Command** | `cd ../.. && pnpm turbo build --filter=@entelewallet/web` |
 
-`apps/web/vercel.json` encodes these commands for preview/production deploys.
+`apps/web/vercel.json` encodes install/build commands for this layout.
 
-If Root Directory is left blank (repo root), the build will fail because there is no Next.js app at the repository root.
+### Fallback: repo-root deployment
+
+If Root Directory is left at the repository root, the root `vercel.json` sets `framework: nextjs` and `outputDirectory: apps/web/.next` so Vercel does not look for a static `public` build folder.
+
+### Troubleshooting: `No Output Directory named "public"`
+
+This error means Vercel is treating the repo as a static site instead of Next.js. Fix:
+
+1. Set **Root Directory** to `apps/web` (preferred), **or**
+2. Ensure root `vercel.json` is present (sets `framework: nextjs`, `outputDirectory: apps/web/.next`)
+3. Clear **Output Directory** in Project Settings if it is set to `public`
+4. Set **Framework Preset** to **Next.js**
 
 ## Build
 
@@ -41,8 +55,8 @@ Copy `.env.example` to `apps/web/.env.local` and configure:
 
 Configure at DNS/CDN level:
 
-- entelewallet.app → app.entelewallet.com
-- wallet.entelekron.io → app.entelewallet.com
+- app.entelewallet.com → entelewallet.app (also handled in middleware + vercel.json)
+- wallet.entelekron.io → entelewallet.app
 
 ## Production Checklist
 
