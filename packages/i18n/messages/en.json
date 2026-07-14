@@ -280,7 +280,7 @@
     "searchTitle": "Search any crypto",
     "searchPlaceholder": "Search Bitcoin, Ethereum, Solana…",
     "noResults": "No coins found. Try another name or symbol.",
-    "poweredBy": "Live USD prices via CoinGecko."
+    "poweredBy": "USD prices from third-party market data sources."
   },
   "portfolio": {
     "holdingsTitle": "Your holdings",

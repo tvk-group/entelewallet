@@ -42,6 +42,7 @@ Until Supabase is configured, wallet linking UI shows a configuration notice and
 | `NEXT_PUBLIC_BASE_RPC_URL` | Private Base RPC endpoint |
 | `ALCHEMY_API_KEY` | Server-only Alchemy key for ERC-20 auto-discovery and multi-network token balances |
 | `COINGECKO_API_KEY` | Optional CoinGecko demo API key for higher rate limits on `/api/prices` and `/api/markets/search` |
+| `COINMARKETCAP_API_KEY` | Optional CoinMarketCap Pro API key — silent failover on `/api/prices` when CoinGecko returns no quote |
 
 ## Portfolio (Phases B–E)
 
