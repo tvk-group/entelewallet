@@ -10,6 +10,24 @@ import { getVerificationBadgeKey } from '@entelewallet/wallet-core';
 import { SignatureWarningBanner } from './security-banner';
 import { WalletLinkPanel } from './wallet-link-panel';
 import { ShieldCheck, Loader2 } from 'lucide-react';
+import type { Address } from 'viem';
+
+const SIGNATURE_TIMEOUT_MS = 120_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(message)), ms);
+    promise
+      .then((value) => {
+        clearTimeout(timer);
+        resolve(value);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
 
 export function WalletVerification() {
   const t = useT();
@@ -44,12 +62,20 @@ export function WalletVerification() {
         body: JSON.stringify({ address, chainId }),
       });
 
+      const nonceBody = await nonceRes.json().catch(() => ({}));
       if (!nonceRes.ok) {
-        throw new Error('Failed to create nonce');
+        throw new Error(
+          typeof nonceBody.error === 'string' ? nonceBody.error : 'Failed to create verification nonce',
+        );
       }
 
-      const { message } = await nonceRes.json();
-      const signature = await signMessageAsync({ message });
+      const { message } = nonceBody as { message: string };
+
+      const signature = await withTimeout(
+        signMessageAsync({ message, account: address as Address }),
+        SIGNATURE_TIMEOUT_MS,
+        t('connect.signatureTimeout'),
+      );
 
       const verifyRes = await fetch('/api/wallet/verify', {
         method: 'POST',
@@ -68,7 +94,12 @@ export function WalletVerification() {
       setVerificationStatus('verified');
     } catch (err) {
       setVerificationStatus('verification_failed');
-      setError(err instanceof Error ? err.message : t('connect.verificationFailed'));
+      const message = err instanceof Error ? err.message : t('connect.verificationFailed');
+      if (message.toLowerCase().includes('user rejected') || message.toLowerCase().includes('denied')) {
+        setError(t('connect.signatureRejected'));
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -105,6 +136,9 @@ export function WalletVerification() {
         <>
           <SignatureWarningBanner />
           <p className="text-sm text-slate-600">{t('connect.verifyPrompt')}</p>
+          {verificationStatus === 'signature_pending' && (
+            <Alert variant="info">{t('connect.openWalletToSign')}</Alert>
+          )}
           <Button onClick={handleVerify} disabled={loading} className="gap-2">
             {loading ? (
               <>

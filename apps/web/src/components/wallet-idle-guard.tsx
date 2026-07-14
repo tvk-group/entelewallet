@@ -14,25 +14,26 @@ function getIdleMs(): number {
 
 const ACTIVITY_EVENTS = ['mousedown', 'keydown', 'touchstart', 'scroll', 'visibilitychange'] as const;
 
+interface WalletIdleGuardProps {
+  /** Do not auto-disconnect while waiting for a verification signature. */
+  pauseWhileVerifying?: boolean;
+}
+
 /**
  * Disconnects the wallet after a period of inactivity (default 3 minutes).
  */
-export function WalletIdleGuard() {
+export function WalletIdleGuard({ pauseWhileVerifying = false }: WalletIdleGuardProps) {
   const { isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const lastActivityRef = useRef(Date.now());
   const idleMs = getIdleMs();
 
   useEffect(() => {
-    if (!isConnected) return;
-
-    const markActive = () => {
-      lastActivityRef.current = Date.now();
-    };
+    if (!isConnected || pauseWhileVerifying) return;
 
     const onActivity = () => {
       if (document.visibilityState === 'hidden') return;
-      markActive();
+      lastActivityRef.current = Date.now();
     };
 
     for (const event of ACTIVITY_EVENTS) {
@@ -46,7 +47,7 @@ export function WalletIdleGuard() {
       }
     }, 15_000);
 
-    markActive();
+    lastActivityRef.current = Date.now();
 
     return () => {
       for (const event of ACTIVITY_EVENTS) {
@@ -54,7 +55,7 @@ export function WalletIdleGuard() {
       }
       window.clearInterval(interval);
     };
-  }, [isConnected, disconnect, idleMs]);
+  }, [isConnected, disconnect, idleMs, pauseWhileVerifying]);
 
   return null;
 }

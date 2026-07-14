@@ -8,7 +8,6 @@ import { ReactNode, useState, createContext, useContext, useMemo, useEffect } fr
 import { useI18n } from '@/lib/i18n-context';
 import type { LocaleCode } from '@entelewallet/i18n';
 import { CANONICAL_APP_URL } from '@entelewallet/config';
-import { WalletIdleGuard } from '@/components/wallet-idle-guard';
 import {
   createEnteleWagmiConfig,
   isWalletConnectConfigured,
@@ -88,7 +87,6 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
   return (
     <WalletUiContext.Provider value={{ uiState, setUiState, connectError, setConnectError }}>
       <WalletRejectionHandler setConnectError={setConnectError} />
-      <WalletIdleGuard />
       <RainbowKitProvider
         locale={rkLocale}
         appInfo={{
