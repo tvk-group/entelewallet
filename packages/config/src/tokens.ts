@@ -1,5 +1,6 @@
 import type { TokenConfig } from '@entelewallet/types';
 import { getChainByChainId, getDefaultNetworkViewId, getDisplayNetworkById } from './chain-registry/registry';
+import { MAJOR_TOKENS } from './major-tokens';
 
 const ENK_CONTRACT = '0xC95343B3f8A5af57a9b3B1acFf3D2a7654Fa28F6';
 
@@ -136,6 +137,7 @@ export const TOKEN_REGISTRY: TokenConfig[] = [
     coingeckoId: 'usd-coin',
     explorerUrl: 'https://snowtrace.io/token/0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E',
   },
+  ...MAJOR_TOKENS,
 ];
 
 export const ENK_TOKEN_META = {

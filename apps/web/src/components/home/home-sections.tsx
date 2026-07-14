@@ -23,6 +23,7 @@ import { getPublicOfficialAddresses } from '@entelewallet/config';
 import { Button, LtrSpan } from '@entelewallet/ui';
 import { cn } from '@entelewallet/utils';
 import { EcosystemCyberCoin } from '@/components/ecosystem-cyber-coin';
+import { usePwa } from '@/lib/pwa-context';
 
 function PremiumCard({
   children,
@@ -231,6 +232,10 @@ export function HomeEnkPreview() {
 
 export function HomePwaSection() {
   const t = useT();
+  const { showInstallPrompts } = usePwa();
+
+  if (!showInstallPrompts) return null;
+
   const steps = [
     { icon: Apple, title: t('install.iphoneTitle'), body: t('install.iphoneSteps') },
     { icon: Smartphone, title: t('install.androidTitle'), body: t('install.androidSteps') },

@@ -58,6 +58,55 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     networkId: 'solana',
     coingeckoId: 'solana',
   },
+  {
+    id: 'xrp',
+    symbol: 'XRP',
+    name: 'XRP',
+    networkId: 'ripple',
+    coingeckoId: 'ripple',
+  },
+  {
+    id: 'doge',
+    symbol: 'DOGE',
+    name: 'Dogecoin',
+    networkId: 'dogecoin',
+    coingeckoId: 'dogecoin',
+  },
+  {
+    id: 'trx',
+    symbol: 'TRX',
+    name: 'TRON',
+    networkId: 'tron',
+    coingeckoId: 'tron',
+  },
+  {
+    id: 'ton',
+    symbol: 'TON',
+    name: 'Toncoin',
+    networkId: 'ton',
+    coingeckoId: 'the-open-network',
+  },
+  {
+    id: 'dot',
+    symbol: 'DOT',
+    name: 'Polkadot',
+    networkId: 'polkadot',
+    coingeckoId: 'polkadot',
+  },
+  {
+    id: 'ltc',
+    symbol: 'LTC',
+    name: 'Litecoin',
+    networkId: 'litecoin',
+    coingeckoId: 'litecoin',
+  },
+  {
+    id: 'shib',
+    symbol: 'SHIB',
+    name: 'Shiba Inu',
+    networkId: 'shiba',
+    coingeckoId: 'shiba-inu',
+  },
 ];
 
 export const DEFAULT_WATCHLIST_ENTRIES: WatchlistEntry[] = DEFAULT_WATCHLIST_SYMBOLS.map(
@@ -76,7 +125,7 @@ export const DEFAULT_PORTFOLIO_PREFERENCES = {
   displayMode: 'holdings-first' as const,
   networkViewId: 'entelekron',
   chainId: 1,
-  autoDiscoverEnabled: false,
+  autoDiscoverEnabled: true,
 };
 
 export function getWatchlistCatalogItem(symbol: string): WatchlistCatalogItem | undefined {

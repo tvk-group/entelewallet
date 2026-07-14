@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
+import { usePwa } from '@/lib/pwa-context';
 import { ROUTES } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
 import { Smartphone, Monitor, Apple } from 'lucide-react';
@@ -10,6 +13,18 @@ import { PwaInstallMockup } from '@/components/pwa-install-mockup';
 
 export default function InstallPage() {
   const t = useT();
+  const router = useRouter();
+  const { isStandalone } = usePwa();
+
+  useEffect(() => {
+    if (isStandalone) {
+      router.replace(ROUTES.overview);
+    }
+  }, [isStandalone, router]);
+
+  if (isStandalone) {
+    return null;
+  }
 
   const steps = [
     { icon: Apple, title: t('install.iphoneTitle'), body: t('install.iphoneSteps') },
@@ -18,7 +33,7 @@ export default function InstallPage() {
   ];
 
   return (
-    <PageLayout title={t('install.title')} description={t('install.description')}>
+    <PageLayout title={t('install.title')} description={t('install.description')} appShell={false}>
       <div className="mx-auto max-w-2xl space-y-6">
         <PwaInstallMockup />
 

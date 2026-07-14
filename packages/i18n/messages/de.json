@@ -669,5 +669,11 @@
     "verificationExpired": "Wallet verification has expired. Verify ownership again before linking.",
     "verificationWindowHint": "Verification is valid for 30 minutes after signing.",
     "reverify": "Re-verify wallet"
+  },
+  "markets": {
+    "searchTitle": "Search any crypto",
+    "searchPlaceholder": "Search Bitcoin, Ethereum, Solana…",
+    "noResults": "No coins found. Try another name or symbol.",
+    "poweredBy": "Live USD prices via CoinGecko."
   }
 }

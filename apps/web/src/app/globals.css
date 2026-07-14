@@ -11,6 +11,21 @@
   body {
     @apply overflow-x-hidden bg-white text-slate-900 antialiased;
     min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+.mobile-app-shell {
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 40%, #f8fafc 100%);
+}
+
+.mobile-app-shell .mobile-bottom-nav {
+  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.08);
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 

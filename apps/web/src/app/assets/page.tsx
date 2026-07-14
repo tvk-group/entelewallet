@@ -12,6 +12,7 @@ import { PortfolioMarketSection } from '@/components/portfolio/portfolio-market-
 import { PortfolioWatchlistSection } from '@/components/portfolio/portfolio-watchlist-section';
 import { PortfolioEcosystemSection } from '@/components/portfolio/portfolio-ecosystem-section';
 import { PortfolioNetworkBreakdown } from '@/components/portfolio/portfolio-network-breakdown';
+import { CryptoMarketSearch } from '@/components/crypto-market-search';
 import { PortfolioSyncHandler } from '@/components/portfolio/portfolio-sync-handler';
 import { PortfolioDisplayModeSelect } from '@/components/portfolio/portfolio-display-mode';
 import { useEntelekronPortfolio } from '@/hooks/use-entelekron-portfolio';
@@ -160,6 +161,8 @@ function AssetsPortfolioContent() {
           onDismiss={dismissDiscoveredToken}
         />
       </PortfolioSection>
+
+      <CryptoMarketSearch />
 
       <PortfolioSection
         title={t('portfolio.watchlistTitle')}

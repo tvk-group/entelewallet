@@ -276,6 +276,12 @@
     "addressCopied": "Address copied",
     "activeNetwork": "Active network"
   },
+  "markets": {
+    "searchTitle": "Search any crypto",
+    "searchPlaceholder": "Search Bitcoin, Ethereum, Solana…",
+    "noResults": "No coins found. Try another name or symbol.",
+    "poweredBy": "Live USD prices via CoinGecko."
+  },
   "portfolio": {
     "holdingsTitle": "Your holdings",
     "holdingsDescription": "Tokens with a balance on the active network.",

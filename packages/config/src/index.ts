@@ -11,3 +11,4 @@ export * from './support';
 export * from './ecosystem';
 export * from './portfolio';
 export * from './alchemy';
+export * from './coingecko-platform';
