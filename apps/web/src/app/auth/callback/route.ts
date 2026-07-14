@@ -5,7 +5,7 @@ import { CANONICAL_APP_URL, ROUTES } from '@entelewallet/config';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? ROUTES.overview;
+  const next = searchParams.get('next') ?? ROUTES.account;
 
   const appOrigin = CANONICAL_APP_URL.replace(/\/$/, '');
   const redirectBase = origin.includes('localhost') ? origin : appOrigin;

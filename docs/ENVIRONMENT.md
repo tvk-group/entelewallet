@@ -23,7 +23,9 @@ When Supabase is configured, the app enables:
 Setup:
 
 1. Create a project at [supabase.com](https://supabase.com) (e.g. name: `EnteleWALLET`)
-2. Run the migration: `supabase/migrations/20260101000000_initial_schema.sql` in the SQL Editor
+2. Run migrations in the SQL Editor (safe to re-run):
+   - `supabase/migrations/20260101000000_initial_schema.sql` (idempotent)
+   - If the first run failed partway (e.g. `relation "idx_wallet_connections_address" already exists`), run `supabase/migrations/20260714000000_idempotent_repair.sql` instead — it completes any missing indexes, policies, and constraints.
 3. Add env vars to Vercel and `apps/web/.env.local`:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`

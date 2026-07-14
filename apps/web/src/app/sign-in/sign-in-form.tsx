@@ -14,6 +14,7 @@ export default function SignInForm() {
   const searchParams = useSearchParams();
   const isSignup = searchParams.get('mode') === 'signup';
   const callbackError = searchParams.get('error') === 'auth_callback_failed';
+  const nextPath = searchParams.get('next') ?? ROUTES.account;
 
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
@@ -35,7 +36,7 @@ export default function SignInForm() {
     setErrorMessage(null);
 
     const supabase = createClient();
-    const redirectTo = `${CANONICAL_APP_URL.replace(/\/$/, '')}${ROUTES.authCallback}`;
+    const redirectTo = `${CANONICAL_APP_URL.replace(/\/$/, '')}${ROUTES.authCallback}?next=${encodeURIComponent(nextPath)}`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
@@ -106,7 +107,10 @@ export default function SignInForm() {
               {isSignup ? (
                 <>
                   {t('auth.alreadyHaveAccount')}{' '}
-                  <Link href={ROUTES.signIn} className="font-medium text-cyan-700 hover:text-cyan-900">
+                  <Link
+                    href={`${ROUTES.signIn}?next=${encodeURIComponent(nextPath)}`}
+                    className="font-medium text-cyan-700 hover:text-cyan-900"
+                  >
                     {t('common.signIn')}
                   </Link>
                 </>
@@ -114,7 +118,7 @@ export default function SignInForm() {
                 <>
                   {t('auth.newAccount')}{' '}
                   <Link
-                    href={`${ROUTES.signIn}?mode=signup`}
+                    href={`${ROUTES.signIn}?mode=signup&next=${encodeURIComponent(nextPath)}`}
                     className="font-medium text-cyan-700 hover:text-cyan-900"
                   >
                     {t('common.createAccount')}

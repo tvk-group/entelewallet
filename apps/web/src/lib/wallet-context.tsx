@@ -67,6 +67,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, [user, address]);
 
   useEffect(() => {
+    if (!user || !address || authLoading) return;
+    const stored = localStorage.getItem(`${VERIFIED_KEY}-${address.toLowerCase()}`);
+    if (!stored) return;
+    void refreshLinkStatus();
+  }, [user, address, authLoading, refreshLinkStatus]);
+
+  useEffect(() => {
     if (!isConnected || !address) {
       setVerificationStatus('disconnected');
       setVerifiedAt(null);

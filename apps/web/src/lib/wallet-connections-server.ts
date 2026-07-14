@@ -34,6 +34,12 @@ function mapRow(row: WalletConnectionRow): WalletConnectionRecord {
   };
 }
 
+function logSupabaseError(context: string, error: { message?: string; code?: string } | null) {
+  if (error) {
+    console.error(`[wallet_connections] ${context}:`, error.message ?? error);
+  }
+}
+
 export async function getActiveConnectionForAddress(
   walletAddress: string,
 ): Promise<WalletConnectionRecord | null> {
@@ -51,7 +57,11 @@ export async function getActiveConnectionForAddress(
     .limit(1)
     .maybeSingle();
 
-  if (error || !data) return null;
+  if (error) {
+    logSupabaseError('getActiveConnectionForAddress', error);
+    return null;
+  }
+  if (!data) return null;
   return mapRow(data as WalletConnectionRow);
 }
 
@@ -67,7 +77,10 @@ export async function getUserConnections(userId: string): Promise<WalletConnecti
     .order('is_primary', { ascending: false })
     .order('linked_at', { ascending: false });
 
-  if (error || !data) return [];
+  if (error) {
+    logSupabaseError('getUserConnections', error);
+    return [];
+  }
   return (data as WalletConnectionRow[]).map(mapRow);
 }
 
@@ -79,11 +92,11 @@ export async function recordAuthEvent(params: {
   ipHash?: string;
   userAgentHash?: string;
   metadata?: Record<string, unknown>;
-}): Promise<void> {
+}): Promise<boolean> {
   const admin = createAdminClient();
-  if (!admin) return;
+  if (!admin) return false;
 
-  await admin.from('wallet_auth_events').insert({
+  const { error } = await admin.from('wallet_auth_events').insert({
     user_id: params.userId ?? null,
     wallet_address: normalizeAddress(params.walletAddress).toLowerCase(),
     chain_id: params.chainId,
@@ -92,6 +105,12 @@ export async function recordAuthEvent(params: {
     user_agent_hash: params.userAgentHash ?? null,
     metadata: params.metadata ?? {},
   });
+
+  if (error) {
+    logSupabaseError(`recordAuthEvent:${params.eventType}`, error);
+    return false;
+  }
+  return true;
 }
 
 export async function hasRecentVerification(
@@ -100,7 +119,7 @@ export async function hasRecentVerification(
   windowMinutes = 30,
 ): Promise<boolean> {
   const admin = createAdminClient();
-  if (!admin) return true; // dev fallback when Supabase not configured
+  if (!admin) return false;
 
   const since = new Date(Date.now() - windowMinutes * 60 * 1000).toISOString();
   const normalized = normalizeAddress(walletAddress).toLowerCase();
@@ -114,7 +133,10 @@ export async function hasRecentVerification(
     .gte('created_at', since)
     .limit(1);
 
-  if (error) return false;
+  if (error) {
+    logSupabaseError('hasRecentVerification', error);
+    return false;
+  }
   return (data?.length ?? 0) > 0;
 }
 
@@ -153,7 +175,10 @@ export async function linkWalletToUser(params: {
       .select('*')
       .single();
 
-    if (error || !data) throw new Error('link_update_failed');
+    if (error || !data) {
+      logSupabaseError('linkWalletToUser:update', error);
+      throw new Error('link_update_failed');
+    }
     return mapRow(data as WalletConnectionRow);
   }
 
@@ -181,7 +206,13 @@ export async function linkWalletToUser(params: {
     .select('*')
     .single();
 
-  if (error || !data) throw new Error('link_insert_failed');
+  if (error || !data) {
+    logSupabaseError('linkWalletToUser:insert', error);
+    if (error?.code === '23505') {
+      throw new Error('wallet_linked_to_other_account');
+    }
+    throw new Error('link_insert_failed');
+  }
   return mapRow(data as WalletConnectionRow);
 }
 
@@ -206,5 +237,8 @@ export async function unlinkWalletForUser(
     .eq('wallet_address', normalized)
     .is('revoked_at', null);
 
-  if (error) throw new Error('unlink_failed');
+  if (error) {
+    logSupabaseError('unlinkWalletForUser', error);
+    throw new Error('unlink_failed');
+  }
 }
