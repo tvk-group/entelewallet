@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { LtrSpan } from '@entelewallet/ui';
 import { useT } from '@/lib/i18n-context';
 import type { PortfolioAsset } from '@entelewallet/types';
 import { formatUsd } from '@/hooks/use-token-prices';
+import { TokenLogo } from '@/components/token-logo';
 
 interface PortfolioMarketSectionProps {
   assets: PortfolioAsset[];
@@ -29,11 +29,13 @@ export function PortfolioMarketSection({ assets, formatBalance }: PortfolioMarke
         return (
           <li key={asset.id} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50/80">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
-              {asset.logo ? (
-                <Image src={asset.logo} alt="" width={36} height={36} className="h-9 w-9 object-contain p-0.5" />
-              ) : (
-                <span className="text-[10px] font-bold">{asset.symbol.slice(0, 3)}</span>
-              )}
+              <TokenLogo
+                symbol={asset.symbol}
+                name={asset.name}
+                logo={asset.logo}
+                coingeckoId={asset.coingeckoId}
+                size={36}
+              />
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-slate-900">{asset.symbol}</p>

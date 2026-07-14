@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import { getDisplayNetworks } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 import { useT } from '@/lib/i18n-context';
 import { useNetworkView } from '@/lib/network-view-context';
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import { Check, ChevronDown, Globe2 } from 'lucide-react';
+import { ChainLogo } from '@/components/chain-logo';
+import { useAccount, useChainId } from 'wagmi';
+import { Check, ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 type NetworkChainPickerVariant = 'panel' | 'header';
@@ -20,7 +20,6 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
   const t = useT();
   const chainId = useChainId();
   const { isConnected } = useAccount();
-  const { switchChain, isPending } = useSwitchChain();
   const { networkViewId, setNetworkViewId, activeNetwork } = useNetworkView();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,28 +47,10 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
 
-  const handleSelect = (networkId: string, targetChainId: number, priceOnly: boolean) => {
+  const handleSelect = (networkId: string) => {
     setNetworkViewId(networkId);
-    if (!priceOnly && isConnected && targetChainId !== chainId) {
-      switchChain({ chainId: targetChainId });
-    }
     setOpen(false);
   };
-
-  const networkIcon = activeNetwork?.icon ? (
-    <Image
-      src={activeNetwork.icon}
-      alt=""
-      width={isHeader ? 20 : 40}
-      height={isHeader ? 20 : 40}
-      className={cn(
-        'object-contain',
-        isHeader ? 'h-5 w-5' : 'h-10 w-10',
-      )}
-    />
-  ) : (
-    <Globe2 className={cn('text-slate-400', isHeader ? 'h-4 w-4' : 'h-5 w-5')} />
-  );
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
@@ -92,7 +73,12 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
             isHeader ? 'h-7 w-7' : 'h-10 w-10 shadow-sm',
           )}
         >
-          {networkIcon}
+          <ChainLogo
+            icon={activeNetwork?.icon}
+            networkId={activeNetwork?.id}
+            name={activeNetwork?.name}
+            size={isHeader ? 20 : 40}
+          />
         </div>
         <div className={cn('min-w-0 flex-1', isHeader ? 'hidden sm:block' : 'text-left')}>
           {!isHeader && (
@@ -140,35 +126,36 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
                 {group.items.map((network) => {
                   const selected = network.id === networkViewId;
                   const priceOnly = network.portfolioTier === 'price-only';
+                  const walletOnNetwork = isConnected && chainId === network.chainId;
                   return (
                     <li key={network.id}>
                       <button
                         type="button"
-                        disabled={isPending}
-                        onClick={() => handleSelect(network.id, network.chainId, priceOnly)}
+                        onClick={() => handleSelect(network.id)}
                         className={cn(
                           'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition',
                           selected
                             ? 'bg-gradient-to-r from-cyan-50 to-violet-50 text-blue-900'
                             : 'hover:bg-slate-50',
-                          isPending && 'opacity-60',
                         )}
                         role="option"
                         aria-selected={selected}
                       >
                         <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
-                          <Image
-                            src={network.icon}
-                            alt=""
-                            width={28}
-                            height={28}
-                            className="h-7 w-7 object-contain p-0.5"
+                          <ChainLogo
+                            icon={network.icon}
+                            networkId={network.id}
+                            name={network.name}
+                            size={28}
                           />
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium">{network.name}</p>
                           <p className="text-xs text-slate-500">
                             {network.nativeCurrency.symbol} · ID {network.chainId}
+                            {walletOnNetwork && (
+                              <span className="ml-1 text-emerald-700">· {t('networks.walletActive')}</span>
+                            )}
                           </p>
                         </div>
                         {network.status === 'experimental' && (

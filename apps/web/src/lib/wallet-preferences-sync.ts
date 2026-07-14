@@ -1,5 +1,5 @@
 import type { WalletPreferences } from '@entelewallet/types';
-import { DEFAULT_PORTFOLIO_PREFERENCES } from '@entelewallet/config';
+import { DEFAULT_PORTFOLIO_PREFERENCES, normalizeDisplayMode } from '@entelewallet/config';
 import {
   patchWalletPreferences as patchRemotePreferences,
   fetchWalletPreferences as fetchRemotePreferences,
@@ -22,9 +22,17 @@ async function fetchLocalPreferences(): Promise<WalletPreferences | null> {
   return null;
 }
 
+function mergePreferences(partial: Partial<WalletPreferences>): WalletPreferences {
+  return {
+    ...DEFAULT_PORTFOLIO_PREFERENCES,
+    ...partial,
+    displayMode: normalizeDisplayMode(partial.displayMode),
+  };
+}
+
 async function patchLocalPreferences(patch: Partial<WalletPreferences>): Promise<WalletPreferences> {
   const current = readPortfolioPreferences();
-  const next = { ...current, ...patch };
+  const next = mergePreferences({ ...current, ...patch });
   writePortfolioPreferences(next);
 
   try {
@@ -61,14 +69,14 @@ export async function loadSyncedPreferences(): Promise<WalletPreferences> {
 
   const fromBff = await fetchLocalPreferences();
   if (fromBff) {
-    const merged = { ...DEFAULT_PORTFOLIO_PREFERENCES, ...fromBff };
+    const merged = mergePreferences(fromBff);
     writePortfolioPreferences(merged);
     return merged;
   }
 
   try {
     const remote = await fetchRemotePreferences();
-    const merged = { ...DEFAULT_PORTFOLIO_PREFERENCES, ...remote };
+    const merged = mergePreferences(remote);
     writePortfolioPreferences(merged);
     return merged;
   } catch (error) {

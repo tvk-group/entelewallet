@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { PageLayout } from '@/components/page-layout';
 import { WalletPortfolioHeader } from '@/components/wallet-portfolio-header';
-import { NetworkChainPicker } from '@/components/network-chain-picker';
 import { PortfolioSection } from '@/components/portfolio/portfolio-section';
 import { PortfolioHoldingsTable } from '@/components/portfolio/portfolio-holdings-table';
 import { PortfolioDiscoveredSection } from '@/components/portfolio/portfolio-discovered-section';
@@ -12,6 +11,7 @@ import { PortfolioMarketSection } from '@/components/portfolio/portfolio-market-
 import { PortfolioWatchlistSection } from '@/components/portfolio/portfolio-watchlist-section';
 import { PortfolioEcosystemSection } from '@/components/portfolio/portfolio-ecosystem-section';
 import { PortfolioNetworkBreakdown } from '@/components/portfolio/portfolio-network-breakdown';
+import { PortfolioNetworksGrid } from '@/components/portfolio/portfolio-networks-grid';
 import { CryptoMarketSearch } from '@/components/crypto-market-search';
 import { PortfolioSyncHandler } from '@/components/portfolio/portfolio-sync-handler';
 import { PortfolioDisplayModeSelect } from '@/components/portfolio/portfolio-display-mode';
@@ -91,9 +91,7 @@ function AssetsPortfolioContent() {
       </PortfolioSection>
 
       <PortfolioSection title={t('networks.title')} description={t('networks.switchHint')}>
-        <div className="p-4">
-          <NetworkChainPicker />
-        </div>
+        <PortfolioNetworksGrid />
       </PortfolioSection>
 
       {hasError && (

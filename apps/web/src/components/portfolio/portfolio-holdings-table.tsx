@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { LtrSpan } from '@entelewallet/ui';
 import { useT } from '@/lib/i18n-context';
 import type { PortfolioAsset } from '@entelewallet/types';
 import { formatUsd } from '@/hooks/use-token-prices';
+import { TokenLogo } from '@/components/token-logo';
 import { Loader2 } from 'lucide-react';
 
 interface PortfolioHoldingsTableProps {
@@ -65,11 +65,13 @@ export function PortfolioHoldingsTable({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
-                      {asset.logo ? (
-                        <Image src={asset.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain p-0.5" />
-                      ) : (
-                        <span className="text-[10px] font-bold text-slate-600">{asset.symbol.slice(0, 3)}</span>
-                      )}
+                      <TokenLogo
+                        symbol={asset.symbol}
+                        name={asset.name}
+                        logo={asset.logo}
+                        coingeckoId={asset.coingeckoId}
+                        size={32}
+                      />
                     </div>
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-slate-900">{asset.symbol}</p>
