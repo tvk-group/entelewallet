@@ -36,6 +36,30 @@ This error means Vercel is treating the repo as a static site instead of Next.js
 3. Clear **Output Directory** in Project Settings if it is set to `public`
 4. Set **Framework Preset** to **Next.js**
 
+### Troubleshooting: domains redirect loop / site won't load
+
+If `entelewallet.app` never loads (browser says "too many redirects"), check for conflicting apex ↔ www redirects:
+
+| Source | What it does |
+|--------|----------------|
+| Vercel Domains (dashboard) | May redirect `entelewallet.app` → `www.entelewallet.app` if www is primary |
+| `vercel.json` + middleware (this repo) | Redirects `www.entelewallet.app` → `entelewallet.app` |
+
+These fight each other and create an infinite loop.
+
+**Fix in Vercel → Project → Settings → Domains:**
+
+1. Set **`entelewallet.app`** as the **primary** production domain
+2. Set **`www.entelewallet.app`** to **redirect** to `entelewallet.app` (not the reverse)
+3. Redeploy
+
+Test:
+
+```bash
+curl -sI https://entelewallet.app/ | grep -iE '^(HTTP|location:)'
+# Expect: HTTP/2 200 (no location header), not a redirect to www
+```
+
 ## Build
 
 ```bash

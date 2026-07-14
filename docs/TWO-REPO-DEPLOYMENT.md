@@ -66,12 +66,32 @@ Deploy each repo as a separate Vercel project:
 | Root Directory | `apps/web` *(recommended)* or repo root with root `vercel.json` |
 | Framework Preset | Next.js |
 | Output Directory | *(blank — do not use `public`)* |
-| Production Domain | `entelewallet.app` |
-| Alias Domains | `www.entelewallet.app`, `app.entelewallet.com`, `www.app.entelewallet.com` |
+| **Primary domain** | `entelewallet.app` *(apex — not www)* |
+| Alias domains | `www.entelewallet.app`, `app.entelewallet.com`, `www.app.entelewallet.com` |
 
 Environment: see `apps/web/.env.example`
 
 If deploy fails with **No Output Directory named "public"**, set Root Directory to `apps/web` and clear Output Directory in Vercel project settings. See [DEPLOYMENT.md](./DEPLOYMENT.md#troubleshooting-no-output-directory-named-public).
+
+### Vercel domain setup (critical)
+
+In **Project → Settings → Domains** for the entelewallet-app project:
+
+| Domain | Vercel setting |
+|--------|----------------|
+| `entelewallet.app` | **Primary** (Production) |
+| `www.entelewallet.app` | Redirect → `entelewallet.app` |
+| `app.entelewallet.com` | Redirect → `entelewallet.app` |
+| `www.app.entelewallet.com` | Redirect → `entelewallet.app` |
+
+**Do not** set `www.entelewallet.app` as the primary domain. If Vercel redirects apex → www while `vercel.json`/middleware redirects www → apex, browsers get an infinite redirect loop and the site never loads.
+
+Verify with:
+
+```bash
+curl -sI https://entelewallet.app/ | grep -i location
+# Should NOT redirect to www. Should return 200, or only alias hosts should redirect.
+```
 
 ### entelewallet-site
 
