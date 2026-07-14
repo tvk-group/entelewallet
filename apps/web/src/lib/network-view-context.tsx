@@ -6,11 +6,12 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
 import { getDefaultNetworkViewId, getDisplayNetworkById } from '@entelewallet/config';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 type NetworkViewContextValue = {
   networkViewId: string;
@@ -21,15 +22,22 @@ type NetworkViewContextValue = {
 const NetworkViewContext = createContext<NetworkViewContextValue | null>(null);
 
 export function NetworkViewProvider({ children }: { children: ReactNode }) {
+  const { isConnected } = useAccount();
   const chainId = useChainId();
   const [networkViewId, setNetworkViewIdState] = useState(() => getDefaultNetworkViewId(chainId));
+  const lastChainIdRef = useRef(chainId);
 
   useEffect(() => {
-    const view = getDisplayNetworkById(networkViewId);
-    if (!view || view.chainId !== chainId) {
+    if (lastChainIdRef.current === chainId) return;
+    lastChainIdRef.current = chainId;
+    setNetworkViewIdState(getDefaultNetworkViewId(chainId));
+  }, [chainId]);
+
+  useEffect(() => {
+    if (!isConnected) {
       setNetworkViewIdState(getDefaultNetworkViewId(chainId));
     }
-  }, [chainId, networkViewId]);
+  }, [isConnected, chainId]);
 
   const setNetworkViewId = useCallback((id: string) => {
     setNetworkViewIdState(id);

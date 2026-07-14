@@ -1,5 +1,6 @@
+import type { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import type { Viewport } from 'next';
 import { Web3Provider } from '@/lib/web3-provider';
 import { I18nProvider } from '@/lib/i18n-context';
 import { AuthProvider } from '@/lib/auth-context';
@@ -7,47 +8,69 @@ import { PwaProvider } from '@/lib/pwa-context';
 import { WalletProvider } from '@/lib/wallet-context';
 import { NetworkViewProvider } from '@/lib/network-view-context';
 import { SEO_DEFAULT, BRAND_ASSETS } from '@entelewallet/config';
+import { isMarketingHost } from '@entelewallet/config';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
-export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://entelewallet.app'),
-  title: SEO_DEFAULT.title,
-  description: SEO_DEFAULT.description,
-  applicationName: 'EnteleWALLET',
-  appleWebApp: { capable: true, title: 'EnteleWALLET' },
-  manifest: '/manifest.webmanifest',
-  icons: {
-    icon: [
-      { url: BRAND_ASSETS.favicon16, sizes: '16x16', type: 'image/png' },
-      { url: BRAND_ASSETS.favicon32, sizes: '32x32', type: 'image/png' },
-      { url: BRAND_ASSETS.icon192, sizes: '192x192', type: 'image/png' },
-    ],
-    apple: BRAND_ASSETS.appleTouchIcon,
-    shortcut: BRAND_ASSETS.favicon32,
-  },
-  openGraph: {
-    title: SEO_DEFAULT.title,
-    description: SEO_DEFAULT.description,
-    images: [{ url: SEO_DEFAULT.ogImage, width: 1200, height: 630, alt: 'EnteleWALLET' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: SEO_DEFAULT.title,
-    description: SEO_DEFAULT.description,
-    images: [SEO_DEFAULT.ogImage],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const host = (await headers()).get('host') ?? '';
+  const isCom = isMarketingHost(host);
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  viewportFit: 'cover',
-  themeColor: '#0ea5e9',
-};
+  return {
+    metadataBase: new URL(
+      isCom
+        ? process.env.NEXT_PUBLIC_MARKETING_URL || 'https://entelewallet.com'
+        : process.env.NEXT_PUBLIC_APP_URL || 'https://entelewallet.app',
+    ),
+    title: isCom ? 'EnteleWALLET.com | TVK Group' : SEO_DEFAULT.title,
+    description: SEO_DEFAULT.description,
+    applicationName: isCom ? 'EnteleWALLET.com' : 'EnteleWALLET',
+    appleWebApp: {
+      capable: true,
+      title: isCom ? 'EW.com' : 'EnteleWALLET',
+    },
+    manifest: '/manifest.webmanifest',
+    icons: {
+      icon: [
+        { url: BRAND_ASSETS.favicon16, sizes: '16x16', type: 'image/png' },
+        { url: BRAND_ASSETS.favicon32, sizes: '32x32', type: 'image/png' },
+        {
+          url: isCom ? BRAND_ASSETS.pwaComIcon192 : BRAND_ASSETS.pwaAppIcon192,
+          sizes: '192x192',
+          type: 'image/png',
+        },
+      ],
+      apple: isCom ? BRAND_ASSETS.pwaComAppleTouch : BRAND_ASSETS.pwaAppAppleTouch,
+      shortcut: BRAND_ASSETS.favicon32,
+    },
+    openGraph: {
+      title: SEO_DEFAULT.title,
+      description: SEO_DEFAULT.description,
+      images: [{ url: SEO_DEFAULT.ogImage, width: 1200, height: 630, alt: 'EnteleWALLET' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: SEO_DEFAULT.title,
+      description: SEO_DEFAULT.description,
+      images: [SEO_DEFAULT.ogImage],
+    },
+  };
+}
+
+export async function generateViewport(): Promise<Viewport> {
+  const host = (await headers()).get('host') ?? '';
+  const isCom = isMarketingHost(host);
+
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    viewportFit: 'cover',
+    themeColor: isCom ? '#0f766e' : '#1e40af',
+  };
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

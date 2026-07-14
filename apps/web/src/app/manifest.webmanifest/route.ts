@@ -1,23 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CANONICAL_APP_DOMAIN } from '@entelewallet/config';
+import { BRAND_ASSETS, CANONICAL_APP_DOMAIN, isMarketingHost } from '@entelewallet/config';
 
-type PwaVariant = 'app' | 'com';
-
-function resolveVariant(host: string): PwaVariant {
-  const normalized = host.toLowerCase().split(':')[0] ?? '';
-  if (
-    normalized === 'entelewallet.com' ||
-    normalized === 'www.entelewallet.com' ||
-    normalized.endsWith('.entelewallet.com')
-  ) {
-    return 'com';
-  }
-  return 'app';
-}
-
-function buildManifest(origin: string, variant: PwaVariant) {
-  const isCom = variant === 'com';
-
+function buildManifest(origin: string, isCom: boolean) {
   return {
     name: isCom ? 'EnteleWALLET.com' : 'EnteleWALLET',
     short_name: isCom ? 'EW.com' : 'EnteleWALLET',
@@ -28,21 +12,33 @@ function buildManifest(origin: string, variant: PwaVariant) {
     scope: `${origin}/`,
     id: `${origin}/`,
     display: 'standalone',
-    background_color: '#ffffff',
+    background_color: isCom ? '#ecfdf5' : '#ffffff',
     theme_color: isCom ? '#0f766e' : '#1e40af',
     orientation: 'portrait-primary',
     icons: [
       {
-        src: isCom ? '/icons/pwa-com-192.png' : '/icons/icon-192.png',
+        src: isCom ? BRAND_ASSETS.pwaComIcon192 : BRAND_ASSETS.pwaAppIcon192,
         sizes: '192x192',
         type: 'image/png',
-        purpose: 'any maskable',
+        purpose: 'any',
       },
       {
-        src: isCom ? '/icons/pwa-com-512.png' : '/icons/icon-512.png',
+        src: isCom ? BRAND_ASSETS.pwaComIcon512 : BRAND_ASSETS.pwaAppIcon512,
         sizes: '512x512',
         type: 'image/png',
-        purpose: 'any maskable',
+        purpose: 'any',
+      },
+      {
+        src: isCom ? BRAND_ASSETS.pwaComIcon192 : BRAND_ASSETS.pwaAppIcon192,
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
+      {
+        src: isCom ? BRAND_ASSETS.pwaComIcon512 : BRAND_ASSETS.pwaAppIcon512,
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
       },
     ],
   };
@@ -52,13 +48,13 @@ export function GET(request: NextRequest) {
   const host = request.headers.get('host') ?? CANONICAL_APP_DOMAIN;
   const proto = request.headers.get('x-forwarded-proto') ?? 'https';
   const origin = `${proto}://${host}`;
-  const variant = resolveVariant(host);
-  const manifest = buildManifest(origin, variant);
+  const isCom = isMarketingHost(host);
+  const manifest = buildManifest(origin, isCom);
 
   return NextResponse.json(manifest, {
     headers: {
       'Content-Type': 'application/manifest+json',
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'private, no-cache, no-store, must-revalidate',
     },
   });
 }

@@ -324,7 +324,9 @@
     },
     "switchWallet": "Switch wallet",
     "walletActive": "Wallet active",
-    "switchFailed": "Could not switch network in your wallet. Try from your wallet extension."
+    "switchFailed": "Could not switch network in your wallet. Try from your wallet extension.",
+    "switchTimeout": "Network switch timed out. Confirm in your wallet or try again.",
+    "tapToSwitch": "Tap to switch wallet"
   },
   "transactions": {
     "title": "Transactions",

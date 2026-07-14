@@ -12,6 +12,14 @@ export const BRAND_ASSETS = {
   iconMark: '/brand/entelewallet-icon-mark.png',
   /** Circular app icon on dark blue — PWA, favicon, dark UI surfaces */
   appIcon: '/brand/entelewallet-app-icon.png',
+  /** PWA icon set for entelewallet.app (blue, "APP" badge) */
+  pwaAppIcon192: '/icons/pwa-app-192.png',
+  pwaAppIcon512: '/icons/pwa-app-512.png',
+  pwaAppAppleTouch: '/icons/pwa-app-180.png',
+  /** PWA icon set for entelewallet.com (teal, ".COM" badge) */
+  pwaComIcon192: '/icons/pwa-com-192.png',
+  pwaComIcon512: '/icons/pwa-com-512.png',
+  pwaComAppleTouch: '/icons/pwa-com-180.png',
   /** Primary app icon source (512) */
   icon512: '/brand/entelewallet-icon-512.png',
   icon192: '/icons/icon-192.png',
