@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 import { cn } from '@entelewallet/utils';
 import { useT } from '@/lib/i18n-context';
 import { useWatchlist } from '@/hooks/use-watchlist';
 import { formatUsd } from '@/hooks/use-token-prices';
+import { TokenLogo } from '@/components/token-logo';
 import { Plus, X } from 'lucide-react';
 
 export function PortfolioWatchlistSection() {
@@ -27,17 +27,28 @@ export function PortfolioWatchlistSection() {
       <div className="border-b border-slate-100 bg-slate-50/80 px-4 py-3">
         <p className="text-xs text-slate-500">{t('portfolio.watchlistHint')}</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {symbols.map((symbol) => (
-            <button
-              key={symbol}
-              type="button"
-              onClick={() => void removeSymbol(symbol)}
-              className="inline-flex items-center gap-1 rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-900 transition hover:bg-cyan-100"
-            >
-              {symbol}
-              <X className="h-3 w-3 opacity-60" />
-            </button>
-          ))}
+          {symbols.map((symbol) => {
+            const item = catalog.find((c) => c.symbol === symbol);
+            return (
+              <button
+                key={symbol}
+                type="button"
+                onClick={() => void removeSymbol(symbol)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-900 transition hover:bg-cyan-100"
+              >
+                <TokenLogo
+                  symbol={symbol}
+                  name={item?.name}
+                  logo={item?.logo}
+                  coingeckoId={item?.coingeckoId}
+                  size={16}
+                  className="ring-0"
+                />
+                {symbol}
+                <X className="h-3 w-3 opacity-60" />
+              </button>
+            );
+          })}
         </div>
         <div className="mt-3 flex gap-2">
           <input
@@ -78,15 +89,14 @@ export function PortfolioWatchlistSection() {
               <tr key={entry.symbol} className="hover:bg-slate-50/80">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    {item?.logo ? (
-                      <Image
-                        src={item.logo}
-                        alt=""
-                        width={28}
-                        height={28}
-                        className="h-7 w-7 rounded-full object-contain ring-1 ring-slate-200"
-                      />
-                    ) : null}
+                    <TokenLogo
+                      symbol={entry.symbol}
+                      name={item?.name ?? entry.symbol}
+                      logo={item?.logo}
+                      coingeckoId={entry.coingeckoId ?? item?.coingeckoId}
+                      size={28}
+                      className="ring-1 ring-slate-200"
+                    />
                     <span className="font-semibold text-slate-900">{entry.symbol}</span>
                   </div>
                 </td>

@@ -7,31 +7,17 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 import { getDefaultNetworkViewId, getDisplayNetworkById } from '@entelewallet/config';
 import { useAccount, useChainId } from 'wagmi';
-
-const NETWORK_VIEW_KEY = 'entelewallet-network-view';
-
-function readStoredNetworkViewId(): string | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    return localStorage.getItem(NETWORK_VIEW_KEY);
-  } catch {
-    return null;
-  }
-}
-
-function writeStoredNetworkViewId(id: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(NETWORK_VIEW_KEY, id);
-  } catch {
-    // ignore quota errors
-  }
-}
+import {
+  getNetworkViewId,
+  hydrateNetworkViewStore,
+  setNetworkViewIdStore,
+  subscribeNetworkView,
+} from '@/lib/network-view-store';
 
 type NetworkViewContextValue = {
   networkViewId: string;
@@ -41,25 +27,39 @@ type NetworkViewContextValue = {
 
 const NetworkViewContext = createContext<NetworkViewContextValue | null>(null);
 
+function readStoredNetworkViewId(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('entelewallet-network-view');
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Portfolio network view — independent from the wallet's active chain.
- * Switching view is instant (React state); balances load via read-only RPC.
+ * Uses a shared external store so header, assets grid, and portfolio stay in sync.
  */
 export function NetworkViewProvider({ children }: { children: ReactNode }) {
   const { isConnected } = useAccount();
   const chainId = useChainId();
   const wasConnectedRef = useRef(isConnected);
+  const hydratedRef = useRef(false);
 
-  const [networkViewId, setNetworkViewIdState] = useState(() => {
-    const stored = readStoredNetworkViewId();
-    if (stored && getDisplayNetworkById(stored)) return stored;
-    return getDefaultNetworkViewId(chainId);
-  });
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+    hydrateNetworkViewStore(chainId);
+  }, [chainId]);
+
+  const networkViewId = useSyncExternalStore(
+    subscribeNetworkView,
+    () => getNetworkViewId(chainId),
+    () => getDefaultNetworkViewId(1),
+  );
 
   const setNetworkViewId = useCallback((id: string) => {
-    if (!getDisplayNetworkById(id)) return;
-    setNetworkViewIdState(id);
-    writeStoredNetworkViewId(id);
+    setNetworkViewIdStore(id);
   }, []);
 
   // On first wallet connect only, default view to wallet chain if user has no saved preference.
@@ -69,8 +69,7 @@ export function NetworkViewProvider({ children }: { children: ReactNode }) {
 
     if (justConnected && !readStoredNetworkViewId()) {
       const next = getDefaultNetworkViewId(chainId);
-      setNetworkViewIdState(next);
-      writeStoredNetworkViewId(next);
+      setNetworkViewIdStore(next);
     }
   }, [isConnected, chainId]);
 
