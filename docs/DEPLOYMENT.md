@@ -2,14 +2,12 @@
 
 ## Target
 
-- **Primary domain:** entelewallet.app
+- **Primary domain:** app.entelewallet.com
 - **Platform:** Vercel (recommended) or any Node.js host
 
 ## Vercel (monorepo)
 
 This repo is a pnpm + Turborepo monorepo. The Next.js app lives in `apps/web`.
-
-### Recommended: Root Directory = `apps/web`
 
 In the Vercel project **Settings → General**:
 
@@ -17,24 +15,12 @@ In the Vercel project **Settings → General**:
 |---------|-------|
 | **Root Directory** | `apps/web` |
 | **Framework Preset** | Next.js |
-| **Output Directory** | *(leave blank — Next.js default)* |
-| **Install Command** | `cd ../.. && pnpm install` |
+| **Install Command** | `cd ../.. && pnpm install` (or leave default if Root Directory is set) |
 | **Build Command** | `cd ../.. && pnpm turbo build --filter=@entelewallet/web` |
 
-`apps/web/vercel.json` encodes install/build commands for this layout.
+`apps/web/vercel.json` encodes these commands for preview/production deploys.
 
-### Fallback: repo-root deployment
-
-If Root Directory is left at the repository root, the root `vercel.json` sets `framework: nextjs` and `outputDirectory: apps/web/.next` so Vercel does not look for a static `public` build folder.
-
-### Troubleshooting: `No Output Directory named "public"`
-
-This error means Vercel is treating the repo as a static site instead of Next.js. Fix:
-
-1. Set **Root Directory** to `apps/web` (preferred), **or**
-2. Ensure root `vercel.json` is present (sets `framework: nextjs`, `outputDirectory: apps/web/.next`)
-3. Clear **Output Directory** in Project Settings if it is set to `public`
-4. Set **Framework Preset** to **Next.js**
+If Root Directory is left blank (repo root), the build will fail because there is no Next.js app at the repository root.
 
 ## Build
 
@@ -55,8 +41,8 @@ Copy `.env.example` to `apps/web/.env.local` and configure:
 
 Configure at DNS/CDN level:
 
-- app.entelewallet.com → entelewallet.app (also handled in middleware + vercel.json)
-- wallet.entelekron.io → entelewallet.app
+- entelewallet.app → app.entelewallet.com
+- wallet.entelekron.io → app.entelewallet.com
 
 ## Production Checklist
 

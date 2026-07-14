@@ -19,8 +19,6 @@
     "@entelewallet/utils": "workspace:*",
     "@entelewallet/wallet-core": "workspace:*",
     "@rainbow-me/rainbowkit": "^2.2.2",
-    "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.1",
     "@tanstack/react-query": "^5.62.8",
     "lucide-react": "^0.468.0",
     "next": "^15.1.3",
