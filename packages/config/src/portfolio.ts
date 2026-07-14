@@ -10,7 +10,6 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     name: 'Sui',
     networkId: 'sui',
     coingeckoId: 'sui',
-    logo: '/icons/chains/sui.svg',
   },
   {
     id: 'ada',
@@ -18,7 +17,6 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     name: 'Cardano',
     networkId: 'cardano',
     coingeckoId: 'cardano',
-    logo: '/icons/chains/cardano.svg',
   },
   {
     id: 'mnt',
@@ -26,7 +24,6 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     name: 'Mantle',
     networkId: 'mantle',
     coingeckoId: 'mantle',
-    logo: '/icons/chains/mantle.svg',
   },
   {
     id: 'bdag',
@@ -34,7 +31,6 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     name: 'BlockDAG',
     networkId: 'blockdag',
     coingeckoId: 'blockdag',
-    logo: '/icons/chains/blockdag.svg',
   },
   {
     id: 'btc',
@@ -49,7 +45,6 @@ export const WATCHLIST_CATALOG: WatchlistCatalogItem[] = [
     name: 'Ethereum',
     networkId: 'ethereum',
     coingeckoId: 'ethereum',
-    logo: '/icons/chains/ethereum.svg',
   },
   {
     id: 'sol',

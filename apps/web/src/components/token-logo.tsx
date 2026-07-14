@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { resolveTokenLogo } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 
@@ -25,6 +25,10 @@ export function TokenLogo({
   const [failed, setFailed] = useState(false);
   const src = resolveTokenLogo({ logo, coingeckoId, symbol });
 
+  useEffect(() => {
+    setFailed(false);
+  }, [logo, coingeckoId, symbol, src]);
+
   if (!src || failed) {
     return (
       <span
@@ -42,6 +46,7 @@ export function TokenLogo({
 
   return (
     <Image
+      key={`${symbol}-${src}`}
       src={src}
       alt={name ?? symbol}
       width={size}

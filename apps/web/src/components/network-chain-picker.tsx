@@ -57,6 +57,7 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
     <div ref={containerRef} className={cn('relative', className)}>
       <button
         type="button"
+        key={networkViewId}
         onClick={() => setOpen((value) => !value)}
         className={cn(
           'flex items-center gap-2 transition',
@@ -93,7 +94,7 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
               isHeader ? 'text-xs' : 'text-sm',
             )}
           >
-            {activeNetwork?.name ?? `Chain ${chainId}`}
+            {activeNetwork?.name ?? t('networks.title')}
           </p>
         </div>
         <ChevronDown

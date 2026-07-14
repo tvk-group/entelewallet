@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { resolveChainIcon } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 import { Globe2 } from 'lucide-react';
@@ -18,6 +18,10 @@ export function ChainLogo({ icon, networkId, name, size = 28, className }: Chain
   const [failed, setFailed] = useState(false);
   const src = resolveChainIcon({ icon, networkId });
 
+  useEffect(() => {
+    setFailed(false);
+  }, [icon, networkId, src]);
+
   if (!src || failed) {
     return (
       <Globe2
@@ -30,6 +34,7 @@ export function ChainLogo({ icon, networkId, name, size = 28, className }: Chain
 
   return (
     <Image
+      key={`${networkId ?? 'chain'}-${src}`}
       src={src}
       alt={name ?? ''}
       width={size}
