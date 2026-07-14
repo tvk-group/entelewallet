@@ -321,7 +321,10 @@
       "active": "Mainnets",
       "experimental": "Experimental",
       "testnet": "Testnets"
-    }
+    },
+    "switchWallet": "Switch wallet",
+    "walletActive": "Wallet active",
+    "switchFailed": "Could not switch network in your wallet. Try from your wallet extension."
   },
   "transactions": {
     "title": "Transactions",

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { truncateAddress } from '@entelewallet/utils';
 import { LtrSpan } from '@entelewallet/ui';
 import { useAccount } from 'wagmi';
@@ -9,6 +8,7 @@ import { useT } from '@/lib/i18n-context';
 import { Copy, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { WalletIdenticon } from './wallet-identicon';
+import { ChainLogo } from './chain-logo';
 import { formatUsd } from '@/hooks/use-token-prices';
 import { PortfolioDisplayModeSelect } from './portfolio/portfolio-display-mode';
 import type { PortfolioDisplayMode } from '@entelewallet/types';
@@ -94,15 +94,13 @@ export function WalletPortfolioHeader({
             variant="header"
           />
           <div className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 ring-1 ring-white/15">
-            {activeNetwork?.icon ? (
-              <Image
-                src={activeNetwork.icon}
-                alt=""
-                width={22}
-                height={22}
-                className="h-[22px] w-[22px] rounded-full object-contain p-0.5 ring-1 ring-white/20"
-              />
-            ) : null}
+            <ChainLogo
+              icon={activeNetwork?.icon}
+              networkId={activeNetwork?.id}
+              name={activeNetwork?.name}
+              size={22}
+              className="rounded-full ring-1 ring-white/20"
+            />
             <div className="text-right">
               <p className="text-[10px] uppercase tracking-wider text-cyan-100/75">
                 {t('assets.activeNetwork')}

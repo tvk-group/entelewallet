@@ -3,6 +3,7 @@ import {
   getFullPortfolioChainIds,
   getTokensForChain,
   getDefaultNetworkViewId,
+  resolveTokenLogo,
 } from '@entelewallet/config';
 import { ERC20_ABI } from '@entelewallet/blockchain';
 import type { PortfolioAsset, NetworkHoldingsBreakdown } from '@entelewallet/types';
@@ -75,7 +76,11 @@ function tokenToAsset(
     chainId: token.chainId,
     contractAddress: token.contractAddress,
     decimals: token.decimals,
-    logo: token.logo,
+    logo: resolveTokenLogo({
+      logo: token.logo,
+      coingeckoId: token.coingeckoId,
+      symbol: token.symbol,
+    }),
     coingeckoId: token.coingeckoId,
     priceUsd,
     balance: balance?.toString(),

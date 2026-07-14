@@ -114,7 +114,7 @@ export function WalletProviders({ children }: { children: ReactNode }) {
   const config = useMemo(() => createEnteleWagmiConfig(), []);
 
   return (
-    <WagmiProvider config={config} reconnectOnMount>
+    <WagmiProvider config={config} reconnectOnMount={false}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitInner>{children}</RainbowKitInner>
       </QueryClientProvider>

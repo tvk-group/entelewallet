@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Badge, Button, LtrSpan } from '@entelewallet/ui';
 import { DOMAIN_CONFIG, ROUTES } from '@entelewallet/config';
 import { useT } from '@/lib/i18n-context';
 import type { EcosystemAsset } from '@entelewallet/types';
 import { formatUsd } from '@/hooks/use-token-prices';
+import { TokenLogo } from '@/components/token-logo';
 import { ExternalLink } from 'lucide-react';
 import { formatUnits } from 'viem';
 
@@ -37,11 +37,7 @@ export function PortfolioEcosystemSection({ assets }: PortfolioEcosystemSectionP
           <li key={asset.symbol} className="px-4 py-4">
             <div className="flex items-start gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
-                {asset.logo ? (
-                  <Image src={asset.logo} alt="" width={44} height={44} className="h-11 w-11 object-contain p-0.5" />
-                ) : (
-                  <span className="text-xs font-bold">{asset.symbol}</span>
-                )}
+                <TokenLogo symbol={asset.symbol} name={asset.name} logo={asset.logo} size={44} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

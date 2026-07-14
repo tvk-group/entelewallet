@@ -21,6 +21,7 @@ import {
   zkSync,
 } from 'viem/chains';
 import { getWalletConnectChains } from '@entelewallet/config';
+import { WAGMI_CONNECT_CHAIN_IDS } from '@entelewallet/config';
 
 const KNOWN_CHAINS: Record<number, Chain> = {
   [mainnet.id]: mainnet,
@@ -65,7 +66,17 @@ function registryChainToViem(chain: ReturnType<typeof getWalletConnectChains>[nu
   });
 }
 
-/** Wagmi/viem chain list derived from the modular chain registry. */
+/** Wagmi/viem chains — limited set for fast wallet connect/switch. */
+export function getWagmiViemChains(): readonly [Chain, ...Chain[]] {
+  const all = getWalletConnectChains().map(registryChainToViem);
+  const core = WAGMI_CONNECT_CHAIN_IDS.map((id) => all.find((c) => c.id === id)).filter(
+    (c): c is Chain => Boolean(c),
+  );
+  if (core.length === 0) return [mainnet];
+  return core as [Chain, ...Chain[]];
+}
+
+/** All registry chains (portfolio, display). */
 export function getEnteleViemChains(): readonly [Chain, ...Chain[]] {
   const chains = getWalletConnectChains().map(registryChainToViem);
   if (chains.length === 0) return [mainnet];

@@ -2,7 +2,6 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import type { WalletList } from '@rainbow-me/rainbowkit';
 import {
   coinbaseWallet,
-  injectedWallet,
   metaMaskWallet,
   okxWallet,
   rabbyWallet,
@@ -11,30 +10,23 @@ import {
 import { mainnet } from 'wagmi/chains';
 import { createConfig, http, type Config } from 'wagmi';
 import { CANONICAL_APP_URL, BRAND_ASSETS } from '@entelewallet/config';
-import { getEnteleViemChains } from '@/lib/entele-chains';
+import { getWagmiViemChains } from '@/lib/entele-chains';
 
-/**
- * RainbowKit requires a projectId string even when WalletConnect is disabled in the UI.
- * This placeholder must never be used for live WalletConnect sessions.
- */
 const PLACEHOLDER_PROJECT_ID = '00000000000000000000000000000000';
 
 export const walletConnectProjectId =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID?.trim() || '';
 
-/** Reown Cloud project IDs are 32-character hex strings. */
 export function isValidWalletConnectProjectId(projectId: string): boolean {
   return /^[a-f0-9]{32}$/i.test(projectId);
 }
 
 export const isWalletConnectConfigured = isValidWalletConnectProjectId(walletConnectProjectId);
 
-export const enteleChains = getEnteleViemChains();
+export const wagmiChains = getWagmiViemChains();
 
 function walletConnectMetadata() {
-  // Use canonical URL for SSR-safe config; both production domains must be Reown-allowlisted.
   const baseUrl = CANONICAL_APP_URL.replace(/\/$/, '');
-
   return {
     name: 'EnteleWALLET',
     description: 'EnteleWALLET Lite — verified wallet access for the EnteleKRON ecosystem.',
@@ -43,17 +35,16 @@ function walletConnectMetadata() {
   };
 }
 
-/** Browser extensions only — used when WalletConnect is not configured. */
+/** MetaMask only via dedicated connector — avoids duplicate injected discovery delays. */
 function buildBrowserOnlyWalletList(): WalletList {
   return [
     {
       groupName: 'Browser Wallets',
-      wallets: [injectedWallet, metaMaskWallet, rabbyWallet, coinbaseWallet, okxWallet],
+      wallets: [metaMaskWallet, rabbyWallet, coinbaseWallet, okxWallet],
     },
   ];
 }
 
-/** Browser wallets + WalletConnect QR when a valid Reown project ID exists. */
 export function buildEnteleWalletList(projectId: string): WalletList {
   const wallets = buildBrowserOnlyWalletList();
 
@@ -81,9 +72,9 @@ function createBrowserOnlyFallbackConfig(): Config {
     appUrl: CANONICAL_APP_URL,
     projectId: PLACEHOLDER_PROJECT_ID,
     wallets: buildBrowserOnlyWalletList(),
-    chains: [...enteleChains],
+    chains: [...wagmiChains],
     ssr: true,
-    multiInjectedProviderDiscovery: true,
+    multiInjectedProviderDiscovery: false,
   });
 }
 
@@ -103,9 +94,9 @@ export function createEnteleWagmiConfig(): Config {
       appUrl: CANONICAL_APP_URL,
       projectId,
       wallets,
-      chains: [...enteleChains],
+      chains: [...wagmiChains],
       ssr: true,
-      multiInjectedProviderDiscovery: true,
+      multiInjectedProviderDiscovery: false,
       walletConnectParameters: isWalletConnectConfigured
         ? { metadata: walletConnectMetadata() }
         : undefined,
@@ -124,3 +115,6 @@ export function createEnteleWagmiConfig(): Config {
     }
   }
 }
+
+/** @deprecated use wagmiChains */
+export const enteleChains = wagmiChains;

@@ -16,7 +16,7 @@ interface PortfolioSettingsCardProps {
 export function PortfolioSettingsCard({ onPreferencesChange }: PortfolioSettingsCardProps) {
   const t = useT();
   const { linked, saveLinked, clearLinked } = useLinkedAddresses();
-  const [displayMode, setDisplayMode] = useState<PortfolioDisplayMode>('holdings-first');
+  const [displayMode, setDisplayMode] = useState<PortfolioDisplayMode>('all-market');
   const [autoDiscover, setAutoDiscover] = useState(false);
   const [suiDraft, setSuiDraft] = useState(linked.sui ?? '');
   const [adaDraft, setAdaDraft] = useState(linked.cardano ?? '');

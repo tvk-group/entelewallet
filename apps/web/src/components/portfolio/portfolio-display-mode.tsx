@@ -2,6 +2,7 @@
 
 import { cn } from '@entelewallet/utils';
 import { useT } from '@/lib/i18n-context';
+import { normalizeDisplayMode } from '@entelewallet/config';
 import type { PortfolioDisplayMode } from '@entelewallet/types';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -22,6 +23,7 @@ export function PortfolioDisplayModeSelect({
   variant = 'inline',
 }: PortfolioDisplayModeSelectProps) {
   const t = useT();
+  const activeMode = normalizeDisplayMode(value);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,7 +51,7 @@ export function PortfolioDisplayModeSelect({
         aria-expanded={open}
         aria-haspopup="listbox"
       >
-        <span>{t(`portfolio.displayMode.${value}`)}</span>
+        <span>{t(`portfolio.displayMode.${activeMode}`)}</span>
         <ChevronDown className={cn('h-3.5 w-3.5 transition', open && 'rotate-180')} />
       </button>
 
@@ -66,14 +68,14 @@ export function PortfolioDisplayModeSelect({
               <button
                 type="button"
                 role="option"
-                aria-selected={mode === value}
+                aria-selected={mode === activeMode}
                 onClick={() => {
                   onChange(mode);
                   setOpen(false);
                 }}
                 className={cn(
                   'w-full px-3 py-2 text-left text-xs transition',
-                  mode === value
+                  mode === activeMode
                     ? 'bg-cyan-50 font-semibold text-cyan-900'
                     : 'text-slate-700 hover:bg-slate-50',
                 )}

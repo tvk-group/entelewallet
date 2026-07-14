@@ -10,5 +10,9 @@ export type { OfficialAddress, OfficialAddressCategory, OfficialAddressStatus } 
 export * from './support';
 export * from './ecosystem';
 export * from './portfolio';
+export * from './portfolio-display';
+export * from './wagmi-chains';
 export * from './alchemy';
 export * from './coingecko-platform';
+export * from './token-logos';
+export * from './chain-logos';

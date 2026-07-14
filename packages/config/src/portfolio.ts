@@ -122,7 +122,7 @@ export const DEFAULT_WATCHLIST_ENTRIES: WatchlistEntry[] = DEFAULT_WATCHLIST_SYM
 );
 
 export const DEFAULT_PORTFOLIO_PREFERENCES = {
-  displayMode: 'holdings-first' as const,
+  displayMode: 'all-market' as const,
   networkViewId: 'entelekron',
   chainId: 1,
   autoDiscoverEnabled: true,

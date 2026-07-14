@@ -1,4 +1,4 @@
-import { DEFAULT_PORTFOLIO_PREFERENCES } from '@entelewallet/config';
+import { DEFAULT_PORTFOLIO_PREFERENCES, normalizeDisplayMode } from '@entelewallet/config';
 import type { PortfolioDisplayMode, WalletPreferences } from '@entelewallet/types';
 
 const PREFS_KEY = 'entelewallet-portfolio-prefs';
@@ -15,6 +15,7 @@ export function readPortfolioPreferences(): WalletPreferences {
     return {
       ...DEFAULT_PORTFOLIO_PREFERENCES,
       ...parsed,
+      displayMode: normalizeDisplayMode(parsed.displayMode),
     };
   } catch {
     return { ...DEFAULT_PORTFOLIO_PREFERENCES };
