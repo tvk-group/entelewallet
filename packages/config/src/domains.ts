@@ -44,6 +44,8 @@ export const TRANSPARENCY_ADDRESSES: TransparencyAddress[] = [];
 
 export const ROUTES = {
   home: '/',
+  signIn: '/sign-in',
+  authCallback: '/auth/callback',
   connect: '/connect',
   overview: '/overview',
   assets: '/assets',

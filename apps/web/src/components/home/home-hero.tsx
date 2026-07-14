@@ -51,6 +51,16 @@ export function HomeHero() {
 
           <div className="flex flex-wrap gap-3">
             <WalletConnectButton className="btn-primary-glow" />
+            <Link href={ROUTES.signIn}>
+              <Button variant="primary" size="lg" className="rounded-xl">
+                {t('common.signIn')}
+              </Button>
+            </Link>
+            <Link href={`${ROUTES.signIn}?mode=signup`}>
+              <Button variant="secondary" size="lg" className="glass-btn rounded-xl">
+                {t('common.createAccount')}
+              </Button>
+            </Link>
             <Link href={ROUTES.security}>
               <Button variant="secondary" size="lg" className="glass-btn rounded-xl">
                 {t('common.securityCenter')}

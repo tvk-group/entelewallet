@@ -46,6 +46,16 @@ export default function AccountPage() {
             )}
 
             <div className="flex flex-wrap gap-3 pt-2">
+              <Link href={ROUTES.signIn}>
+                <Button variant="primary" className="gap-2">
+                  {t('common.signIn')}
+                </Button>
+              </Link>
+              <Link href={`${ROUTES.signIn}?mode=signup`}>
+                <Button variant="secondary" className="gap-2">
+                  {t('common.createAccount')}
+                </Button>
+              </Link>
               <a
                 href={DOMAIN_CONFIG.investorAppDashboard}
                 target="_blank"

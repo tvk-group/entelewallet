@@ -74,10 +74,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 See [docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md) and `.env.example`.
 
-Key variables:
-- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect Cloud project ID
+Copy `apps/web/.env.example` to `apps/web/.env.local` and configure:
+
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect Cloud project ID (required for mobile/QR wallets)
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — required for email magic-link sign-in
 - `NEXT_PUBLIC_ETHEREUM_RPC_URL` — Ethereum RPC (optional)
-- Supabase credentials — for production auth storage
+
+**Vercel:** Add the same variables in Project → Settings → Environment Variables. Without Supabase keys, wallet connect still works; email sign-in shows a configuration notice.
 
 ## Scripts
 

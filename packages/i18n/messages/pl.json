@@ -636,5 +636,16 @@
     "riskBody": "Digital assets involve significant risk including total loss. Wallet connection does not equal investment approval. Token claims are not open unless officially announced.",
     "disclaimerTitle": "Disclaimer",
     "disclaimerBody": "EnteleWALLET Lite provides no financial, legal or tax advice. All payments must follow approved EnteleKRON investor dashboard instructions only."
+  },
+  "auth": {
+    "signInDescription": "We'll email you a secure magic link — no password required.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "sendMagicLink": "Send magic link",
+    "checkEmail": "Check your email for the sign-in link.",
+    "callbackError": "Sign-in could not be completed. Please try again.",
+    "supabaseNotConfigured": "Email sign-in requires Supabase. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel, or connect your wallet instead.",
+    "alreadyHaveAccount": "Already have an account?",
+    "newAccount": "New here?"
   }
 }
