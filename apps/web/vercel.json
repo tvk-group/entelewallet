@@ -2,5 +2,75 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && pnpm install",
   "buildCommand": "cd ../.. && pnpm turbo build --filter=@entelewallet/web",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.entelewallet.app" }],
+      "destination": "https://entelewallet.app/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "app.entelewallet.com" }],
+      "destination": "https://entelewallet.app/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.app.entelewallet.com" }],
+      "destination": "https://entelewallet.app/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/roadmap",
+      "destination": "https://entelewallet.com/roadmap",
+      "permanent": true
+    },
+    {
+      "source": "/ecosystem",
+      "destination": "https://entelewallet.com/ecosystem",
+      "permanent": true
+    },
+    {
+      "source": "/legal",
+      "destination": "https://entelewallet.com/legal",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "https://entelewallet.com/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "https://entelewallet.com/terms",
+      "permanent": true
+    },
+    {
+      "source": "/risk",
+      "destination": "https://entelewallet.com/risk",
+      "permanent": true
+    },
+    {
+      "source": "/disclaimer",
+      "destination": "https://entelewallet.com/disclaimer",
+      "permanent": true
+    }
+  ]
 }

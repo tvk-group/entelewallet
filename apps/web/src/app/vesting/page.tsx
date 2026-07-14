@@ -1,9 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
-import { DOMAIN_CONFIG, ROUTES } from '@entelewallet/config';
+import { DOMAIN_CONFIG, websiteUrl } from '@entelewallet/config';
 import { Card, CardContent, Button } from '@entelewallet/ui';
 import { ExternalLink } from 'lucide-react';
 
@@ -30,9 +29,11 @@ export default function VestingPage() {
                 {t('common.openInvestorApp')} <ExternalLink className="h-4 w-4" />
               </Button>
             </a>
-            <Link href={ROUTES.roadmap}>
-              <Button variant="ghost">{t('vesting.learnAboutVesting')}</Button>
-            </Link>
+            <a href={websiteUrl('roadmap')} target="_blank" rel="noopener noreferrer">
+              <Button variant="ghost" className="gap-2">
+                {t('vesting.learnAboutVesting')} <ExternalLink className="h-4 w-4" />
+              </Button>
+            </a>
           </div>
         </CardContent>
       </Card>
