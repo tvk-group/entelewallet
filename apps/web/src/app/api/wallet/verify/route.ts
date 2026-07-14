@@ -5,6 +5,7 @@ import { normalizeAddress, hashString } from '@entelewallet/utils';
 import { z } from 'zod';
 import { nonceStore } from '@/lib/nonce-store';
 import { recordAuthEvent } from '@/lib/wallet-connections-server';
+import { createClient } from '@/lib/supabase/server';
 
 const schema = z.object({
   message: z.string(),
@@ -63,13 +64,23 @@ export async function POST(request: NextRequest) {
 
     const verifiedAt = new Date().toISOString();
 
-    await recordAuthEvent({
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const persisted = await recordAuthEvent({
+      userId: user?.id,
       walletAddress: normalized,
       chainId,
       eventType: 'verification_success',
       ipHash: hashString(ip),
       userAgentHash: hashString(userAgent),
     });
+
+    if (!persisted) {
+      console.warn('[wallet_auth_event] verification_success not persisted to Supabase');
+    }
 
     console.info('[wallet_auth_event]', {
       event_type: 'verification_success',

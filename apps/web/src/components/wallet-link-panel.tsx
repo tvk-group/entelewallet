@@ -14,10 +14,12 @@ import { Link2, Loader2, LogIn } from 'lucide-react';
 
 const ERROR_KEYS: Record<string, string> = {
   sign_in_required: 'walletLink.signInRequired',
-  verification_required: 'walletLink.verificationRequired',
+  verification_required: 'walletLink.verificationExpired',
   wallet_linked_to_other_account: 'walletLink.linkedToOtherAccount',
   supabase_not_configured: 'walletLink.notConfigured',
   link_failed: 'walletLink.linkFailed',
+  link_insert_failed: 'walletLink.linkFailed',
+  link_update_failed: 'walletLink.linkFailed',
 };
 
 interface WalletLinkPanelProps {
@@ -39,6 +41,7 @@ export function WalletLinkPanel({ compact = false }: WalletLinkPanelProps) {
   } = useWalletStatus();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   if (!isConnected || !address) {
     return (
@@ -64,13 +67,13 @@ export function WalletLinkPanel({ compact = false }: WalletLinkPanelProps) {
       <div className="space-y-3">
         <p className="text-sm text-slate-600">{t('walletLink.signInPrompt')}</p>
         <div className="flex flex-wrap gap-2">
-          <Link href={ROUTES.signIn}>
+          <Link href={`${ROUTES.signIn}?next=${encodeURIComponent(ROUTES.account)}`}>
             <Button variant="primary" size="sm" className="gap-2">
               <LogIn className="h-4 w-4" />
               {t('common.signIn')}
             </Button>
           </Link>
-          <Link href={`${ROUTES.signIn}?mode=signup`}>
+          <Link href={`${ROUTES.signIn}?mode=signup&next=${encodeURIComponent(ROUTES.account)}`}>
             <Button variant="secondary" size="sm">
               {t('common.createAccount')}
             </Button>
@@ -106,6 +109,7 @@ export function WalletLinkPanel({ compact = false }: WalletLinkPanelProps) {
     if (!address) return;
     setLoading(true);
     setError(null);
+    setErrorCode(null);
 
     const result = await linkWalletToAccount({
       address,
@@ -116,7 +120,9 @@ export function WalletLinkPanel({ compact = false }: WalletLinkPanelProps) {
     setLoading(false);
 
     if (!result.success) {
-      const key = ERROR_KEYS[result.error ?? ''] ?? 'walletLink.linkFailed';
+      const code = result.error ?? 'link_failed';
+      const key = ERROR_KEYS[code] ?? 'walletLink.linkFailed';
+      setErrorCode(code);
       setError(t(key));
       if (result.error === 'wallet_linked_to_other_account') {
         setVerificationStatus('linked_to_other_account');
@@ -155,10 +161,23 @@ export function WalletLinkPanel({ compact = false }: WalletLinkPanelProps) {
               </>
             )}
           </Button>
+          <p className="text-xs text-slate-500">{t('walletLink.verificationWindowHint')}</p>
         </>
       )}
 
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && (
+        <Alert variant="error">
+          {error}
+          {errorCode === 'verification_required' && (
+            <span>
+              {' '}
+              <Link href={ROUTES.connect} className="font-medium underline">
+                {t('walletLink.reverify')}
+              </Link>
+            </span>
+          )}
+        </Alert>
+      )}
     </div>
   );
 }

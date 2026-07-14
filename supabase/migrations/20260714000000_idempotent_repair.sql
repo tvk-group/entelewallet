@@ -1,4 +1,7 @@
--- EnteleWALLET Lite: wallet_connections
+-- Safe to re-run: completes or repairs a partially applied initial schema.
+-- Run this in the Supabase SQL Editor if the initial migration failed partway through.
+
+-- wallet_connections
 CREATE TABLE IF NOT EXISTS wallet_connections (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID,
@@ -37,7 +40,7 @@ CREATE POLICY "Users can update own wallet connections"
   ON wallet_connections FOR UPDATE
   USING (auth.uid() = user_id);
 
--- wallet_auth_nonces (immutable)
+-- wallet_auth_nonces
 CREATE TABLE IF NOT EXISTS wallet_auth_nonces (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   wallet_address TEXT NOT NULL,
@@ -59,7 +62,7 @@ CREATE POLICY "No client access to nonces"
   ON wallet_auth_nonces FOR ALL
   USING (false);
 
--- wallet_auth_events (append-only log)
+-- wallet_auth_events
 CREATE TABLE IF NOT EXISTS wallet_auth_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID,

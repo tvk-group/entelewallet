@@ -665,6 +665,9 @@
     "linkedDescription": "This wallet is linked to your EnteleWALLET account.",
     "linkedAt": "Linked at",
     "linkedToOtherAccount": "This wallet is already linked to another account.",
-    "notConfigured": "Account linking requires Supabase configuration in production."
+    "notConfigured": "Account linking requires Supabase configuration in production.",
+    "verificationExpired": "Wallet verification has expired. Verify ownership again before linking.",
+    "verificationWindowHint": "Verification is valid for 30 minutes after signing.",
+    "reverify": "Re-verify wallet"
   }
 }
