@@ -1,4 +1,4 @@
-# EnteleWALLET App
+# EnteleWALLET
 
 <p align="center">
   <img src=".github/assets/entelewallet-logo-horizontal.png" alt="EnteleWALLET — Secure • Intelligent • Connected" width="640" />
@@ -8,25 +8,31 @@
   <strong>EnteleWALLET Lite</strong> — Secure wallet-connected dashboard for the EnteleKRON ecosystem.
 </p>
 
-Repository: [tvk-group/entelewallet-app](https://github.com/tvk-group/entelewallet-app)
+Repository: [tvk-group/entelewallet](https://github.com/tvk-group/entelewallet)
 
-> Marketing pages (roadmap, legal, ecosystem) live in the separate **[entelewallet-site](https://github.com/tvk-group/entelewallet-site)** repo at [entelewallet.com](https://entelewallet.com).
+## Brand Assets
 
-## Domains
+Official logos and banners live in:
 
-| Domain | Repo | Purpose |
-|--------|------|---------|
-| [entelewallet.app](https://entelewallet.app) | **this repo** | PWA wallet app, auth, dashboard |
-| [entelewallet.com](https://entelewallet.com) | entelewallet-site | Marketing website |
-| app.entelewallet.com | alias → entelewallet.app | Legacy alias (308 redirect) |
+| Asset | Path |
+|-------|------|
+| Full logo (white bg) | `.github/assets/entelewallet-logo-horizontal.png` |
+| Icon mark (white bg) | `.github/assets/entelewallet-icon-512.png` |
+| Dark banner | `.github/assets/entelewallet-logo-horizontal.png` |
+| Social preview / OG | `.github/assets/social-preview.png` |
+| Website copies | `apps/web/public/brand/` and `apps/web/public/og/` |
 
-See [docs/TWO-REPO-DEPLOYMENT.md](./docs/TWO-REPO-DEPLOYMENT.md) for the full split architecture.
+Tagline: **SECURE • INTELLIGENT • CONNECTED**
+
+## Current Phase
+
+**EnteleWALLET Lite** — Phase 1 production release.
+
+Connect, verify and monitor your EnteleKRON ecosystem wallet. Read-only, non-custodial, no seed phrases or private keys.
 
 ## What It Does
 
-- Auth landing with sign-in, account creation, and wallet connect
-- Supabase magic-link authentication (scaffold)
-- Connect existing wallets via RainbowKit (MetaMask, WalletConnect, Coinbase, etc.)
+- Connect existing wallets via RainbowKit modal (MetaMask, WalletConnect, Coinbase, etc.)
 - Verify wallet ownership with SIWE (EIP-4361) signatures
 - View ENK, ETH, USDT, SOVRA, ENM asset balances
 - Access transaction explorer links
@@ -37,15 +43,28 @@ See [docs/TWO-REPO-DEPLOYMENT.md](./docs/TWO-REPO-DEPLOYMENT.md) for the full sp
 
 ## What It Does NOT Do
 
-- Create or import wallets (seed phrases / private keys)
-- Custody funds or execute transfers
-- Host marketing content (roadmap, legal, ecosystem pages)
+- Create or import wallets
+- Store seed phrases or private keys
+- Custody funds
+- Send tokens, swap, stake, or trade
+- Browser extension or mobile key storage
+
+> **Warning:** This repository must never add seed phrase, private key, custody, transfer, swap or exchange functionality without formal security architecture, independent audit planning and legal approval.
+
+## Domains
+
+| Domain | Purpose |
+|--------|---------|
+| app.entelewallet.com | Canonical app (this repo) |
+| entelewallet.com | Marketing site (separate repo) |
+| entelewallet.app | Redirect → app.entelewallet.com |
+| wallet.entelekron.io | Redirect → app.entelewallet.com |
 
 ## Setup
 
 ```bash
 pnpm install
-cp apps/web/.env.example apps/web/.env.local
+cp .env.example apps/web/.env.local
 pnpm dev
 ```
 
@@ -53,13 +72,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Environment Variables
 
-App-only variables: [`apps/web/.env.example`](./apps/web/.env.example)
+See [docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md) and `.env.example`.
 
-Key variables:
-- `NEXT_PUBLIC_APP_URL` — canonical app URL (`https://entelewallet.app`)
-- `NEXT_PUBLIC_MARKETING_URL` — website URL (`https://entelewallet.com`)
-- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect Cloud project ID
-- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — magic-link auth
+Copy `apps/web/.env.example` to `apps/web/.env.local` and configure:
+
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect Cloud project ID (required for mobile/QR wallets)
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — required for email magic-link sign-in
+- `NEXT_PUBLIC_ETHEREUM_RPC_URL` — Ethereum RPC (optional)
+
+**Vercel:** Add the same variables in Project → Settings → Environment Variables. Without Supabase keys, wallet connect still works; email sign-in shows a configuration notice.
 
 ## Scripts
 
@@ -67,31 +88,40 @@ Key variables:
 |--------|-------------|
 | `pnpm dev` | Start development server |
 | `pnpm build` | Production build |
-| `pnpm typecheck` | TypeScript check |
 | `pnpm lint` | ESLint |
+| `pnpm typecheck` | TypeScript check |
 | `pnpm i18n:check` | Validate all translations |
 | `pnpm security:check` | Verify dangerous flags disabled |
+| `pnpm format` | Prettier format |
 
 ## Project Structure
 
 ```
-apps/web/              Next.js PWA application
-packages/config/       Domains, routes, websiteUrl(), feature flags
+apps/web/           Next.js application
+packages/config/    Feature flags, tokens, chains, domains
 packages/wallet-core/  SIWE verification (no private keys)
-packages/security/     Security copy and constants
-packages/blockchain/   Explorer links, ERC-20, multicall
-packages/i18n/         25-language translations
-packages/ui/           Shared UI components
-docs/                  Architecture, security, deployment docs
-supabase/              Database migrations
+packages/security/  Security copy and constants
+packages/blockchain/  Explorer links, ERC-20, multicall
+packages/i18n/      25-language translations
+packages/ui/        Shared UI components
+docs/               Architecture, security, deployment docs
+supabase/           Database migrations
 ```
 
 ## Security
 
 - SIWE signatures verify ownership only — no gas, no transactions
 - Dangerous feature flags disabled by default
-- Official app domain: `entelewallet.app`
+- Official domain list: app.entelewallet.com, entelewallet.com, entelekron.io, tvk.group
 - See [docs/SECURITY_MODEL.md](./docs/SECURITY_MODEL.md)
+
+## Roadmap
+
+See [docs/PHASES.md](./docs/PHASES.md).
+
+- **Now:** Lite — connect, verify, monitor
+- **Next:** Account layer, investor linking, vesting integration
+- **Future:** Full non-custodial wallet (requires audit + legal review)
 
 ## License
 

@@ -5,10 +5,9 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
-import { CANONICAL_APP_URL, ROUTES, websiteUrl } from '@entelewallet/config';
+import { CANONICAL_APP_URL, ROUTES } from '@entelewallet/config';
 import { Button, Card, CardContent, Alert } from '@entelewallet/ui';
 import { createClient } from '@/lib/supabase/client';
-import { ExternalLink } from 'lucide-react';
 
 export default function SignInForm() {
   const t = useT();
@@ -126,16 +125,14 @@ export default function SignInForm() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-slate-500">
-          <a
-            href={websiteUrl('home')}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-cyan-700 hover:text-cyan-900"
-          >
-            {t('auth.visitWebsite')} <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link href={ROUTES.connect}>
+            <Button variant="secondary">{t('common.connectWallet')}</Button>
+          </Link>
+          <Link href={ROUTES.home}>
+            <Button variant="ghost">{t('common.back')}</Button>
+          </Link>
+        </div>
       </div>
     </PageLayout>
   );
