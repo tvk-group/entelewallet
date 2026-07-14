@@ -328,8 +328,9 @@
   "networks": {
     "title": "Networks",
     "switchNetwork": "Switch network",
-    "connectToSwitchChain": "Connect your wallet to switch chains. You can still preview networks here.",
-    "switchHint": "Browse all supported networks and switch your portfolio view",
+    "connectToSwitchChain": "Connect your wallet to view your balances. You can preview networks instantly without connecting.",
+    "instantViewHint": "Tap any network to switch instantly — balances load via public RPC. Your wallet does not need to be on this chain.",
+    "switchHint": "Tap a network to switch your portfolio view instantly",
     "switchWallet": "Switch wallet",
     "walletActive": "Wallet active",
     "switchFailed": "Could not switch network in your wallet. Try from your wallet extension.",

@@ -12,7 +12,7 @@ function buildManifest(origin: string, isCom: boolean) {
     scope: `${origin}/`,
     id: `${origin}/`,
     display: 'standalone',
-    background_color: isCom ? '#ecfdf5' : '#ffffff',
+    background_color: '#ffffff',
     theme_color: isCom ? '#0f766e' : '#1e40af',
     orientation: 'portrait-primary',
     icons: [

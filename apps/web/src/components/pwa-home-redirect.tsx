@@ -11,14 +11,13 @@ import { usePwa } from '@/lib/pwa-context';
  */
 export function PwaHomeRedirect({ children }: { children: ReactNode }) {
   const { isStandalone } = usePwa();
-  const { isConnected, status } = useAccount();
+  const { isConnected } = useAccount();
   const router = useRouter();
 
   useEffect(() => {
     if (!isStandalone) return;
-    if (status === 'connecting' || status === 'reconnecting') return;
     router.replace(isConnected ? ROUTES.overview : ROUTES.connect);
-  }, [isStandalone, isConnected, status, router]);
+  }, [isStandalone, isConnected, router]);
 
   if (isStandalone) {
     return null;
