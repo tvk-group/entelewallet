@@ -6,6 +6,7 @@ import {
   baseSepolia,
   bsc,
   mainnet,
+  mantle,
   optimism,
   polygon,
   sepolia,
@@ -20,6 +21,7 @@ const KNOWN_CHAINS: Record<number, Chain> = {
   [arbitrum.id]: arbitrum,
   [optimism.id]: optimism,
   [avalanche.id]: avalanche,
+  [mantle.id]: mantle,
   [sepolia.id]: sepolia,
   [baseSepolia.id]: baseSepolia,
 };

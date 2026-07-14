@@ -20,7 +20,7 @@ export {
   loadTvkModules,
 } from './chain-registry';
 
-export type { ChainDefinition, TvkModule, UiCategory } from './chain-registry';
+export type { ChainDefinition, TvkModule, UiCategory, PortfolioTier } from './chain-registry';
 
 function toChainConfig(chain: ReturnType<typeof loadChains>[number]): ChainConfig {
   const explorer = chain.blockExplorerUrls[0] ?? '';

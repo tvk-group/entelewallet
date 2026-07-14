@@ -223,6 +223,77 @@
     "notes": "Test network — no real funds."
   },
   {
+    "id": "mantle",
+    "chainId": 5000,
+    "name": "Mantle",
+    "shortName": "MNT",
+    "nativeCurrency": { "name": "Mantle", "symbol": "MNT", "decimals": 18 },
+    "rpcUrls": ["https://rpc.mantle.xyz", "https://mantle.publicnode.com"],
+    "blockExplorerUrls": ["https://explorer.mantle.xyz"],
+    "icon": "/icons/chains/mantle.svg",
+    "status": "active",
+    "uiCategory": "active",
+    "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],
+    "riskFlag": "low",
+    "portfolioTier": "full",
+    "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
+  },
+  {
+    "id": "sui",
+    "chainId": 10101,
+    "name": "Sui",
+    "shortName": "SUI",
+    "nativeCurrency": { "name": "Sui", "symbol": "SUI", "decimals": 9 },
+    "rpcUrls": [],
+    "blockExplorerUrls": ["https://suiscan.xyz"],
+    "icon": "/icons/chains/sui.svg",
+    "status": "active",
+    "uiCategory": "experimental",
+    "tokenStandards": ["native"],
+    "riskFlag": "medium",
+    "portfolioTier": "price-only",
+    "capabilities": { "watchOnly": true, "walletConnect": false, "transactions": false },
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    },
+    "notes": "Price-only v1 — spot prices via CoinGecko. Balance reads in Phase E."
+  },
+  {
+    "id": "cardano",
+    "chainId": 10102,
+    "name": "Cardano",
+    "shortName": "ADA",
+    "nativeCurrency": { "name": "Cardano", "symbol": "ADA", "decimals": 6 },
+    "rpcUrls": [],
+    "blockExplorerUrls": ["https://cardanoscan.io"],
+    "icon": "/icons/chains/cardano.svg",
+    "status": "active",
+    "uiCategory": "experimental",
+    "tokenStandards": ["native"],
+    "riskFlag": "medium",
+    "portfolioTier": "price-only",
+    "capabilities": { "watchOnly": true, "walletConnect": false, "transactions": false },
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    },
+    "notes": "Price-only v1 — spot prices via CoinGecko. Balance reads in Phase E."
+  },
+  {
     "id": "blockdag",
     "chainId": 1404,
     "name": "BlockDAG",
@@ -235,6 +306,7 @@
     "uiCategory": "experimental",
     "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],
     "riskFlag": "medium",
+    "portfolioTier": "price-only",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
     "verification": {
       "rpcVerified": false,
@@ -243,6 +315,6 @@
       "balanceDetectionTested": false,
       "tokenDetectionTested": false
     },
-    "notes": "Official BlockDAG network (EVM-compatible, chain ID 1404). Watch-only and portfolio tracking until RPC, explorer, signing, and balance/token detection tests pass. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
+    "notes": "Official BlockDAG network (EVM-compatible, chain ID 1404). Price-only v1 in portfolio until balance detection verification passes. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
   }
 ]

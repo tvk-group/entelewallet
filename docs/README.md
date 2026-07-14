@@ -15,6 +15,7 @@ EnteleWALLET Lite is the first production phase of the EnteleWALLET master walle
 | [I18N.md](./I18N.md) | Internationalization system |
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Deployment guide |
 | [ENVIRONMENT.md](./ENVIRONMENT.md) | Environment variables |
+| [ENTELEWALLET-PORTFOLIO-TASKLIST.md](./ENTELEWALLET-PORTFOLIO-TASKLIST.md) | Portfolio screens, API contracts, phased checklist |
 
 ## Quick Start
 

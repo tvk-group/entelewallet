@@ -264,6 +264,44 @@
     "addressCopied": "Address copied",
     "activeNetwork": "Active network"
   },
+  "portfolio": {
+    "holdingsTitle": "Your holdings",
+    "holdingsDescription": "Tokens with a balance on the active network.",
+    "holdingsEmpty": "No tokens with a balance on this network yet.",
+    "marketTitle": "Live market assets",
+    "marketDescription": "Configured assets and spot prices for the active network.",
+    "marketEmpty": "No additional market assets to show.",
+    "discoveredTitle": "Auto-discovered tokens",
+    "discoveredDescription": "ERC-20 tokens detected via Alchemy (Phase D).",
+    "discoveredDisclaimer": "Discovered tokens are not verified by TVK Group. They may be spam or malicious. Review contract addresses before interacting.",
+    "discoveredDisabled": "Auto-discovery is off. Enable in settings when EnteleKRON sync is available (Phase B).",
+    "discoveredEmpty": "No additional ERC-20 tokens detected on this wallet.",
+    "watchlistTitle": "Watchlist",
+    "watchlistDescription": "Track spot prices — default: SUI, ADA, MNT, BlockDAG.",
+    "watchlistHint": "Tap a chip to remove. Add symbols from the catalog.",
+    "watchlistAdd": "Add",
+    "watchlistAddPlaceholder": "Symbol",
+    "ecosystemTitle": "Ecosystem tokens",
+    "ecosystemDescription": "ENK, SOVRA, and EnergieMIND with vesting links.",
+    "ecosystemEmpty": "No ecosystem tokens configured for this network.",
+    "ecosystemNoBalance": "No balance detected",
+    "ecosystemVestingHint": "Link your EnteleKRON investor account to view lockup and vesting.",
+    "walletEmpty": "Connect and verify your wallet to see balances.",
+    "noBalance": "No balance",
+    "colAsset": "Asset",
+    "colNetwork": "Network",
+    "colPrice": "Price",
+    "colBalance": "Balance",
+    "colValue": "Value",
+    "displayMode": {
+      "holdings-first": "Holdings first",
+      "all-market": "All market"
+    },
+    "displayModeHint": {
+      "holdings-first": "Show your balances first, then catalog.",
+      "all-market": "Show full asset catalog with prices."
+    }
+  },
   "networks": {
     "title": "Networks",
     "switchNetwork": "Switch network",
@@ -271,6 +309,7 @@
     "switchHint": "Select a network to view balances",
     "experimental": "Experimental",
     "testnet": "Testnet",
+    "priceOnly": "Price only",
     "category": {
       "tvk-ecosystem": "TVK Ecosystem",
       "active": "Mainnets",
