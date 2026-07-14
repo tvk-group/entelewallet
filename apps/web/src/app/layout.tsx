@@ -1,7 +1,9 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import type { Viewport } from 'next';
 import { Web3Provider } from '@/lib/web3-provider';
 import { I18nProvider } from '@/lib/i18n-context';
 import { AuthProvider } from '@/lib/auth-context';
+import { PwaProvider } from '@/lib/pwa-context';
 import { WalletProvider } from '@/lib/wallet-context';
 import { NetworkViewProvider } from '@/lib/network-view-context';
 import { SEO_DEFAULT, BRAND_ASSETS } from '@entelewallet/config';
@@ -16,7 +18,6 @@ export const metadata = {
   description: SEO_DEFAULT.description,
   applicationName: 'EnteleWALLET',
   appleWebApp: { capable: true, title: 'EnteleWALLET' },
-  themeColor: '#0ea5e9',
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
@@ -40,18 +41,28 @@ export const metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#0ea5e9',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`app-shell-bg ${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <I18nProvider>
-          <Web3Provider>
-            <AuthProvider>
-              <WalletProvider>
-                <NetworkViewProvider>{children}</NetworkViewProvider>
-              </WalletProvider>
-            </AuthProvider>
-          </Web3Provider>
+          <PwaProvider>
+            <Web3Provider>
+              <AuthProvider>
+                <WalletProvider>
+                  <NetworkViewProvider>{children}</NetworkViewProvider>
+                </WalletProvider>
+              </AuthProvider>
+            </Web3Provider>
+          </PwaProvider>
         </I18nProvider>
       </body>
     </html>

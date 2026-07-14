@@ -8,6 +8,7 @@ import { Button } from '@entelewallet/ui';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { WalletAppPreview } from './wallet-app-preview';
 import { BrandLogo } from '@/components/brand-logo';
+import { usePwa } from '@/lib/pwa-context';
 
 const TRUST_CHIP_KEYS = [
   'home.trustChipNoSeed',
@@ -19,6 +20,7 @@ const TRUST_CHIP_KEYS = [
 
 export function HomeHero() {
   const t = useT();
+  const { showInstallPrompts, isAppMode } = usePwa();
 
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-white/50 bg-white/30 p-6 shadow-xl shadow-blue-900/5 backdrop-blur-sm sm:p-10 lg:p-12">
@@ -71,12 +73,21 @@ export function HomeHero() {
                 {t('common.transparencyCenter')}
               </Button>
             </Link>
-            <Link href={ROUTES.install}>
-              <Button variant="ghost" size="lg" className="gap-2 rounded-xl">
-                <Download className="h-4 w-4" />
-                {t('common.installApp')}
-              </Button>
-            </Link>
+            {showInstallPrompts && !isAppMode && (
+              <Link href={ROUTES.install}>
+                <Button variant="ghost" size="lg" className="gap-2 rounded-xl">
+                  <Download className="h-4 w-4" />
+                  {t('common.installApp')}
+                </Button>
+              </Link>
+            )}
+            {isAppMode && (
+              <Link href={ROUTES.overview}>
+                <Button variant="primary" size="lg" className="rounded-xl">
+                  {t('common.openApp')}
+                </Button>
+              </Link>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-2 pt-2">

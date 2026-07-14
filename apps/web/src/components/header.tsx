@@ -11,14 +11,25 @@ import { WalletConnectButton } from './wallet-connect-button';
 import { LanguageSelector } from './language-selector';
 import { BrandLogo } from './brand-logo';
 import { NetworkChainPicker } from './network-chain-picker';
+import { usePwa } from '@/lib/pwa-context';
 
 export function Header() {
   const t = useT();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { showInstallPrompts, isAppMode } = usePwa();
+
+  const navRoutes = NAV_ROUTES.filter(
+    (route) => showInstallPrompts || route.href !== ROUTES.install,
+  );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/30 bg-white/60 shadow-sm shadow-blue-900/5 backdrop-blur-2xl">
+    <header
+      className={cn(
+        'sticky top-0 z-40 border-b border-white/30 bg-white/60 shadow-sm shadow-blue-900/5 backdrop-blur-2xl',
+        isAppMode && 'pt-[env(safe-area-inset-top)]',
+      )}
+    >
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
       <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href={ROUTES.home} className="group flex shrink-0 items-center">
@@ -27,7 +38,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex">
-          {NAV_ROUTES.map((route) => (
+          {navRoutes.map((route) => (
             <Link
               key={route.href}
               href={route.href}
@@ -47,14 +58,16 @@ export function Header() {
           <NetworkChainPicker variant="header" className="hidden md:block" />
           <LanguageSelector className="hidden sm:inline-flex" />
           <WalletConnectButton className="btn-primary-glow !rounded-xl" />
-          <button
-            type="button"
-            className="rounded-xl border border-white/60 bg-white/70 p-2.5 text-slate-600 shadow-sm backdrop-blur hover:bg-white xl:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={t('common.menu')}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {!isAppMode && (
+            <button
+              type="button"
+              className="rounded-xl border border-white/60 bg-white/70 p-2.5 text-slate-600 shadow-sm backdrop-blur hover:bg-white xl:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={t('common.menu')}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          )}
         </div>
       </div>
 
@@ -66,7 +79,7 @@ export function Header() {
           <div className="mb-3 sm:hidden">
             <LanguageSelector className="w-full justify-center" />
           </div>
-          {NAV_ROUTES.map((route) => (
+          {navRoutes.map((route) => (
             <Link
               key={route.href}
               href={route.href}

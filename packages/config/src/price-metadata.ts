@@ -10,6 +10,10 @@ const NATIVE_COINGECKO: Record<string, string> = {
   SUI: 'sui',
   ADA: 'cardano',
   BDAG: 'blockdag',
+  FTM: 'fantom',
+  xDAI: 'xdai',
+  CRO: 'crypto-com-chain',
+  CELO: 'celo',
 };
 
 /** Resolve CoinGecko id for portfolio pricing. */

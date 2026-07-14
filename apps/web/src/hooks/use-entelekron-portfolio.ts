@@ -15,7 +15,7 @@ import { usePortfolioBalances } from '@/hooks/use-portfolio-balances';
 import { useMultiChainPortfolio } from '@/hooks/use-multi-chain-portfolio';
 import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
 import { useLinkedAddresses } from '@/hooks/use-linked-addresses';
-import { getTokenUsdValue, useTokenPrices } from '@/hooks/use-token-prices';
+import { getAssetUsdValue, getTokenUsdValue, useDiscoveredAssetPrices, useTokenPrices } from '@/hooks/use-token-prices';
 import { useNetworkView } from '@/lib/network-view-context';
 import { useWalletStatus } from '@/lib/wallet-context';
 import type { TokenConfig } from '@entelewallet/types';
@@ -108,7 +108,7 @@ export function useEntelekronPortfolio() {
     refetch: refetchMultiChain,
   } = useMultiChainPortfolio();
 
-  const autoDiscoverEnabled = preferences?.autoDiscoverEnabled ?? false;
+  const autoDiscoverEnabled = preferences?.autoDiscoverEnabled ?? true;
   const {
     discovered: discoveredTokens,
     isLoading: discoveredLoading,
@@ -116,6 +116,17 @@ export function useEntelekronPortfolio() {
     dismissToken,
     refetch: refetchDiscovered,
   } = useDiscoveredTokens(autoDiscoverEnabled);
+
+  const { prices: discoveredPrices } = useDiscoveredAssetPrices(discoveredTokens);
+
+  const pricedDiscovered = useMemo(
+    () =>
+      discoveredTokens.map((asset) => {
+        const valueUsd = getAssetUsdValue(asset, discoveredPrices);
+        return valueUsd !== undefined ? { ...asset, valueUsd } : asset;
+      }),
+    [discoveredTokens, discoveredPrices],
+  );
 
   const {
     balances: nonEvmBalances,
@@ -182,7 +193,7 @@ export function useEntelekronPortfolio() {
     if (apiQuery.data) {
       return {
         ...apiQuery.data,
-        discovered: apiQuery.data.discovered ?? discoveredTokens,
+        discovered: apiQuery.data.discovered ?? pricedDiscovered,
         networkBreakdown: apiQuery.data.networkBreakdown ?? networkBreakdown,
         crossChainTotalUsd: apiQuery.data.crossChainTotalUsd ?? crossChainTotalUsd,
         ecosystem: (apiQuery.data.ecosystem ?? []).map((asset) => ({
@@ -199,7 +210,7 @@ export function useEntelekronPortfolio() {
       walletAddress: address,
       preferences: { ...preferences, networkViewId, chainId },
       holdings,
-      discovered: discoveredTokens,
+      discovered: pricedDiscovered,
       marketCatalog,
       watchlist: [],
       ecosystem: activeSlice?.ecosystem ?? [],
@@ -211,7 +222,7 @@ export function useEntelekronPortfolio() {
     address,
     preferences,
     apiQuery.data,
-    discoveredTokens,
+    pricedDiscovered,
     networkBreakdown,
     crossChainTotalUsd,
     mergedHoldings,

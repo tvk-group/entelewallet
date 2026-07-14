@@ -4,12 +4,21 @@ import {
   avalanche,
   base,
   baseSepolia,
+  blast,
   bsc,
+  celo,
+  cronos,
+  fantom,
+  gnosis,
+  linea,
   mainnet,
   mantle,
+  mode,
   optimism,
   polygon,
+  scroll,
   sepolia,
+  zkSync,
 } from 'viem/chains';
 import { getWalletConnectChains } from '@entelewallet/config';
 
@@ -24,6 +33,15 @@ const KNOWN_CHAINS: Record<number, Chain> = {
   [mantle.id]: mantle,
   [sepolia.id]: sepolia,
   [baseSepolia.id]: baseSepolia,
+  [linea.id]: linea,
+  [scroll.id]: scroll,
+  [zkSync.id]: zkSync,
+  [blast.id]: blast,
+  [fantom.id]: fantom,
+  [gnosis.id]: gnosis,
+  [celo.id]: celo,
+  [cronos.id]: cronos,
+  [mode.id]: mode,
 };
 
 function registryChainToViem(chain: ReturnType<typeof getWalletConnectChains>[number]): Chain {

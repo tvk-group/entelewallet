@@ -5,16 +5,17 @@ import { useAccount } from 'wagmi';
 import type { Address } from 'viem';
 import { fetchMultiChainPortfolio } from '@/lib/multi-chain-balances';
 import { useTokenPrices } from '@/hooks/use-token-prices';
-import { getTokensForChain } from '@entelewallet/config';
+import { getFullPortfolioChainIds, getTokensForChain } from '@entelewallet/config';
 import { useMemo } from 'react';
 
 export function useMultiChainPortfolio() {
   const { address } = useAccount();
 
+  const portfolioChainIds = useMemo(() => getFullPortfolioChainIds(), []);
+
   const priceTokens = useMemo(() => {
-    const chains = [1, 8453, 5000, 1404];
-    return chains.flatMap((chainId) => getTokensForChain(chainId));
-  }, []);
+    return portfolioChainIds.flatMap((chainId) => getTokensForChain(chainId));
+  }, [portfolioChainIds]);
 
   const { prices } = useTokenPrices(priceTokens);
 

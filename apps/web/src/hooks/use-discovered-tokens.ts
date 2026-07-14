@@ -3,14 +3,14 @@
 import { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-import { ALCHEMY_NETWORK_SLUGS } from '@entelewallet/config';
+import { getAlchemyDiscoveryChainIds } from '@entelewallet/config';
 import type { PortfolioAsset } from '@entelewallet/types';
 import {
   hideDiscoveredToken,
   readHiddenDiscovered,
 } from '@/lib/discovered-token-storage';
 
-const DISCOVERY_CHAIN_IDS = Object.keys(ALCHEMY_NETWORK_SLUGS).map(Number);
+const DISCOVERY_CHAIN_IDS = getAlchemyDiscoveryChainIds();
 
 async function fetchDiscoveredForChain(
   address: string,
