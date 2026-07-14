@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const recentlyVerified = await hasRecentVerification(normalized, body.chainId);
+    const recentlyVerified = await hasRecentVerification(normalized);
     if (!recentlyVerified) {
       return NextResponse.json(
         { success: false, error: 'verification_required' },

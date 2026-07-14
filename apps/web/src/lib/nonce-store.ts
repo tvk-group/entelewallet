@@ -1,6 +1,13 @@
 export const nonceStore = new Map<
   string,
-  { nonce: string; expiresAt: Date; used: boolean; chainId: number; domain: string }
+  {
+    nonce: string;
+    expiresAt: Date;
+    used: boolean;
+    chainId: number;
+    domain: string;
+    message?: string;
+  }
 >();
 
 export function cleanExpiredNonces() {

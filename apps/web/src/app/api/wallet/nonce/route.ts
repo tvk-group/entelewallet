@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSiweMessage, generateNonce, getSiweMessageString } from '@entelewallet/wallet-core';
 import { SIWE_STATEMENT } from '@entelewallet/security';
-import { CANONICAL_APP_DOMAIN, CANONICAL_APP_URL } from '@entelewallet/config';
 import { normalizeAddress } from '@entelewallet/utils';
 import { z } from 'zod';
-import { nonceStore, cleanExpiredNonces } from '@/lib/nonce-store';
+import { resolveSiweOrigin } from '@/lib/siwe-request';
+import { storeWalletNonce } from '@/lib/wallet-nonce-server';
 
 const schema = z.object({
   address: z.string(),
@@ -18,31 +18,32 @@ export async function POST(request: NextRequest) {
     const normalized = normalizeAddress(address);
     const nonce = generateNonce();
     const expiresAt = new Date(Date.now() + 8 * 60 * 1000);
-    const domain = CANONICAL_APP_DOMAIN;
+    const host = request.headers.get('host');
+    const proto = request.headers.get('x-forwarded-proto');
+    const { domain, uri } = resolveSiweOrigin(host, proto);
 
     const siweMessage = createSiweMessage({
       address: normalized,
       chainId,
       nonce,
       domain,
-      uri: CANONICAL_APP_URL,
+      uri,
       statement: SIWE_STATEMENT,
       expirationTime: expiresAt,
     });
 
     const message = getSiweMessageString(siweMessage);
 
-    nonceStore.set(`${normalized.toLowerCase()}-${nonce}`, {
-      nonce,
-      expiresAt,
-      used: false,
+    await storeWalletNonce({
+      walletAddress: normalized,
       chainId,
+      nonce,
+      message,
       domain,
+      expiresAt,
     });
 
-    cleanExpiredNonces();
-
-    return NextResponse.json({ message, nonce, expiresAt: expiresAt.toISOString() });
+    return NextResponse.json({ message, nonce, expiresAt: expiresAt.toISOString(), domain });
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Invalid request' },

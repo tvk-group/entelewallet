@@ -115,7 +115,7 @@ export async function recordAuthEvent(params: {
 
 export async function hasRecentVerification(
   walletAddress: string,
-  chainId: number,
+  chainId?: number,
   windowMinutes = 30,
 ): Promise<boolean> {
   const admin = createAdminClient();
@@ -124,20 +124,53 @@ export async function hasRecentVerification(
   const since = new Date(Date.now() - windowMinutes * 60 * 1000).toISOString();
   const normalized = normalizeAddress(walletAddress).toLowerCase();
 
-  const { data, error } = await admin
+  let query = admin
     .from('wallet_auth_events')
     .select('id')
     .eq('wallet_address', normalized)
-    .eq('chain_id', chainId)
     .eq('event_type', 'verification_success')
     .gte('created_at', since)
     .limit(1);
+
+  if (chainId !== undefined) {
+    query = query.eq('chain_id', chainId);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     logSupabaseError('hasRecentVerification', error);
     return false;
   }
   return (data?.length ?? 0) > 0;
+}
+
+export async function getLatestVerification(
+  walletAddress: string,
+): Promise<{ verifiedAt: string; chainId: number } | null> {
+  const admin = createAdminClient();
+  if (!admin) return null;
+
+  const normalized = normalizeAddress(walletAddress).toLowerCase();
+
+  const { data, error } = await admin
+    .from('wallet_auth_events')
+    .select('created_at, chain_id')
+    .eq('wallet_address', normalized)
+    .eq('event_type', 'verification_success')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !data) {
+    if (error) logSupabaseError('getLatestVerification', error);
+    return null;
+  }
+
+  return {
+    verifiedAt: data.created_at ?? new Date().toISOString(),
+    chainId: data.chain_id ?? 0,
+  };
 }
 
 export async function linkWalletToUser(params: {

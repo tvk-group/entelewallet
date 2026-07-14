@@ -219,7 +219,10 @@
     "testWalletConnectButton": "Test WalletConnect QR",
     "testWalletConnectOpening": "Opening WalletConnect…",
     "testWalletConnectSuccess": "WalletConnect session established.",
-    "testWalletConnectNoConnector": "WalletConnect connector not found. Check NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID and restart the dev server."
+    "testWalletConnectNoConnector": "WalletConnect connector not found. Check NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID and restart the dev server.",
+    "openWalletToSign": "Open your wallet extension or app and approve the signature request. This does not cost gas.",
+    "signatureTimeout": "Signature request timed out. Open your wallet and try again.",
+    "signatureRejected": "Signature was rejected. Verification was not completed."
   },
   "preConnect": {
     "title": "Before you connect",

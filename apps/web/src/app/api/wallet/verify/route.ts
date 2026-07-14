@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySiweMessage } from '@entelewallet/wallet-core';
-import { CANONICAL_APP_DOMAIN } from '@entelewallet/config';
 import { normalizeAddress, hashString } from '@entelewallet/utils';
 import { z } from 'zod';
-import { nonceStore } from '@/lib/nonce-store';
-import { recordAuthEvent } from '@/lib/wallet-connections-server';
+import { consumeWalletNonce } from '@/lib/wallet-nonce-server';
+import { recordAuthEvent, getLatestVerification } from '@/lib/wallet-connections-server';
 import { createClient } from '@/lib/supabase/server';
 
 const schema = z.object({
@@ -20,29 +19,21 @@ export async function POST(request: NextRequest) {
     const { message, signature, address, chainId } = schema.parse(body);
     const normalized = normalizeAddress(address);
 
-    // Extract nonce from SIWE message
     const nonceMatch = message.match(/Nonce: ([a-f0-9]+)/i);
     if (!nonceMatch) {
       return NextResponse.json({ success: false, error: 'Invalid message format' }, { status: 400 });
     }
-    const nonce = nonceMatch[1];
-    const storeKey = `${normalized.toLowerCase()}-${nonce}`;
-    const stored = nonceStore.get(storeKey);
+    const nonce = nonceMatch[1]!;
 
+    const stored = await consumeWalletNonce(normalized, nonce);
     if (!stored) {
-      return NextResponse.json({ success: false, error: 'Nonce not found or expired' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'Nonce not found or expired. Please try again.' },
+        { status: 400 },
+      );
     }
 
-    if (stored.used) {
-      return NextResponse.json({ success: false, error: 'Nonce already used' }, { status: 400 });
-    }
-
-    if (stored.expiresAt < new Date()) {
-      nonceStore.delete(storeKey);
-      return NextResponse.json({ success: false, error: 'Nonce expired' }, { status: 400 });
-    }
-
-    const result = await verifySiweMessage(message, signature, CANONICAL_APP_DOMAIN, nonce);
+    const result = await verifySiweMessage(message, signature, stored.domain, nonce);
 
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 400 });
@@ -56,12 +47,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Chain ID mismatch' }, { status: 400 });
     }
 
-    stored.used = true;
-    nonceStore.set(storeKey, stored);
-
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
-
     const verifiedAt = new Date().toISOString();
 
     const supabase = await createClient();
@@ -86,6 +73,7 @@ export async function POST(request: NextRequest) {
       event_type: 'verification_success',
       wallet_address: normalized,
       chain_id: chainId,
+      domain: stored.domain,
       ip_hash: hashString(ip),
       user_agent_hash: hashString(userAgent),
       timestamp: verifiedAt,
@@ -103,4 +91,20 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
+}
+
+export async function GET(request: NextRequest) {
+  const address = request.nextUrl.searchParams.get('address');
+  if (!address) {
+    return NextResponse.json({ error: 'address_required' }, { status: 400 });
+  }
+
+  const normalized = normalizeAddress(address);
+  const latest = await getLatestVerification(normalized);
+
+  return NextResponse.json({
+    verified: Boolean(latest),
+    verifiedAt: latest?.verifiedAt,
+    chainId: latest?.chainId,
+  });
 }
