@@ -1,13 +1,13 @@
 'use client';
 
-import { getDisplayNetworks } from '@entelewallet/config';
-import { isWagmiConnectChain } from '@entelewallet/config';
+import { getDisplayNetworks, getChainByChainId } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 import { useT } from '@/lib/i18n-context';
 import { useNetworkView } from '@/lib/network-view-context';
 import { ChainLogo } from '@/components/chain-logo';
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import { Check, Loader2, Wallet } from 'lucide-react';
+import { switchWalletChain } from '@/lib/switch-wallet-chain';
+import { useAccount, useChainId, useSwitchChain, useWalletClient } from 'wagmi';
+import { Check, Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 export function PortfolioNetworksGrid() {
@@ -15,6 +15,7 @@ export function PortfolioNetworksGrid() {
   const chainId = useChainId();
   const { isConnected } = useAccount();
   const { switchChainAsync, isPending } = useSwitchChain();
+  const { data: walletClient } = useWalletClient();
   const { networkViewId, setNetworkViewId } = useNetworkView();
   const [switchingId, setSwitchingId] = useState<string | null>(null);
   const [switchError, setSwitchError] = useState<string | null>(null);
@@ -31,29 +32,46 @@ export function PortfolioNetworksGrid() {
       .filter((group) => group.items.length > 0);
   }, [networks]);
 
-  const handleSelectView = (networkId: string) => {
-    setNetworkViewId(networkId);
-    setSwitchError(null);
-  };
+  const attemptSwitch = async (networkId: string, targetChainId: number) => {
+    if (!isConnected || targetChainId === chainId) return true;
 
-  const handleSwitchWallet = async (
-    event: React.MouseEvent,
-    networkId: string,
-    targetChainId: number,
-  ) => {
-    event.stopPropagation();
-    if (!isConnected || !isWagmiConnectChain(targetChainId)) return;
-    if (targetChainId === chainId) return;
+    const chain = getChainByChainId(targetChainId);
+    if (!chain || chain.portfolioTier === 'price-only') return true;
 
     setSwitchingId(networkId);
     setSwitchError(null);
+
     try {
-      await switchChainAsync({ chainId: targetChainId });
-      setNetworkViewId(networkId);
-    } catch {
-      setSwitchError(t('networks.switchFailed'));
+      await switchWalletChain({
+        chainId: targetChainId,
+        switchChainAsync,
+        addChainAsync: walletClient
+          ? async ({ chain }) => {
+              await walletClient.addChain({ chain });
+            }
+          : undefined,
+      });
+      return true;
+    } catch (error) {
+      const message = error instanceof Error ? error.message.toLowerCase() : '';
+      setSwitchError(
+        message.includes('timed out') ? t('networks.switchTimeout') : t('networks.switchFailed'),
+      );
+      return false;
     } finally {
       setSwitchingId(null);
+    }
+  };
+
+  const handleSelectNetwork = async (networkId: string, targetChainId: number) => {
+    setNetworkViewId(networkId);
+    setSwitchError(null);
+
+    if (!isConnected) return;
+
+    const switched = await attemptSwitch(networkId, targetChainId);
+    if (switched) {
+      setNetworkViewId(networkId);
     }
   };
 
@@ -76,26 +94,28 @@ export function PortfolioNetworksGrid() {
             {group.items.map((network) => {
               const selected = network.id === networkViewId;
               const walletOnNetwork = isConnected && chainId === network.chainId;
-              const canSwitch =
-                isConnected &&
-                isWagmiConnectChain(network.chainId) &&
-                network.portfolioTier !== 'price-only';
               const isSwitching = switchingId === network.id && isPending;
+              const priceOnly = network.portfolioTier === 'price-only';
 
               return (
                 <li key={network.id}>
                   <button
                     type="button"
-                    onClick={() => handleSelectView(network.id)}
+                    disabled={isSwitching}
+                    onClick={() => void handleSelectNetwork(network.id, network.chainId)}
                     className={cn(
                       'relative flex w-full flex-col items-center gap-2 rounded-xl border px-3 py-3 text-center transition',
                       selected
                         ? 'border-cyan-300 bg-gradient-to-b from-cyan-50 to-violet-50 shadow-sm'
                         : 'border-slate-200 bg-white hover:border-cyan-200 hover:shadow-sm',
+                      isSwitching && 'opacity-70',
                     )}
                   >
                     {selected && (
                       <Check className="absolute right-2 top-2 h-3.5 w-3.5 text-cyan-700" />
+                    )}
+                    {isSwitching && (
+                      <Loader2 className="absolute left-2 top-2 h-3.5 w-3.5 animate-spin text-cyan-700" />
                     )}
                     <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
                       <ChainLogo
@@ -116,29 +136,19 @@ export function PortfolioNetworksGrid() {
                         {t('networks.experimental')}
                       </span>
                     )}
-                    {network.portfolioTier === 'price-only' && (
+                    {priceOnly && (
                       <span className="rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-semibold uppercase text-violet-800">
                         {t('networks.priceOnly')}
                       </span>
                     )}
-                    {canSwitch && !walletOnNetwork && (
-                      <button
-                        type="button"
-                        disabled={isSwitching}
-                        onClick={(e) => void handleSwitchWallet(e, network.id, network.chainId)}
-                        className="mt-1 inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[9px] font-medium text-slate-600 hover:border-cyan-200 disabled:opacity-60"
-                      >
-                        {isSwitching ? (
-                          <Loader2 className="h-3 w-3 animate-spin" />
-                        ) : (
-                          <Wallet className="h-3 w-3" />
-                        )}
-                        {t('networks.switchWallet')}
-                      </button>
-                    )}
                     {walletOnNetwork && (
                       <span className="text-[9px] font-medium text-emerald-700">
                         {t('networks.walletActive')}
+                      </span>
+                    )}
+                    {isConnected && !walletOnNetwork && !priceOnly && (
+                      <span className="text-[9px] font-medium text-slate-500">
+                        {t('networks.tapToSwitch')}
                       </span>
                     )}
                   </button>

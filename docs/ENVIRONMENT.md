@@ -43,6 +43,7 @@ Until Supabase is configured, wallet linking UI shows a configuration notice and
 | `ALCHEMY_API_KEY` | Server-only Alchemy key for ERC-20 auto-discovery and multi-network token balances |
 | `COINGECKO_API_KEY` | Optional CoinGecko demo API key for higher rate limits on `/api/prices` and `/api/markets/search` |
 | `COINMARKETCAP_API_KEY` | Optional CoinMarketCap Pro API key — silent failover on `/api/prices` when CoinGecko returns no quote |
+| `NEXT_PUBLIC_WALLET_IDLE_MS` | Auto-disconnect wallet after inactivity in ms (default `180000` = 3 minutes) |
 
 ## Portfolio (Phases B–E)
 

@@ -1,12 +1,13 @@
 'use client';
 
-import { getDisplayNetworks } from '@entelewallet/config';
+import { getDisplayNetworks, getChainByChainId } from '@entelewallet/config';
 import { cn } from '@entelewallet/utils';
 import { useT } from '@/lib/i18n-context';
 import { useNetworkView } from '@/lib/network-view-context';
 import { ChainLogo } from '@/components/chain-logo';
-import { useAccount, useChainId } from 'wagmi';
-import { Check, ChevronDown } from 'lucide-react';
+import { switchWalletChain } from '@/lib/switch-wallet-chain';
+import { useAccount, useChainId, useSwitchChain, useWalletClient } from 'wagmi';
+import { Check, ChevronDown, Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 type NetworkChainPickerVariant = 'panel' | 'header';
@@ -20,8 +21,12 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
   const t = useT();
   const chainId = useChainId();
   const { isConnected } = useAccount();
+  const { switchChainAsync, isPending } = useSwitchChain();
+  const { data: walletClient } = useWalletClient();
   const { networkViewId, setNetworkViewId, activeNetwork } = useNetworkView();
   const [open, setOpen] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
+  const [switchError, setSwitchError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const networks = useMemo(() => getDisplayNetworks(), []);
@@ -47,9 +52,36 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
 
-  const handleSelect = (networkId: string) => {
+  const handleSelect = async (networkId: string, targetChainId: number) => {
     setNetworkViewId(networkId);
     setOpen(false);
+    setSwitchError(null);
+
+    if (!isConnected || targetChainId === chainId) return;
+
+    const chain = getChainByChainId(targetChainId);
+    if (!chain || chain.portfolioTier === 'price-only') return;
+
+    setIsSwitching(true);
+    try {
+      await switchWalletChain({
+        chainId: targetChainId,
+        switchChainAsync,
+        addChainAsync: walletClient
+          ? async ({ chain }) => {
+              await walletClient.addChain({ chain });
+            }
+          : undefined,
+      });
+      setNetworkViewId(networkId);
+    } catch (error) {
+      const message = error instanceof Error ? error.message.toLowerCase() : '';
+      setSwitchError(
+        message.includes('timed out') ? t('networks.switchTimeout') : t('networks.switchFailed'),
+      );
+    } finally {
+      setIsSwitching(false);
+    }
   };
 
   return (
@@ -57,11 +89,13 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
+        disabled={isSwitching || isPending}
         className={cn(
           'flex items-center gap-2 transition',
           isHeader
             ? 'max-w-[11rem] rounded-xl border border-slate-200/80 bg-white/80 px-2.5 py-1.5 text-left shadow-sm hover:border-cyan-200 hover:bg-white sm:max-w-[13rem]'
             : 'w-full justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm hover:border-cyan-200 hover:shadow-md',
+          (isSwitching || isPending) && 'opacity-70',
         )}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -73,12 +107,16 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
             isHeader ? 'h-7 w-7' : 'h-10 w-10 shadow-sm',
           )}
         >
-          <ChainLogo
-            icon={activeNetwork?.icon}
-            networkId={activeNetwork?.id}
-            name={activeNetwork?.name}
-            size={isHeader ? 20 : 40}
-          />
+          {isSwitching || isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin text-cyan-700" />
+          ) : (
+            <ChainLogo
+              icon={activeNetwork?.icon}
+              networkId={activeNetwork?.id}
+              name={activeNetwork?.name}
+              size={isHeader ? 20 : 40}
+            />
+          )}
         </div>
         <div className={cn('min-w-0 flex-1', isHeader ? 'hidden sm:block' : 'text-left')}>
           {!isHeader && (
@@ -103,6 +141,10 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
           )}
         />
       </button>
+
+      {switchError && !open && (
+        <p className="mt-1 text-[10px] text-red-600">{switchError}</p>
+      )}
 
       {open && (
         <div
@@ -131,7 +173,7 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
                     <li key={network.id}>
                       <button
                         type="button"
-                        onClick={() => handleSelect(network.id)}
+                        onClick={() => void handleSelect(network.id, network.chainId)}
                         className={cn(
                           'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition',
                           selected

@@ -90,8 +90,20 @@ export const SEO_DEFAULT = {
 /** Origins that must be allowlisted in the WalletConnect / Reown Cloud dashboard. */
 export const WALLETCONNECT_ALLOWED_ORIGINS = [
   'https://entelewallet.app',
+  'https://entelewallet.com',
+  'https://www.entelewallet.com',
   'https://app.entelewallet.com',
   'https://wallet.entelekron.io',
   'http://localhost:3000',
   'http://localhost:3001',
 ] as const;
+
+/** True when the request host is the marketing site (entelewallet.com). */
+export function isMarketingHost(host: string): boolean {
+  const normalized = host.toLowerCase().split(':')[0] ?? '';
+  return (
+    normalized === 'entelewallet.com' ||
+    normalized === 'www.entelewallet.com' ||
+    (normalized.endsWith('.entelewallet.com') && normalized !== 'app.entelewallet.com')
+  );
+}
