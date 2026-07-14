@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useT } from '@/lib/i18n-context';
-import { ROUTES, DOMAIN_CONFIG, PUBLIC_CONTACT_EMAILS } from '@entelewallet/config';
+import { ROUTES, DOMAIN_CONFIG, PUBLIC_CONTACT_EMAILS, websiteUrl } from '@entelewallet/config';
 import { Alert, LtrSpan } from '@entelewallet/ui';
 import { Shield } from 'lucide-react';
 import { BrandLogo } from './brand-logo';
@@ -28,10 +28,10 @@ export function Footer() {
         { href: ROUTES.security, label: t('nav.security') },
         { href: ROUTES.transparency, label: t('nav.transparency') },
         { href: ROUTES.officialDomains, label: t('nav.officialDomains') },
-        { href: ROUTES.risk, label: t('footer.riskDisclosure') },
-        { href: ROUTES.legal, label: t('nav.legal') },
-        { href: ROUTES.privacy, label: t('footer.privacy') },
-        { href: ROUTES.terms, label: t('footer.terms') },
+        { href: websiteUrl('risk'), label: t('footer.riskDisclosure'), external: true },
+        { href: websiteUrl('legal'), label: t('nav.legal'), external: true },
+        { href: websiteUrl('privacy'), label: t('footer.privacy'), external: true },
+        { href: websiteUrl('terms'), label: t('footer.terms'), external: true },
       ],
     },
     {
@@ -46,7 +46,7 @@ export function Footer() {
       title: t('footer.ecosystemSection'),
       links: [
         { href: DOMAIN_CONFIG.entelekron, label: 'EnteleKRON', external: true },
-        { href: ROUTES.ecosystem, label: t('nav.ecosystem') },
+        { href: websiteUrl('ecosystem'), label: t('nav.ecosystem'), external: true },
         { href: 'https://tvk.group', label: 'TVK Group', external: true },
       ],
     },
