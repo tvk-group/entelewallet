@@ -71,6 +71,7 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "save": "Save",
+    "clear": "Clear",
     "back": "Back",
     "language": "اللغة"
   },
@@ -300,7 +301,12 @@
     "displayModeHint": {
       "holdings-first": "Show your balances first, then catalog.",
       "all-market": "Show full asset catalog with prices."
-    }
+    },
+    "breakdownTitle": "Cross-chain breakdown",
+    "breakdownDescription": "Total USD per network across Ethereum, Base, Mantle, and BlockDAG.",
+    "breakdownEmpty": "No cross-chain balances detected yet.",
+    "holdingsLabel": "holdings",
+    "hideToken": "Hide"
   },
   "networks": {
     "title": "Networks",
@@ -394,7 +400,20 @@
     "unlinkConfirm": "Are you sure you want to unlink this wallet?",
     "lastVerified": "Last Verified",
     "verificationHistory": "Verification History",
-    "securityWarnings": "Security Warnings"
+    "securityWarnings": "Security Warnings",
+    "portfolioTitle": "Portfolio",
+    "displayMode": "Display mode",
+    "displayModeHint": "Synced across devices when your EnteleKRON session is active.",
+    "autoDiscover": "Auto-discover ERC-20 tokens",
+    "autoDiscoverHint": "Uses Alchemy to find additional tokens in your wallet. Unverified tokens may be spam.",
+    "linkedAddresses": "Linked non-EVM addresses",
+    "linkedAddressesHint": "Read-only balance tracking for Sui and Cardano (Phase E).",
+    "suiAddress": "Sui address",
+    "cardanoAddress": "Cardano address",
+    "suiPlaceholder": "0x… (64 hex chars)",
+    "cardanoPlaceholder": "addr1… or stake1…",
+    "invalidSuiAddress": "Invalid Sui address format.",
+    "invalidCardanoAddress": "Invalid Cardano address format."
   },
   "account": {
     "title": "Account",

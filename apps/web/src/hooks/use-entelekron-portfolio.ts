@@ -3,47 +3,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
-import { formatUnits } from 'viem';
 import { getDisplayNetworkById } from '@entelewallet/config';
 import type { PortfolioAsset, PortfolioResponse, EcosystemAsset } from '@entelewallet/types';
 import { EntelekronApiError, fetchPortfolio } from '@/lib/entelekron-api';
-import { readPortfolioPreferences, writePortfolioPreferences } from '@/lib/portfolio-preferences';
+import { formatAssetBalance } from '@/lib/multi-chain-balances';
+import {
+  loadSyncedPreferences,
+  patchLocalPreferences,
+} from '@/lib/wallet-preferences-sync';
 import { usePortfolioBalances } from '@/hooks/use-portfolio-balances';
+import { useMultiChainPortfolio } from '@/hooks/use-multi-chain-portfolio';
+import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
+import { useLinkedAddresses } from '@/hooks/use-linked-addresses';
 import { getTokenUsdValue, useTokenPrices } from '@/hooks/use-token-prices';
 import { useNetworkView } from '@/lib/network-view-context';
 import type { TokenConfig } from '@entelewallet/types';
+import type { WalletPreferences } from '@entelewallet/types';
 
-function tokenToPortfolioAsset(
-  token: TokenConfig,
-  networkId: string,
-  balance: bigint | undefined,
-  priceUsd: number | undefined,
-  valueUsd: number | undefined,
-): PortfolioAsset {
-  const hasBalance = balance !== undefined && balance > 0n;
-  return {
-    id: `${networkId}-${token.symbol}-${token.contractAddress ?? 'native'}`,
-    symbol: token.symbol,
-    name: token.name,
-    network: token.network,
-    networkId,
-    chainId: token.chainId,
-    contractAddress: token.contractAddress,
-    decimals: token.decimals,
-    logo: token.logo,
-    coingeckoId: token.coingeckoId,
-    priceUsd,
-    balance: balance?.toString(),
-    valueUsd,
-    hasBalance,
-    fiatQuotePolicy: token.fiatQuotePolicy,
-    source: 'configured',
-    pendingOfficialConfiguration: token.pendingOfficialConfiguration,
-  };
-}
-
-function buildLocalPortfolio(
-  address: string,
+function buildActiveNetworkSlice(
   networkViewId: string,
   tokens: TokenConfig[],
   nativeValue: bigint | undefined,
@@ -60,12 +37,30 @@ function buildLocalPortfolio(
     const coingeckoId = token.coingeckoId;
     const priceUsd =
       coingeckoId && prices[coingeckoId] !== undefined ? prices[coingeckoId] : undefined;
+    const hasBalance = balance !== undefined && balance > 0n;
 
-    const asset = tokenToPortfolioAsset(token, networkViewId, balance, priceUsd, valueUsd);
+    const asset: PortfolioAsset = {
+      id: `${networkViewId}-${token.symbol}-${token.contractAddress ?? 'native'}`,
+      symbol: token.symbol,
+      name: token.name,
+      network: token.network,
+      networkId: networkViewId,
+      chainId: token.chainId,
+      contractAddress: token.contractAddress,
+      decimals: token.decimals,
+      logo: token.logo,
+      coingeckoId: token.coingeckoId,
+      priceUsd,
+      balance: balance?.toString(),
+      valueUsd,
+      hasBalance,
+      fiatQuotePolicy: token.fiatQuotePolicy,
+      source: 'configured',
+      pendingOfficialConfiguration: token.pendingOfficialConfiguration,
+    };
+
     marketCatalog.push(asset);
-    if (asset.hasBalance) {
-      holdings.push(asset);
-    }
+    if (hasBalance) holdings.push(asset);
 
     if (['ENK', 'SOVRA', 'ENM'].includes(token.symbol)) {
       ecosystem.push({
@@ -80,15 +75,6 @@ function buildLocalPortfolio(
     }
   }
 
-  holdings.sort((a, b) => {
-    const aVal = a.valueUsd ?? 0;
-    const bVal = b.valueUsd ?? 0;
-    if (bVal !== aVal) return bVal - aVal;
-    if (a.symbol === 'ENK') return -1;
-    if (b.symbol === 'ENK') return 1;
-    return a.name.localeCompare(b.name);
-  });
-
   return { holdings, marketCatalog, ecosystem };
 }
 
@@ -97,24 +83,46 @@ export function useEntelekronPortfolio() {
   const chainId = useChainId();
   const { networkViewId } = useNetworkView();
   const queryClient = useQueryClient();
-  const [preferences, setPreferences] = useState(readPortfolioPreferences);
+  const [preferences, setPreferences] = useState<WalletPreferences | null>(null);
 
   const {
     tokens,
     nativeValue,
     erc20Balances,
     isInitialLoading,
-    isRefreshing,
+    isRefreshing: activeRefreshing,
     hasError,
-    refetch: refetchBalances,
+    refetch: refetchActiveBalances,
   } = usePortfolioBalances();
 
   const { prices } = useTokenPrices(tokens);
 
-  const localSlice = useMemo(() => {
+  const {
+    holdings: crossChainHoldings,
+    breakdown: networkBreakdown,
+    crossChainTotalUsd,
+    isFetching: multiChainFetching,
+    refetch: refetchMultiChain,
+  } = useMultiChainPortfolio();
+
+  const autoDiscoverEnabled = preferences?.autoDiscoverEnabled ?? false;
+  const {
+    discovered: discoveredTokens,
+    isLoading: discoveredLoading,
+    isFetching: discoveredFetching,
+    dismissToken,
+    refetch: refetchDiscovered,
+  } = useDiscoveredTokens(autoDiscoverEnabled);
+
+  const {
+    balances: nonEvmBalances,
+    isLoading: nonEvmLoading,
+    refetch: refetchNonEvm,
+  } = useLinkedAddresses();
+
+  const activeSlice = useMemo(() => {
     if (!address) return null;
-    return buildLocalPortfolio(
-      address,
+    return buildActiveNetworkSlice(
       networkViewId,
       tokens,
       nativeValue,
@@ -131,77 +139,126 @@ export function useEntelekronPortfolio() {
     staleTime: 60_000,
   });
 
-  const portfolio: PortfolioResponse | null = useMemo(() => {
-    if (!address) return null;
+  const nonEvmHoldings: PortfolioAsset[] = useMemo(
+    () =>
+      nonEvmBalances.map((row) => ({
+        id: `non-evm-${row.networkId}-${row.address}`,
+        symbol: row.symbol,
+        name: row.symbol === 'SUI' ? 'Sui' : 'Cardano',
+        network: row.networkId === 'sui' ? 'Sui' : 'Cardano',
+        networkId: row.networkId,
+        decimals: row.decimals,
+        balance: row.balance,
+        valueUsd: row.valueUsd,
+        hasBalance: true,
+        source: 'configured' as const,
+        fiatQuotePolicy: 'market' as const,
+      })),
+    [nonEvmBalances],
+  );
 
-    if (apiQuery.data) {
-      return apiQuery.data;
+  const mergedHoldings = useMemo(() => {
+    if (apiQuery.data?.holdings?.length) {
+      return apiQuery.data.holdings.filter((h) => h.hasBalance);
     }
 
-    if (!localSlice) return null;
+    const map = new Map<string, PortfolioAsset>();
+    for (const asset of crossChainHoldings) {
+      if (asset.hasBalance) map.set(asset.id, asset);
+    }
+    for (const asset of nonEvmHoldings) {
+      map.set(asset.id, asset);
+    }
+    return [...map.values()].sort((a, b) => (b.valueUsd ?? 0) - (a.valueUsd ?? 0));
+  }, [apiQuery.data, crossChainHoldings, nonEvmHoldings]);
+
+  const portfolio: PortfolioResponse | null = useMemo(() => {
+    if (!address || !preferences) return null;
+
+    if (apiQuery.data) {
+      return {
+        ...apiQuery.data,
+        discovered: apiQuery.data.discovered ?? discoveredTokens,
+        networkBreakdown: apiQuery.data.networkBreakdown ?? networkBreakdown,
+        crossChainTotalUsd: apiQuery.data.crossChainTotalUsd ?? crossChainTotalUsd,
+      };
+    }
+
+    const holdings = mergedHoldings;
+    const marketCatalog = activeSlice?.marketCatalog ?? [];
 
     return {
       walletAddress: address,
-      preferences: {
-        ...preferences,
-        networkViewId,
-        chainId,
-      },
-      holdings: localSlice.holdings,
-      discovered: [],
-      marketCatalog: localSlice.marketCatalog,
+      preferences: { ...preferences, networkViewId, chainId },
+      holdings,
+      discovered: discoveredTokens,
+      marketCatalog,
       watchlist: [],
-      ecosystem: localSlice.ecosystem,
+      ecosystem: activeSlice?.ecosystem ?? [],
       syncedAt: new Date().toISOString(),
+      networkBreakdown,
+      crossChainTotalUsd,
     };
-  }, [address, apiQuery.data, localSlice, preferences, networkViewId, chainId]);
+  }, [
+    address,
+    preferences,
+    apiQuery.data,
+    discoveredTokens,
+    networkBreakdown,
+    crossChainTotalUsd,
+    mergedHoldings,
+    activeSlice,
+    networkViewId,
+    chainId,
+  ]);
 
-  const isApiSynced = apiQuery.isSuccess;
-  const isLoading = isInitialLoading && !portfolio?.holdings.length;
+  const isLoading =
+    (isInitialLoading && !portfolio?.holdings.length) ||
+    discoveredLoading ||
+    nonEvmLoading;
+
+  const isRefreshing =
+    activeRefreshing || multiChainFetching || discoveredFetching;
 
   const syncPortfolio = useCallback(async () => {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ['entelekron-portfolio', address] }),
-      refetchBalances(),
+      refetchActiveBalances(),
+      refetchMultiChain(),
+      refetchDiscovered(),
+      refetchNonEvm(),
     ]);
-  }, [address, queryClient, refetchBalances]);
-
-  const formatBalance = useCallback((asset: PortfolioAsset) => {
-    if (!asset.balance) return null;
-    return parseFloat(formatUnits(BigInt(asset.balance), asset.decimals)).toLocaleString(
-      undefined,
-      { maximumFractionDigits: 6 },
-    );
-  }, []);
+  }, [
+    address,
+    queryClient,
+    refetchActiveBalances,
+    refetchDiscovered,
+    refetchMultiChain,
+    refetchNonEvm,
+  ]);
 
   const updatePreferences = useCallback(
-    (patch: Partial<typeof preferences>) => {
-      const next = { ...preferences, ...patch, networkViewId, chainId };
+    async (patch: Partial<WalletPreferences>) => {
+      const next = await patchLocalPreferences({ ...patch, networkViewId, chainId });
       setPreferences(next);
-      writePortfolioPreferences(next);
     },
-    [preferences, networkViewId, chainId],
+    [networkViewId, chainId],
   );
 
   useEffect(() => {
-    const view = getDisplayNetworkById(networkViewId);
-    if (view && view.chainId !== preferences.chainId) {
-      setPreferences((prev) => {
-        const next = {
-          ...prev,
-          chainId: view.chainId,
-          networkViewId,
-        };
-        writePortfolioPreferences(next);
-        return next;
-      });
-    }
-  }, [networkViewId, preferences.chainId]);
+    void loadSyncedPreferences().then(setPreferences);
+  }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setPreferences(readPortfolioPreferences());
-  }, []);
+    const view = getDisplayNetworkById(networkViewId);
+    if (!view || !preferences) return;
+    if (view.chainId !== preferences.chainId || networkViewId !== preferences.networkViewId) {
+      void patchLocalPreferences({
+        chainId: view.chainId,
+        networkViewId,
+      }).then(setPreferences);
+    }
+  }, [networkViewId, preferences]);
 
   const holdingsWithBalance = useMemo(
     () => portfolio?.holdings.filter((h) => h.hasBalance) ?? [],
@@ -210,34 +267,62 @@ export function useEntelekronPortfolio() {
 
   const marketWithoutHoldings = useMemo(() => {
     const catalog = portfolio?.marketCatalog ?? [];
-    if (preferences.displayMode === 'all-market') {
-      return catalog;
-    }
+    const mode = preferences?.displayMode ?? 'holdings-first';
+    if (mode === 'all-market') return catalog;
     const holdingIds = new Set(holdingsWithBalance.map((h) => h.id));
     return catalog.filter((item) => !holdingIds.has(item.id));
-  }, [portfolio?.marketCatalog, holdingsWithBalance, preferences.displayMode]);
+  }, [portfolio?.marketCatalog, holdingsWithBalance, preferences?.displayMode]);
 
   const totalUsd = useMemo(() => {
+    if (crossChainTotalUsd !== undefined) {
+      const nonEvmTotal = nonEvmHoldings.reduce((sum, row) => sum + (row.valueUsd ?? 0), 0);
+      const hasNonEvm = nonEvmHoldings.some((row) => row.valueUsd !== undefined);
+      const base = crossChainTotalUsd + nonEvmTotal;
+      return {
+        totalUsd: hasNonEvm || crossChainTotalUsd > 0 ? base : crossChainTotalUsd,
+        hasUnlistedBalance: holdingsWithBalance.some((a) => a.fiatQuotePolicy === 'none'),
+        isPartialTotal: holdingsWithBalance.some((a) => a.fiatQuotePolicy === 'none'),
+      };
+    }
+
     let total = 0;
     let hasQuoted = false;
     let hasUnlistedBalance = false;
-
-    for (const asset of portfolio?.holdings ?? []) {
-      if (asset.hasBalance && asset.fiatQuotePolicy === 'none') {
-        hasUnlistedBalance = true;
-      }
+    for (const asset of holdingsWithBalance) {
+      if (asset.fiatQuotePolicy === 'none') hasUnlistedBalance = true;
       if (asset.valueUsd !== undefined) {
         total += asset.valueUsd;
         hasQuoted = true;
       }
     }
-
     return {
       totalUsd: hasQuoted ? total : undefined,
       hasUnlistedBalance,
       isPartialTotal: hasUnlistedBalance && hasQuoted,
     };
-  }, [portfolio?.holdings]);
+  }, [crossChainTotalUsd, nonEvmHoldings, holdingsWithBalance]);
+
+  if (!preferences) {
+    return {
+      portfolio: null,
+      preferences: null,
+      updatePreferences,
+      holdingsWithBalance: [],
+      marketWithoutHoldings: [],
+      discovered: [],
+      ecosystem: [],
+      networkBreakdown: [],
+      totalUsd: { totalUsd: undefined, hasUnlistedBalance: false, isPartialTotal: false },
+      isLoading: true,
+      isRefreshing: false,
+      hasError: false,
+      isApiSynced: false,
+      apiUnavailable: false,
+      syncPortfolio,
+      formatBalance: formatAssetBalance,
+      dismissDiscoveredToken: dismissToken,
+    };
+  }
 
   return {
     portfolio,
@@ -247,13 +332,18 @@ export function useEntelekronPortfolio() {
     marketWithoutHoldings,
     discovered: portfolio?.discovered ?? [],
     ecosystem: portfolio?.ecosystem ?? [],
+    networkBreakdown: portfolio?.networkBreakdown ?? [],
     totalUsd,
     isLoading,
     isRefreshing,
-    hasError: hasError || (apiQuery.isError && !(apiQuery.error instanceof EntelekronApiError && apiQuery.error.status === 401)),
-    isApiSynced,
+    hasError:
+      hasError ||
+      (apiQuery.isError &&
+        !(apiQuery.error instanceof EntelekronApiError && apiQuery.error.status === 401)),
+    isApiSynced: apiQuery.isSuccess,
     apiUnavailable: apiQuery.isError,
     syncPortfolio,
-    formatBalance,
+    formatBalance: formatAssetBalance,
+    dismissDiscoveredToken: dismissToken,
   };
 }

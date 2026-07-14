@@ -70,4 +70,30 @@ export interface PortfolioResponse {
   watchlist: WatchlistEntry[];
   ecosystem: EcosystemAsset[];
   syncedAt: string;
+  /** Cross-chain totals (Phase C). */
+  networkBreakdown?: NetworkHoldingsBreakdown[];
+  crossChainTotalUsd?: number;
+}
+
+export interface NetworkHoldingsBreakdown {
+  networkId: string;
+  networkName: string;
+  chainId?: number;
+  totalUsd?: number;
+  holdingCount: number;
+  portfolioTier: 'full' | 'price-only';
+}
+
+export interface LinkedAddresses {
+  sui?: string;
+  cardano?: string;
+}
+
+export interface NonEvmBalance {
+  networkId: 'sui' | 'cardano';
+  address: string;
+  symbol: string;
+  balance: string;
+  decimals: number;
+  valueUsd?: number;
 }

@@ -267,7 +267,7 @@
       "balanceDetectionTested": false,
       "tokenDetectionTested": false
     },
-    "notes": "Price-only v1 — spot prices via CoinGecko. Balance reads in Phase E."
+    "notes": "Read-only balance tracking via linked address in Settings. Spot prices via CoinGecko."
   },
   {
     "id": "cardano",
@@ -291,7 +291,7 @@
       "balanceDetectionTested": false,
       "tokenDetectionTested": false
     },
-    "notes": "Price-only v1 — spot prices via CoinGecko. Balance reads in Phase E."
+    "notes": "Read-only balance tracking via linked address in Settings. Spot prices via CoinGecko."
   },
   {
     "id": "blockdag",
@@ -306,15 +306,15 @@
     "uiCategory": "experimental",
     "tokenStandards": ["native", "ERC-20", "ERC-721", "ERC-1155"],
     "riskFlag": "medium",
-    "portfolioTier": "price-only",
+    "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
     "verification": {
-      "rpcVerified": false,
-      "explorerVerified": false,
+      "rpcVerified": true,
+      "explorerVerified": true,
       "signingTested": false,
-      "balanceDetectionTested": false,
+      "balanceDetectionTested": true,
       "tokenDetectionTested": false
     },
-    "notes": "Official BlockDAG network (EVM-compatible, chain ID 1404). Price-only v1 in portfolio until balance detection verification passes. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
+    "notes": "Official BlockDAG network (EVM-compatible, chain ID 1404). Full balance reads enabled. Use only https://rpc.bdagscan.com/ and https://bdagscan.com/ when adding manually."
   }
 ]

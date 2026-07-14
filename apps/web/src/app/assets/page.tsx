@@ -11,6 +11,7 @@ import { PortfolioDiscoveredSection } from '@/components/portfolio/portfolio-dis
 import { PortfolioMarketSection } from '@/components/portfolio/portfolio-market-section';
 import { PortfolioWatchlistSection } from '@/components/portfolio/portfolio-watchlist-section';
 import { PortfolioEcosystemSection } from '@/components/portfolio/portfolio-ecosystem-section';
+import { PortfolioNetworkBreakdown } from '@/components/portfolio/portfolio-network-breakdown';
 import { PortfolioSyncHandler } from '@/components/portfolio/portfolio-sync-handler';
 import { PortfolioDisplayModeSelect } from '@/components/portfolio/portfolio-display-mode';
 import { useEntelekronPortfolio } from '@/hooks/use-entelekron-portfolio';
@@ -30,18 +31,17 @@ function AssetsPortfolioContent() {
     marketWithoutHoldings,
     discovered,
     ecosystem,
+    networkBreakdown,
     totalUsd,
     isLoading,
     isRefreshing,
     hasError,
     syncPortfolio,
     formatBalance,
+    dismissDiscoveredToken,
   } = useEntelekronPortfolio();
 
-  const showMarketFirst = preferences.displayMode === 'all-market';
-  const isEmpty = holdingsWithBalance.length === 0 && !isLoading;
-
-  if (status === 'reconnecting') {
+  if (status === 'reconnecting' || !preferences) {
     return (
       <Card>
         <CardContent className="p-8 text-center">
@@ -64,6 +64,9 @@ function AssetsPortfolioContent() {
     );
   }
 
+  const showMarketFirst = preferences.displayMode === 'all-market';
+  const isEmpty = holdingsWithBalance.length === 0 && !isLoading;
+
   return (
     <div className="mx-auto max-w-3xl space-y-4">
       <Suspense fallback={null}>
@@ -74,15 +77,19 @@ function AssetsPortfolioContent() {
         totalUsd={totalUsd.totalUsd}
         isPartialTotal={totalUsd.isPartialTotal}
         displayMode={preferences.displayMode}
-        onDisplayModeChange={(mode) => updatePreferences({ displayMode: mode })}
+        onDisplayModeChange={(mode) => void updatePreferences({ displayMode: mode })}
         isRefreshing={isRefreshing}
         isEmpty={isEmpty}
       />
 
       <PortfolioSection
-        title={t('networks.title')}
-        description={t('networks.switchHint')}
+        title={t('portfolio.breakdownTitle')}
+        description={t('portfolio.breakdownDescription')}
       >
+        <PortfolioNetworkBreakdown breakdown={networkBreakdown} />
+      </PortfolioSection>
+
+      <PortfolioSection title={t('networks.title')} description={t('networks.switchHint')}>
         <div className="p-4">
           <NetworkChainPicker />
         </div>
@@ -102,21 +109,9 @@ function AssetsPortfolioContent() {
             <div className="flex items-center gap-2">
               <PortfolioDisplayModeSelect
                 value={preferences.displayMode}
-                onChange={(mode) => updatePreferences({ displayMode: mode })}
+                onChange={(mode) => void updatePreferences({ displayMode: mode })}
               />
-              <button
-                type="button"
-                onClick={() => void syncPortfolio()}
-                disabled={isRefreshing}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-slate-600 hover:border-cyan-200 disabled:opacity-60"
-              >
-                {isRefreshing ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
-                  <RefreshCw className="h-3 w-3" />
-                )}
-                {t('assets.refresh')}
-              </button>
+              <RefreshButton isRefreshing={isRefreshing} onRefresh={() => void syncPortfolio()} />
             </div>
           }
         >
@@ -128,19 +123,7 @@ function AssetsPortfolioContent() {
             title={t('portfolio.holdingsTitle')}
             description={t('portfolio.holdingsDescription')}
             action={
-              <button
-                type="button"
-                onClick={() => void syncPortfolio()}
-                disabled={isRefreshing}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-slate-600 hover:border-cyan-200 disabled:opacity-60"
-              >
-                {isRefreshing ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
-                  <RefreshCw className="h-3 w-3" />
-                )}
-                {t('assets.refresh')}
-              </button>
+              <RefreshButton isRefreshing={isRefreshing} onRefresh={() => void syncPortfolio()} />
             }
           >
             <PortfolioHoldingsTable
@@ -156,7 +139,7 @@ function AssetsPortfolioContent() {
             action={
               <PortfolioDisplayModeSelect
                 value={preferences.displayMode}
-                onChange={(mode) => updatePreferences({ displayMode: mode })}
+                onChange={(mode) => void updatePreferences({ displayMode: mode })}
               />
             }
           >
@@ -172,7 +155,9 @@ function AssetsPortfolioContent() {
         <PortfolioDiscoveredSection
           discovered={discovered}
           enabled={preferences.autoDiscoverEnabled}
+          loading={isLoading}
           formatBalance={formatBalance}
+          onDismiss={dismissDiscoveredToken}
         />
       </PortfolioSection>
 
@@ -190,6 +175,31 @@ function AssetsPortfolioContent() {
         <PortfolioEcosystemSection assets={ecosystem} />
       </PortfolioSection>
     </div>
+  );
+}
+
+function RefreshButton({
+  isRefreshing,
+  onRefresh,
+}: {
+  isRefreshing: boolean;
+  onRefresh: () => void;
+}) {
+  const t = useT();
+  return (
+    <button
+      type="button"
+      onClick={onRefresh}
+      disabled={isRefreshing}
+      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-slate-600 hover:border-cyan-200 disabled:opacity-60"
+    >
+      {isRefreshing ? (
+        <Loader2 className="h-3 w-3 animate-spin" />
+      ) : (
+        <RefreshCw className="h-3 w-3" />
+      )}
+      {t('assets.refresh')}
+    </button>
   );
 }
 

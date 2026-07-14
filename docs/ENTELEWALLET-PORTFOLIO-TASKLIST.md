@@ -208,30 +208,30 @@ When EnteleKRON APIs return `401` or are unreachable, EnteleWALLET Lite composes
 
 ### Phase B — Preferences sync
 
-- [ ] Authenticated `GET/PATCH /api/user/wallet-preferences`
-- [ ] Sync display mode + network across devices
-- [ ] `PUT /api/user/watchlist` when Supabase session present
-- [ ] Settings page: auto-discover toggle
+- [x] Authenticated `GET/PATCH /api/user/wallet-preferences` (BFF proxy)
+- [x] Sync display mode + network across devices
+- [x] `PUT /api/user/watchlist` when EnteleKRON session present (BFF proxy)
+- [x] Settings page: auto-discover toggle
 
 ### Phase C — Multi-chain
 
-- [ ] Mantle mainnet (chain ID 5000) full balance reads
-- [ ] Cross-chain holdings aggregation in total USD card
-- [ ] Per-network holdings breakdown
+- [x] Mantle mainnet (chain ID 5000) full balance reads
+- [x] Cross-chain holdings aggregation in total USD card
+- [x] Per-network holdings breakdown
 
 ### Phase D — Auto-discover
 
-- [ ] Alchemy `getTokenBalances` on Ethereum
-- [ ] Token metadata normalization + spam filter
-- [ ] Disclaimer + hide/dismiss per discovered token
-- [ ] `preferences.autoDiscoverEnabled` gate
+- [x] Alchemy `getTokenBalances` on Ethereum (+ Base, Mantle, Polygon, etc.)
+- [x] Token metadata normalization + spam filter
+- [x] Disclaimer + hide/dismiss per discovered token
+- [x] `preferences.autoDiscoverEnabled` gate
 
 ### Phase E — Non-EVM
 
-- [ ] Sui address linking (read-only)
-- [ ] Cardano address linking (read-only)
-- [ ] BlockDAG balance reads when RPC verification passes
-- [ ] Upgrade BlockDAG from price-only to full tier
+- [x] Sui address linking (read-only)
+- [x] Cardano address linking (read-only)
+- [x] BlockDAG balance reads (full tier)
+- [x] Upgrade BlockDAG from price-only to full tier
 
 ---
 

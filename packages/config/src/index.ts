@@ -10,3 +10,4 @@ export type { OfficialAddress, OfficialAddressCategory, OfficialAddressStatus } 
 export * from './support';
 export * from './ecosystem';
 export * from './portfolio';
+export * from './alchemy';

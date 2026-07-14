@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, Badge, Button, LtrSpan } from
 import { useAccount } from 'wagmi';
 import { getVerificationBadgeKey } from '@entelewallet/wallet-core';
 import { truncateAddress } from '@entelewallet/utils';
+import { PortfolioSettingsCard } from '@/components/portfolio/portfolio-settings-card';
 
 export default function SettingsPage() {
   const t = useT();
@@ -81,6 +82,8 @@ export default function SettingsPage() {
             )}
           </CardContent>
         </Card>
+
+        <PortfolioSettingsCard />
       </div>
     </PageLayout>
   );
