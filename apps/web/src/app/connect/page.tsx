@@ -6,6 +6,7 @@ import { WalletConnectButton, ResetWalletUiButton } from '@/components/wallet-co
 import { WalletConnectionAlerts } from '@/components/wallet-connection-alerts';
 import { WalletConnectGuide } from '@/components/wallet-connect-guide';
 import { WalletDebugPanel } from '@/components/wallet-debug-panel';
+import { WalletConnectQrButton } from '@/components/wallet-connect-qr-button';
 import { WalletVerification } from '@/components/wallet-verification';
 import { SignatureWarningBanner, SecurityBanner } from '@/components/security-banner';
 import { useT } from '@/lib/i18n-context';
@@ -38,6 +39,7 @@ export default function ConnectPage() {
           <Card className="animate-slide-up">
             <CardContent className="flex flex-col items-center gap-4 p-8">
               <WalletConnectButton disabled={!canConnect} skipAckRedirect />
+              <WalletConnectQrButton disabled={!canConnect} className="mt-2 w-full max-w-sm" />
               {!canConnect && (
                 <p className="text-center text-sm text-amber-700">{t('connect.ackRequired')}</p>
               )}

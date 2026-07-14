@@ -24,6 +24,10 @@ export function WalletConnectGuide() {
             {process.env.NODE_ENV === 'development'
               ? t('connect.walletConnectDevWarning')
               : t('connect.walletConnectUnavailable')}
+            <span className="mt-1 block text-[11px] opacity-90">
+              {t('connect.walletConnectOriginHint')} cloud.reown.com → Project ID →{' '}
+              <code className="rounded bg-white/50 px-1">NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID</code>
+            </span>
           </Alert>
         )}
         <p className="text-xs text-slate-500">{t('connect.viaWalletConnectNote')}</p>

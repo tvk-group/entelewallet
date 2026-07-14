@@ -2,41 +2,51 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import type { WalletList } from '@rainbow-me/rainbowkit';
 import {
   coinbaseWallet,
+  ledgerWallet,
   metaMaskWallet,
   okxWallet,
   rabbyWallet,
+  rainbowWallet,
+  trustWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { mainnet } from 'wagmi/chains';
 import { createConfig, http, type Config } from 'wagmi';
 import { CANONICAL_APP_URL, BRAND_ASSETS } from '@entelewallet/config';
 import { getWagmiViemChains } from '@/lib/entele-chains';
+import {
+  isValidWalletConnectProjectId,
+  isWalletConnectEnabled,
+  resolveWalletConnectProjectId,
+} from '@/lib/walletconnect-config';
+
+export {
+  isValidWalletConnectProjectId,
+  isWalletConnectEnabled,
+  isWalletConnectConfigured,
+  resolveWalletConnectProjectId,
+  walletConnectProjectId,
+} from '@/lib/walletconnect-config';
 
 const PLACEHOLDER_PROJECT_ID = '00000000000000000000000000000000';
-
-export const walletConnectProjectId =
-  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID?.trim() || '';
-
-export function isValidWalletConnectProjectId(projectId: string): boolean {
-  return /^[a-f0-9]{32}$/i.test(projectId);
-}
-
-export const isWalletConnectConfigured = isValidWalletConnectProjectId(walletConnectProjectId);
 
 export const wagmiChains = getWagmiViemChains();
 
 function walletConnectMetadata() {
-  const baseUrl = CANONICAL_APP_URL.replace(/\/$/, '');
+  const origin =
+    typeof window !== 'undefined'
+      ? window.location.origin
+      : CANONICAL_APP_URL.replace(/\/$/, '');
+
   return {
     name: 'EnteleWALLET',
     description: 'EnteleWALLET Lite — verified wallet access for the EnteleKRON ecosystem.',
-    url: baseUrl,
-      icons: [`${baseUrl}${BRAND_ASSETS.iconMark}`],
+    url: origin,
+    icons: [`${origin}${BRAND_ASSETS.iconMark}`],
   };
 }
 
-/** MetaMask only via dedicated connector — avoids duplicate injected discovery delays. */
-function buildBrowserOnlyWalletList(): WalletList {
+function buildBrowserWalletList(): WalletList {
   return [
     {
       groupName: 'Browser Wallets',
@@ -45,17 +55,21 @@ function buildBrowserOnlyWalletList(): WalletList {
   ];
 }
 
+function buildWalletConnectList(): WalletList {
+  return [
+    {
+      groupName: 'WalletConnect',
+      wallets: [walletConnectWallet, rainbowWallet, trustWallet, ledgerWallet],
+    },
+    ...buildBrowserWalletList(),
+  ];
+}
+
 export function buildEnteleWalletList(projectId: string): WalletList {
-  const wallets = buildBrowserOnlyWalletList();
-
-  if (isValidWalletConnectProjectId(projectId)) {
-    wallets.push({
-      groupName: 'Mobile / QR',
-      wallets: [walletConnectWallet],
-    });
+  if (!isValidWalletConnectProjectId(projectId) || !isWalletConnectEnabled()) {
+    return buildBrowserWalletList();
   }
-
-  return wallets;
+  return buildWalletConnectList();
 }
 
 function createBrowserOnlyFallbackConfig(): Config {
@@ -71,7 +85,7 @@ function createBrowserOnlyFallbackConfig(): Config {
       'EnteleWALLET Lite — connect and verify your wallet for the EnteleKRON ecosystem.',
     appUrl: CANONICAL_APP_URL,
     projectId: PLACEHOLDER_PROJECT_ID,
-    wallets: buildBrowserOnlyWalletList(),
+    wallets: buildBrowserWalletList(),
     chains: [...wagmiChains],
     ssr: true,
     multiInjectedProviderDiscovery: false,
@@ -79,25 +93,35 @@ function createBrowserOnlyFallbackConfig(): Config {
 }
 
 export function createEnteleWagmiConfig(): Config {
-  if (!isWalletConnectConfigured && typeof window !== 'undefined') {
-    console.warn('Missing NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID');
+  const projectId = resolveWalletConnectProjectId();
+  const wcEnabled = isWalletConnectEnabled();
+
+  if (!wcEnabled && typeof window !== 'undefined') {
+    if (!isValidWalletConnectProjectId(projectId)) {
+      console.warn(
+        '[EnteleWALLET] WalletConnect disabled — set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID (or NEXT_PUBLIC_REOWN_PROJECT_ID) to your 32-char Reown project ID, then rebuild.',
+      );
+    }
   }
 
   try {
-    const wallets = buildEnteleWalletList(walletConnectProjectId);
-    const projectId = isWalletConnectConfigured ? walletConnectProjectId : PLACEHOLDER_PROJECT_ID;
+    const wallets = buildEnteleWalletList(projectId);
+    const resolvedProjectId = wcEnabled ? projectId : PLACEHOLDER_PROJECT_ID;
 
     return getDefaultConfig({
       appName: 'EnteleWALLET',
       appDescription:
         'EnteleWALLET Lite — connect and verify your wallet for the EnteleKRON ecosystem.',
-      appUrl: CANONICAL_APP_URL,
-      projectId,
+      appUrl:
+        typeof window !== 'undefined'
+          ? window.location.origin
+          : CANONICAL_APP_URL,
+      projectId: resolvedProjectId,
       wallets,
       chains: [...wagmiChains],
       ssr: true,
       multiInjectedProviderDiscovery: false,
-      walletConnectParameters: isWalletConnectConfigured
+      walletConnectParameters: wcEnabled
         ? { metadata: walletConnectMetadata() }
         : undefined,
     });
