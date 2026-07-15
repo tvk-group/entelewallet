@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { Button } from '@entelewallet/ui';
 import { useT } from '@/lib/i18n-context';
-import { isWalletConnectConfigured } from '@/lib/wagmi';
+import { isWalletConnectFeatureEnabled } from '@/lib/wagmi';
 import {
   findAnyWalletConnectConnector,
   findWalletConnectModalConnector,
@@ -17,14 +17,14 @@ interface WalletConnectQrButtonProps {
   className?: string;
 }
 
-/** Opens the WalletConnect QR modal — connects Rainbow, Trust, Ledger, MetaMask Mobile, etc. */
+/** Opens the WalletConnect QR modal for EnteleWALLET mobile / PWA pairing. */
 export function WalletConnectQrButton({ disabled, className }: WalletConnectQrButtonProps) {
   const t = useT();
   const { connect, isPending } = useConnect();
   const connectors = useConnectors();
   const [error, setError] = useState<string | null>(null);
 
-  if (!isWalletConnectConfigured) {
+  if (!isWalletConnectFeatureEnabled()) {
     return null;
   }
 

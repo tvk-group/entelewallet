@@ -46,7 +46,9 @@ export function isWalletConnectEnabled(): boolean {
   return isValidWalletConnectProjectId(resolveWalletConnectProjectId());
 }
 
-export const walletConnectProjectId = resolveWalletConnectProjectId();
+export function isWalletConnectConfigured(): boolean {
+  return isWalletConnectEnabled();
+}
 
-/** Whether WalletConnect / Reown is configured for this build. */
-export const isWalletConnectConfigured = isWalletConnectEnabled();
+/** @deprecated Use isWalletConnectConfigured() — evaluated once at import and can be stale. */
+export const walletConnectProjectId = resolveWalletConnectProjectId();

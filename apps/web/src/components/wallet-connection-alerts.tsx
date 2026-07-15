@@ -14,7 +14,7 @@ export function WalletConnectionAlerts() {
 
   const alerts: { variant: 'error' | 'warning' | 'info'; message: string }[] = [];
 
-  if (!isWalletConnectConfigured) {
+  if (!isWalletConnectConfigured()) {
     alerts.push({
       variant: process.env.NODE_ENV === 'development' ? 'warning' : 'info',
       message:
@@ -26,7 +26,7 @@ export function WalletConnectionAlerts() {
 
   if (
     process.env.NODE_ENV === 'development' &&
-    isWalletConnectConfigured &&
+    isWalletConnectConfigured() &&
     !isWalletConnectOriginAllowed(getCurrentOrigin())
   ) {
     alerts.push({
