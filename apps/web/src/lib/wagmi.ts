@@ -1,13 +1,21 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import type { WalletList } from '@rainbow-me/rainbowkit';
-import { walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
+import {
+  coinbaseWallet,
+  ledgerWallet,
+  metaMaskWallet,
+  okxWallet,
+  rabbyWallet,
+  rainbowWallet,
+  trustWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 import { mainnet } from 'wagmi/chains';
 import { createConfig, http, type Config } from 'wagmi';
 import { CANONICAL_APP_URL, BRAND_ASSETS } from '@entelewallet/config';
 import { getWagmiViemChains } from '@/lib/entele-chains';
 import {
   isValidWalletConnectProjectId,
-  isWalletConnectEnabled,
   isWalletConnectFeatureEnabled,
   resolveWalletConnectProjectId,
   WALLETCONNECT_FALLBACK_PROJECT_ID,
@@ -39,18 +47,30 @@ function walletConnectMetadata() {
   };
 }
 
-/** EnteleWALLET connects via WalletConnect QR — no third-party browser wallets in the list. */
-export function buildEnteleWalletList(): WalletList {
-  if (!isWalletConnectFeatureEnabled()) {
-    return [];
-  }
-
+function buildBrowserWalletList(): WalletList {
   return [
     {
-      groupName: 'EnteleWALLET',
-      wallets: [walletConnectWallet],
+      groupName: 'Browser Wallets',
+      wallets: [metaMaskWallet, rabbyWallet, coinbaseWallet, okxWallet],
     },
   ];
+}
+
+function buildWalletConnectList(): WalletList {
+  return [
+    {
+      groupName: 'WalletConnect',
+      wallets: [walletConnectWallet, rainbowWallet, trustWallet, ledgerWallet],
+    },
+    ...buildBrowserWalletList(),
+  ];
+}
+
+export function buildEnteleWalletList(): WalletList {
+  if (!isWalletConnectFeatureEnabled()) {
+    return buildBrowserWalletList();
+  }
+  return buildWalletConnectList();
 }
 
 function resolveProjectIdForConfig(): string {

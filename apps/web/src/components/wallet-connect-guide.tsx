@@ -11,8 +11,12 @@ export function WalletConnectGuide() {
     <Card className="border-cyan-200/80 bg-cyan-50/30">
       <CardContent className="space-y-4 p-6 text-sm text-slate-700">
         <div>
-          <h3 className="font-semibold text-slate-900">{t('connect.enteleWalletTitle')}</h3>
-          <p className="mt-1">{t('connect.enteleWalletDesc')}</p>
+          <h3 className="font-semibold text-slate-900">{t('connect.browserWalletsTitle')}</h3>
+          <p className="mt-1">{t('connect.browserWalletsDesc')}</p>
+        </div>
+        <div>
+          <h3 className="font-semibold text-slate-900">{t('connect.mobileWalletsTitle')}</h3>
+          <p className="mt-1">{t('connect.mobileWalletsDesc')}</p>
         </div>
         <Alert variant="info">{t('connect.walletConnectHint')}</Alert>
         {!isWalletConnectConfigured() && (
@@ -26,7 +30,7 @@ export function WalletConnectGuide() {
             </span>
           </Alert>
         )}
-        <p className="text-xs text-slate-500">{t('connect.enteleWalletInstallHint')}</p>
+        <p className="text-xs text-slate-500">{t('connect.viaWalletConnectNote')}</p>
       </CardContent>
     </Card>
   );

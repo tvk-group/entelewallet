@@ -38,8 +38,8 @@ export default function ConnectPage() {
         {!isConnected ? (
           <Card className="animate-slide-up">
             <CardContent className="flex flex-col items-center gap-4 p-8">
-              <WalletConnectQrButton disabled={!canConnect} className="w-full max-w-sm" />
-              <WalletConnectButton disabled={!canConnect} skipAckRedirect className="w-full max-w-sm" />
+              <WalletConnectButton disabled={!canConnect} skipAckRedirect />
+              <WalletConnectQrButton disabled={!canConnect} className="mt-2 w-full max-w-sm" />
               {!canConnect && (
                 <p className="text-center text-sm text-amber-700">{t('connect.ackRequired')}</p>
               )}
