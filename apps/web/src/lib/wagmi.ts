@@ -17,15 +17,18 @@ import { getWagmiViemChains } from '@/lib/entele-chains';
 import {
   isValidWalletConnectProjectId,
   isWalletConnectEnabled,
+  isWalletConnectFeatureEnabled,
   resolveWalletConnectProjectId,
 } from '@/lib/walletconnect-config';
 
 export {
   isValidWalletConnectProjectId,
   isWalletConnectEnabled,
+  isWalletConnectFeatureEnabled,
   isWalletConnectConfigured,
   resolveWalletConnectProjectId,
   walletConnectProjectId,
+  WALLETCONNECT_FALLBACK_PROJECT_ID,
 } from '@/lib/walletconnect-config';
 
 const PLACEHOLDER_PROJECT_ID = '00000000000000000000000000000000';
@@ -65,8 +68,9 @@ function buildWalletConnectList(): WalletList {
   ];
 }
 
-export function buildEnteleWalletList(projectId: string): WalletList {
-  if (!isValidWalletConnectProjectId(projectId) || !isWalletConnectEnabled()) {
+/** Wallet list for RainbowKit — WalletConnect group is always shown when the feature flag is on. */
+export function buildEnteleWalletList(): WalletList {
+  if (!isWalletConnectFeatureEnabled()) {
     return buildBrowserWalletList();
   }
   return buildWalletConnectList();
@@ -94,19 +98,20 @@ function createBrowserOnlyFallbackConfig(): Config {
 
 export function createEnteleWagmiConfig(): Config {
   const projectId = resolveWalletConnectProjectId();
+  const wcFeatureOn = isWalletConnectFeatureEnabled();
   const wcEnabled = isWalletConnectEnabled();
+  const resolvedProjectId = isValidWalletConnectProjectId(projectId)
+    ? projectId
+    : PLACEHOLDER_PROJECT_ID;
 
-  if (!wcEnabled && typeof window !== 'undefined') {
-    if (!isValidWalletConnectProjectId(projectId)) {
-      console.warn(
-        '[EnteleWALLET] WalletConnect disabled — set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID (or NEXT_PUBLIC_REOWN_PROJECT_ID) to your 32-char Reown project ID, then rebuild.',
-      );
-    }
+  if (wcFeatureOn && !isValidWalletConnectProjectId(projectId) && typeof window !== 'undefined') {
+    console.warn(
+      '[EnteleWALLET] Invalid WalletConnect project ID — set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID (32-char Reown ID).',
+    );
   }
 
   try {
     const wallets = buildEnteleWalletList(projectId);
-    const resolvedProjectId = wcEnabled ? projectId : PLACEHOLDER_PROJECT_ID;
 
     return getDefaultConfig({
       appName: 'EnteleWALLET',
@@ -116,7 +121,7 @@ export function createEnteleWagmiConfig(): Config {
         typeof window !== 'undefined'
           ? window.location.origin
           : CANONICAL_APP_URL,
-      projectId: resolvedProjectId,
+      projectId: wcFeatureOn ? resolvedProjectId : PLACEHOLDER_PROJECT_ID,
       wallets,
       chains: [...wagmiChains],
       ssr: true,

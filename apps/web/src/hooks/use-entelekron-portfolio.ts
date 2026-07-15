@@ -9,7 +9,10 @@ import { EntelekronApiError, fetchPortfolio } from '@/lib/entelekron-api';
 import { formatAssetBalance } from '@/lib/multi-chain-balances';
 import { readPortfolioPreferences } from '@/lib/portfolio-preferences';
 import { loadSyncedPreferences, patchLocalPreferences } from '@/lib/wallet-preferences-sync';
-import { setNetworkViewIdStore } from '@/lib/network-view-store';
+import {
+  hasExplicitNetworkViewSelection,
+  setNetworkViewIdStore,
+} from '@/lib/network-view-store';
 import { usePortfolioBalances } from '@/hooks/use-portfolio-balances';
 import { useMultiChainPortfolio } from '@/hooks/use-multi-chain-portfolio';
 import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
@@ -275,7 +278,12 @@ export function useEntelekronPortfolio() {
   useEffect(() => {
     void loadSyncedPreferences().then((prefs) => {
       setPreferences(prefs);
-      if (prefs.networkViewId && getDisplayNetworkById(prefs.networkViewId)) {
+      // Do not override an in-session or explicit local network selection with remote prefs.
+      if (
+        !hasExplicitNetworkViewSelection() &&
+        prefs.networkViewId &&
+        getDisplayNetworkById(prefs.networkViewId)
+      ) {
         setNetworkViewIdStore(prefs.networkViewId);
       }
     });

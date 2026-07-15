@@ -7,12 +7,34 @@ const PROJECT_ID_ENV_KEYS = [
   'NEXT_PUBLIC_WC_PROJECT_ID',
 ] as const;
 
+/**
+ * Team Reown project ID used when env is unset so WalletConnect stays available in the wallet list.
+ * Override with NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in production deployments.
+ */
+export const WALLETCONNECT_FALLBACK_PROJECT_ID = '21fef48091f12692cad574a6f7753643';
+
+declare global {
+  interface Window {
+    __ENTELE_WC_PROJECT_ID__?: string;
+  }
+}
+
+export function isWalletConnectFeatureEnabled(): boolean {
+  return isFeatureEnabled('ENABLE_WALLET_CONNECT');
+}
+
 export function resolveWalletConnectProjectId(): string {
   for (const key of PROJECT_ID_ENV_KEYS) {
     const value = process.env[key]?.trim();
     if (value) return value;
   }
-  return '';
+
+  if (typeof window !== 'undefined') {
+    const runtime = window.__ENTELE_WC_PROJECT_ID__?.trim();
+    if (runtime) return runtime;
+  }
+
+  return WALLETCONNECT_FALLBACK_PROJECT_ID;
 }
 
 export function isValidWalletConnectProjectId(projectId: string): boolean {
@@ -20,7 +42,7 @@ export function isValidWalletConnectProjectId(projectId: string): boolean {
 }
 
 export function isWalletConnectEnabled(): boolean {
-  if (!isFeatureEnabled('ENABLE_WALLET_CONNECT')) return false;
+  if (!isWalletConnectFeatureEnabled()) return false;
   return isValidWalletConnectProjectId(resolveWalletConnectProjectId());
 }
 

@@ -54,7 +54,7 @@ export function NetworkViewProvider({ children }: { children: ReactNode }) {
 
   const networkViewId = useSyncExternalStore(
     subscribeNetworkView,
-    () => getNetworkViewId(chainId),
+    () => getNetworkViewId(),
     () => getDefaultNetworkViewId(1),
   );
 

@@ -8,6 +8,8 @@ const NETWORK_VIEW_KEY = 'entelewallet-network-view';
 
 const listeners = new Set<() => void>();
 
+let currentViewId: string | null = null;
+
 function readStoredNetworkViewId(): string | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -38,18 +40,13 @@ function resolveInitialNetworkViewId(fallbackChainId: number): string {
   return getDefaultNetworkViewId(fallbackChainId);
 }
 
-let cachedViewId: string | null = null;
-
-export function getNetworkViewId(fallbackChainId = 1): string {
-  if (cachedViewId && getDisplayNetworkById(cachedViewId)) return cachedViewId;
+function ensureInitialized(fallbackChainId = 1): string {
+  if (currentViewId && getDisplayNetworkById(currentViewId)) {
+    return currentViewId;
+  }
   const resolved = resolveInitialNetworkViewId(fallbackChainId);
-  cachedViewId = resolved;
+  currentViewId = resolved;
   return resolved;
-}
-
-export function subscribeNetworkView(listener: () => void): () => void {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
 }
 
 function notify() {
@@ -58,12 +55,34 @@ function notify() {
   }
 }
 
+function handleStorageEvent(event: StorageEvent): void {
+  if (event.key !== NETWORK_VIEW_KEY && event.key !== null) return;
+  const stored = readStoredNetworkViewId();
+  if (!stored || !getDisplayNetworkById(stored)) return;
+  if (stored === currentViewId) return;
+  currentViewId = stored;
+  notify();
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', handleStorageEvent);
+}
+
+export function getNetworkViewId(fallbackChainId = 1): string {
+  return ensureInitialized(fallbackChainId);
+}
+
+export function subscribeNetworkView(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
 /** Single source of truth for portfolio network view — updates storage + preferences. */
 export function setNetworkViewIdStore(id: string): boolean {
   const network = getDisplayNetworkById(id);
   if (!network) return false;
 
-  cachedViewId = id;
+  currentViewId = id;
   writeStoredNetworkViewId(id);
   updatePortfolioPreferences({
     networkViewId: id,
@@ -75,6 +94,14 @@ export function setNetworkViewIdStore(id: string): boolean {
 
 export function hydrateNetworkViewStore(fallbackChainId: number): string {
   const id = resolveInitialNetworkViewId(fallbackChainId);
-  cachedViewId = id;
+  const changed = currentViewId !== id;
+  currentViewId = id;
+  if (changed) {
+    notify();
+  }
   return id;
+}
+
+export function hasExplicitNetworkViewSelection(): boolean {
+  return Boolean(readStoredNetworkViewId() && getDisplayNetworkById(readStoredNetworkViewId()!));
 }
