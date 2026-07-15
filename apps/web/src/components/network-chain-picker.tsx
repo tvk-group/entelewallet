@@ -76,6 +76,7 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
           )}
         >
           <ChainLogo
+            key={networkViewId}
             icon={activeNetwork?.icon}
             networkId={activeNetwork?.id}
             name={activeNetwork?.name}
