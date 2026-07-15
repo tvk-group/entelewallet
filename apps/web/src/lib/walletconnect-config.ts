@@ -8,10 +8,11 @@ const PROJECT_ID_ENV_KEYS = [
 ] as const;
 
 /**
- * Team Reown project ID used when env is unset so WalletConnect stays available in the wallet list.
- * Override with NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in production deployments.
+ * EnteleWALLET Reown project ID (TVK Group). Used when env is unset so WalletConnect
+ * still uses the team project with production domains allowlisted.
+ * Override with NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in Vercel / local .env.
  */
-export const WALLETCONNECT_FALLBACK_PROJECT_ID = '21fef48091f12692cad574a6f7753643';
+export const WALLETCONNECT_FALLBACK_PROJECT_ID = '7eb3d2a411af6026d82c5d710156efce';
 
 declare global {
   interface Window {

@@ -45,7 +45,7 @@ export function WalletDebugPanel() {
         <p>origin: {origin || '—'}</p>
         <p>origin in allowlist: {originAllowed ? 'yes' : 'no'}</p>
         <p>projectId configured: {isWalletConnectConfigured() ? 'yes' : 'no'}</p>
-        <p>projectId present: {walletConnectProjectId ? 'yes' : 'no'}</p>
+        <p>projectId: {walletConnectProjectId || '—'}</p>
         <p>wagmi status: {status}</p>
         <p>ui state: {uiState}</p>
         <p>chain: {chainId ?? '—'}</p>
