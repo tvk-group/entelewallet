@@ -2,8 +2,11 @@
 
 ## Target
 
-- **Primary domain:** app.entelewallet.com
+- **Primary domain:** entelewallet.app
+- **Alias:** app.entelewallet.com (redirects to entelewallet.app)
 - **Platform:** Vercel (recommended) or any Node.js host
+
+See [DOMAINS.md](./DOMAINS.md) for Vercel domain setup and the common `www.entelewallet.app` redirect mistake.
 
 ## Vercel (monorepo)
 
@@ -39,10 +42,9 @@ Copy `.env.example` to `apps/web/.env.local` and configure:
 
 ## Redirects
 
-Configure at DNS/CDN level:
+Alias domains redirect to the canonical app at `https://entelewallet.app` (configured in `apps/web/next.config.js` and middleware).
 
-- entelewallet.app → app.entelewallet.com
-- wallet.entelekron.io → app.entelewallet.com
+In Vercel Domains, **do not** point `app.entelewallet.com` at `www.entelewallet.app`. Point it at `entelewallet.app` or connect it to Production. See [DOMAINS.md](./DOMAINS.md).
 
 ## Production Checklist
 

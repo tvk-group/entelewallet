@@ -24,7 +24,7 @@ EnteleWALLET Lite is **read-only and non-custodial**:
 | Signature type | SIWE (EIP-4361) — ownership only |
 | Nonce expiry | 8 minutes |
 | Nonce reuse | Single-use, marked after verification |
-| Domain check | Must match `app.entelewallet.com` |
+| Domain check | Must match the browser origin on an allowed host (`entelewallet.app` or alias) |
 | Chain ID | Stored and verified |
 | Gas cost | Zero — signature only, no transaction |
 

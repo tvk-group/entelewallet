@@ -22,9 +22,23 @@ export const OFFICIAL_DOMAINS = [
 /** Redirect-only domains */
 export const REDIRECT_DOMAINS = [
   'app.entelewallet.com',
+  'www.entelewallet.app',
   'wallet.entelekron.io',
   'entelewallet.org',
 ] as const;
+
+/** Hostnames that should 308-redirect to the canonical app domain. */
+export const ALIAS_HOSTS_REDIRECTING_TO_APP = [...REDIRECT_DOMAINS] as const;
+
+export function normalizeHost(host: string | null | undefined): string {
+  return (host ?? CANONICAL_APP_DOMAIN).toLowerCase().split(':')[0] ?? CANONICAL_APP_DOMAIN;
+}
+
+export function shouldRedirectHostToCanonicalApp(host: string | null | undefined): boolean {
+  const normalized = normalizeHost(host);
+  if (normalized === CANONICAL_APP_DOMAIN) return false;
+  return (ALIAS_HOSTS_REDIRECTING_TO_APP as readonly string[]).includes(normalized);
+}
 
 export const DOMAIN_CONFIG = {
   app: CANONICAL_APP_URL,
@@ -90,6 +104,7 @@ export const SEO_DEFAULT = {
 /** Origins that must be allowlisted in the WalletConnect / Reown Cloud dashboard. */
 export const WALLETCONNECT_ALLOWED_ORIGINS = [
   'https://entelewallet.app',
+  'https://www.entelewallet.app',
   'https://entelewallet.com',
   'https://www.entelewallet.com',
   'https://app.entelewallet.com',

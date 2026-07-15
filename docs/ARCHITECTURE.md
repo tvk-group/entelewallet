@@ -40,9 +40,9 @@ entelewallet/
 
 ## Domain Model
 
-- **Canonical app:** `app.entelewallet.com`
-- **Official domains:** app.entelewallet.com, entelewallet.com, entelekron.io, tvk.group
-- **Redirects:** entelewallet.app, wallet.entelekron.io → app.entelewallet.com
+- **Canonical app:** `entelewallet.app`
+- **Official domains:** entelewallet.app, entelewallet.com, entelekron.io, tvk.group
+- **Redirects:** app.entelewallet.com, www.entelewallet.app, wallet.entelekron.io, entelewallet.org → entelewallet.app
 
 ## Future Architecture
 
