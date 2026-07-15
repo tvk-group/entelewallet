@@ -91,7 +91,7 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
         locale={rkLocale}
         appInfo={{
           appName: 'EnteleWALLET',
-          learnMoreUrl: CANONICAL_APP_URL,
+          learnMoreUrl: `${CANONICAL_APP_URL.replace(/\/$/, '')}/install`,
         }}
         theme={lightTheme({
           accentColor: '#1e40af',
@@ -100,7 +100,7 @@ function RainbowKitInner({ children }: { children: ReactNode }) {
           fontStack: 'system',
           overlayBlur: 'large',
         })}
-        modalSize="wide"
+        modalSize="compact"
       >
         {children}
       </RainbowKitProvider>

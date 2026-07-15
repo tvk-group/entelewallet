@@ -63,6 +63,12 @@ reown-modal {
   border-radius: 0.75rem;
 }
 
+/* Hide RainbowKit third-party wallet onboarding links to rainbow.me. */
+.wallet-connect-rk-button a[href*="learn.rainbow.me"],
+.wallet-connect-rk-button a[href*="rainbow.me"] {
+  display: none !important;
+}
+
 /* ─── Premium futuristic background system ─── */
 .app-futuristic-bg {
   position: relative;

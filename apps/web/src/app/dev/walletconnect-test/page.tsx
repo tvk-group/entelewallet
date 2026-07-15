@@ -40,7 +40,7 @@ export default function DevWalletConnectTestPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-2 text-sm">
           <p>origin: {origin || '—'}</p>
           <p>origin allowed: {isWalletConnectOriginAllowed(origin) ? 'yes' : 'no'}</p>
-          <p>projectId configured: {isWalletConnectConfigured ? 'yes' : 'no'}</p>
+          <p>projectId configured: {isWalletConnectConfigured() ? 'yes' : 'no'}</p>
           <p>projectId present: {walletConnectProjectId ? 'yes' : 'no'}</p>
           <p>wagmi status: {status}</p>
           <p>chain: {chainId ?? '—'}</p>

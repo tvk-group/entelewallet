@@ -44,7 +44,7 @@ export function WalletDebugPanel() {
       <CardContent className="space-y-3 font-mono text-xs text-amber-950">
         <p>origin: {origin || '—'}</p>
         <p>origin in allowlist: {originAllowed ? 'yes' : 'no'}</p>
-        <p>projectId configured: {isWalletConnectConfigured ? 'yes' : 'no'}</p>
+        <p>projectId configured: {isWalletConnectConfigured() ? 'yes' : 'no'}</p>
         <p>projectId present: {walletConnectProjectId ? 'yes' : 'no'}</p>
         <p>wagmi status: {status}</p>
         <p>ui state: {uiState}</p>
