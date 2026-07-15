@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { Button } from '@entelewallet/ui';
 import { useT } from '@/lib/i18n-context';
@@ -8,6 +8,7 @@ import { isWalletConnectFeatureEnabled } from '@/lib/wagmi';
 import {
   findAnyWalletConnectConnector,
   findWalletConnectModalConnector,
+  getCurrentOrigin,
 } from '@/lib/walletconnect-utils';
 import { cn } from '@entelewallet/utils';
 import { Loader2, QrCode } from 'lucide-react';
@@ -20,11 +21,24 @@ interface WalletConnectQrButtonProps {
 /** Opens the WalletConnect QR modal for EnteleWALLET mobile / PWA pairing. */
 export function WalletConnectQrButton({ disabled, className }: WalletConnectQrButtonProps) {
   const t = useT();
-  const { connect, isPending } = useConnect();
+  const { connect, isPending, error: connectMutationError } = useConnect();
   const connectors = useConnectors();
   const [error, setError] = useState<string | null>(null);
+  const walletConnectEnabled = isWalletConnectFeatureEnabled();
 
-  if (!isWalletConnectFeatureEnabled()) {
+  useEffect(() => {
+    if (!connectMutationError) return;
+    const msg = connectMutationError.message;
+    if (msg.toLowerCase().includes('allowlist')) {
+      setError(
+        `${t('connect.walletConnectOriginBlocked')} (${getCurrentOrigin()}). ${t('connect.walletConnectOriginHint')} https://cloud.reown.com`,
+      );
+      return;
+    }
+    setError(msg);
+  }, [connectMutationError, t]);
+
+  if (!walletConnectEnabled) {
     return null;
   }
 

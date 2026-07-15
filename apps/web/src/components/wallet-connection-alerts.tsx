@@ -25,13 +25,13 @@ export function WalletConnectionAlerts() {
   }
 
   if (
-    process.env.NODE_ENV === 'development' &&
     isWalletConnectConfigured() &&
-    !isWalletConnectOriginAllowed(getCurrentOrigin())
+    !isWalletConnectOriginAllowed(getCurrentOrigin()) &&
+    !connectError
   ) {
     alerts.push({
-      variant: 'warning',
-      message: `${t('connect.walletConnectOriginBlocked')} (${getCurrentOrigin()})`,
+      variant: process.env.NODE_ENV === 'development' ? 'warning' : 'error',
+      message: `${t('connect.walletConnectOriginBlocked')} (${getCurrentOrigin()}). ${t('connect.walletConnectOriginHint')} https://cloud.reown.com`,
     });
   }
 
