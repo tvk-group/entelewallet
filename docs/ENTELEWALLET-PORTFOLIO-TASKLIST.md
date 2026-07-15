@@ -5,7 +5,7 @@ Handoff document for the EnteleWALLET team. Tracks the seven portfolio screens, 
 ## Deep link
 
 ```
-https://www.entelewallet.app/?source=entelekron&view=wallet&sync=portfolio
+https://entelewallet.app/?source=entelekron&view=wallet&sync=portfolio
 ```
 
 | Param | Value | Behavior |

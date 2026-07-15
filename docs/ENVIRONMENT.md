@@ -6,7 +6,7 @@ See `.env.example` for the full list.
 
 | Variable | Description |
 |----------|-------------|
-| `NEXT_PUBLIC_APP_URL` | Canonical app URL (https://app.entelewallet.com) |
+| `NEXT_PUBLIC_APP_URL` | Canonical app URL (`https://entelewallet.app`) |
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Reown (WalletConnect) Cloud project ID — 32-char hex from [cloud.reown.com](https://cloud.reown.com). Aliases: `NEXT_PUBLIC_REOWN_PROJECT_ID`, `NEXT_PUBLIC_WC_PROJECT_ID`. **Must be set before `pnpm build` / Vercel deploy** (Next.js inlines `NEXT_PUBLIC_*` at build time). |
 
 ## Supabase (account linking & auth)

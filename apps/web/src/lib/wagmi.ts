@@ -111,7 +111,7 @@ export function createEnteleWagmiConfig(): Config {
   }
 
   try {
-    const wallets = buildEnteleWalletList(projectId);
+    const wallets = buildEnteleWalletList();
 
     return getDefaultConfig({
       appName: 'EnteleWALLET',
