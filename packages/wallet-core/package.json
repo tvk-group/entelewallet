@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@entelewallet/types": "workspace:*",
-    "siwe": "^2.3.2"
+    "siwe": "^3.0.0"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

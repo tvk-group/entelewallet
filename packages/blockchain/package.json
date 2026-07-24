@@ -11,7 +11,7 @@
   "dependencies": {
     "@entelewallet/config": "workspace:*",
     "@entelewallet/types": "workspace:*",
-    "viem": "^2.21.54"
+    "viem": "^2.55.8"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
