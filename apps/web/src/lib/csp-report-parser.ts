@@ -93,7 +93,19 @@ export function parseSanitizedCspReport(raw: string): SanitizedCspReport | null 
     return null;
   }
 
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+  if (parsed === null || typeof parsed !== 'object') {
+    return null;
+  }
+
+  if (Array.isArray(parsed)) {
+    for (const entry of parsed) {
+      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue;
+      const report = entry as Record<string, unknown>;
+      const type = typeof report.type === 'string' ? report.type : '';
+      if (!REPORTING_API_TYPES.has(type)) continue;
+      const fields = parseCspReportObject(report.body, 1);
+      if (fields) return { format: 'reporting-api', fields };
+    }
     return null;
   }
 
@@ -102,18 +114,6 @@ export function parseSanitizedCspReport(raw: string): SanitizedCspReport | null 
   if (root['csp-report']) {
     const fields = parseCspReportObject(root['csp-report']);
     return fields ? { format: 'csp-report', fields } : null;
-  }
-
-  if (Array.isArray(root)) {
-    for (const entry of root) {
-      if (!entry || typeof entry !== 'object') continue;
-      const report = entry as Record<string, unknown>;
-      const type = typeof report.type === 'string' ? report.type : '';
-      if (!REPORTING_API_TYPES.has(type)) continue;
-      const fields = parseCspReportObject(report.body, 1);
-      if (fields) return { format: 'reporting-api', fields };
-    }
-    return null;
   }
 
   const type = typeof root.type === 'string' ? root.type : '';
