@@ -13,6 +13,6 @@
     "siwe": "^2.3.2"
   },
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "typescript": "^5.7.2"
   }
 }
