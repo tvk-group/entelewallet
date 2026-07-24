@@ -1,15 +1,32 @@
 import type { TransparencyAddress } from '@entelewallet/types';
 
-export { CONTACT, CONTACT_EMAIL, SUPPORT_EMAIL, SECURITY_EMAIL, LEGAL_EMAIL, PRIVACY_EMAIL, PARTNERS_EMAIL, PRESS_EMAIL, PUBLIC_CONTACT_EMAILS } from './contact';
+export {
+  CONTACT,
+  CONTACT_EMAIL,
+  SUPPORT_EMAIL,
+  SECURITY_EMAIL,
+  LEGAL_EMAIL,
+  PRIVACY_EMAIL,
+  PARTNERS_EMAIL,
+  PRESS_EMAIL,
+  PUBLIC_CONTACT_EMAILS,
+} from './contact';
 
-/** Primary PWA app domain — entelewallet.app */
+/** Canonical application domain — single source of truth for SIWE and redirects. */
 export const CANONICAL_APP_DOMAIN = 'entelewallet.app';
 export const CANONICAL_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://entelewallet.app';
 
-/** Alias redirect domain */
+/** Marketing website (separate branding, may share deployment). */
+export const MARKETING_DOMAIN = 'entelewallet.com';
+export const MARKETING_URL = process.env.NEXT_PUBLIC_MARKETING_URL || 'https://entelewallet.com';
+
+/** Primary redirect alias (legacy). */
 export const APP_ALIAS_DOMAIN = 'app.entelewallet.com';
 export const APP_ALIAS_URL =
   process.env.NEXT_PUBLIC_APP_ALIAS_URL || 'https://app.entelewallet.com';
+
+/** Official GitHub repository for this application. */
+export const GITHUB_REPOSITORY_URL = 'https://github.com/tvk-group/entelewallet-app';
 
 /** Official domains for security center */
 export const OFFICIAL_DOMAINS = [
@@ -43,7 +60,7 @@ export function shouldRedirectHostToCanonicalApp(host: string | null | undefined
 export const DOMAIN_CONFIG = {
   app: CANONICAL_APP_URL,
   appAlias: APP_ALIAS_URL,
-  marketing: process.env.NEXT_PUBLIC_MARKETING_URL || 'https://entelewallet.com',
+  marketing: MARKETING_URL,
   security: process.env.NEXT_PUBLIC_SECURITY_URL || 'https://entelewallet.org',
   entelekron: process.env.NEXT_PUBLIC_ENTELEKRON_URL || 'https://entelekron.io',
   /** Official transparency center — served by EnteleWALLET Lite (entelekron.io/transparency is not deployed). */

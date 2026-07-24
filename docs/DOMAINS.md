@@ -1,19 +1,21 @@
 # Domain configuration
 
-## Canonical app URL
+Canonical definitions live in `packages/config/src/domains.ts`. This document describes deployment expectations.
+
+## Canonical application
 
 **Primary:** `https://entelewallet.app`
 
 All alias hostnames should redirect to the apex app domain (not `www.entelewallet.app`).
 
-| Host | Role |
-|------|------|
-| `entelewallet.app` | Canonical PWA / wallet app |
-| `www.entelewallet.app` | Redirect → `entelewallet.app` |
-| `app.entelewallet.com` | Redirect → `entelewallet.app` |
-| `wallet.entelekron.io` | Redirect → `entelewallet.app` |
-| `entelewallet.org` | Redirect → `entelewallet.app` (security center alias) |
-| `entelewallet.com` | Marketing site (same deployment, different branding) |
+| Host                   | Role                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| `entelewallet.app`     | Canonical PWA / wallet app                            |
+| `www.entelewallet.app` | Redirect → `entelewallet.app`                         |
+| `app.entelewallet.com` | Redirect → `entelewallet.app`                         |
+| `wallet.entelekron.io` | Redirect → `entelewallet.app`                         |
+| `entelewallet.org`     | Redirect → `entelewallet.app` (security center alias) |
+| `entelewallet.com`     | Marketing website                                     |
 
 ## Vercel Domains (fix common mistake)
 
@@ -69,9 +71,9 @@ Add these origins in [Reown Cloud](https://cloud.reown.com):
 
 For `entelewallet.app` on Vercel, use Vercel nameservers or:
 
-| Type | Name | Value |
-|------|------|-------|
-| A | `@` | `76.76.21.21` |
+| Type  | Name  | Value                  |
+| ----- | ----- | ---------------------- |
+| A     | `@`   | `76.76.21.21`          |
 | CNAME | `www` | `cname.vercel-dns.com` |
 
 Use the exact records shown in the Vercel Domains panel for your project.

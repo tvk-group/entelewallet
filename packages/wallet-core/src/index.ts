@@ -35,6 +35,74 @@ export interface VerificationResult {
   error?: string;
 }
 
+export interface StoredNonceExpectations {
+  message: string;
+  domain: string;
+  nonce: string;
+  chainId: number;
+  uri?: string;
+}
+
+export interface SiweValidationExpectations {
+  domain: string;
+  uri: string;
+  nonce: string;
+  chainId: number;
+  address: string;
+}
+
+/** Client message must exactly match the server-stored SIWE payload. */
+export function validateExactStoredMessage(
+  receivedMessage: string,
+  storedMessage: string,
+): VerificationResult {
+  if (receivedMessage !== storedMessage) {
+    return { success: false, error: 'Message mismatch' };
+  }
+  return { success: true };
+}
+
+/** Parse and validate SIWE fields against server expectations before signature check. */
+export function validateSiweExpectations(
+  message: string,
+  expectations: SiweValidationExpectations,
+): VerificationResult {
+  try {
+    const siweMessage = new SiweMessage(message);
+
+    if (siweMessage.domain !== expectations.domain) {
+      return { success: false, error: 'Domain mismatch' };
+    }
+    if (siweMessage.uri !== expectations.uri) {
+      return { success: false, error: 'URI mismatch' };
+    }
+    if (siweMessage.nonce !== expectations.nonce) {
+      return { success: false, error: 'Nonce mismatch' };
+    }
+    if (siweMessage.chainId !== expectations.chainId) {
+      return { success: false, error: 'Chain ID mismatch' };
+    }
+    if (siweMessage.address.toLowerCase() !== expectations.address.toLowerCase()) {
+      return { success: false, error: 'Address mismatch' };
+    }
+
+    if (siweMessage.expirationTime) {
+      const expiresAt = new Date(siweMessage.expirationTime);
+      if (expiresAt.getTime() <= Date.now()) {
+        return { success: false, error: 'Message expired' };
+      }
+    }
+
+    return {
+      success: true,
+      address: siweMessage.address,
+      chainId: siweMessage.chainId,
+    };
+  } catch {
+    return { success: false, error: 'Invalid message format' };
+  }
+}
+
 export async function verifySiweMessage(
   message: string,
   signature: string,
@@ -52,15 +120,22 @@ export async function verifySiweMessage(
       return { success: false, error: 'Nonce mismatch' };
     }
 
+    if (fields.data.expirationTime) {
+      const expiresAt = new Date(fields.data.expirationTime);
+      if (expiresAt.getTime() <= Date.now()) {
+        return { success: false, error: 'Message expired' };
+      }
+    }
+
     return {
       success: true,
       address: fields.data.address,
       chainId: fields.data.chainId,
     };
-  } catch (err) {
+  } catch {
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'Verification failed',
+      error: 'Invalid signature',
     };
   }
 }

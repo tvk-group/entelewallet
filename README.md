@@ -8,25 +8,25 @@
   <strong>EnteleWALLET Lite</strong> — Secure wallet-connected dashboard for the EnteleKRON ecosystem.
 </p>
 
-Repository: [tvk-group/entelewallet](https://github.com/tvk-group/entelewallet)
+Repository: [tvk-group/entelewallet-app](https://github.com/tvk-group/entelewallet-app)
 
 ## Brand Assets
 
 Official logos and banners live in:
 
-| Asset | Path |
-|-------|------|
-| Full logo (white bg) | `.github/assets/entelewallet-logo-horizontal.png` |
-| Icon mark (white bg) | `.github/assets/entelewallet-icon-512.png` |
-| Dark banner | `.github/assets/entelewallet-logo-horizontal.png` |
-| Social preview / OG | `.github/assets/social-preview.png` |
-| Website copies | `apps/web/public/brand/` and `apps/web/public/og/` |
+| Asset                | Path                                               |
+| -------------------- | -------------------------------------------------- |
+| Full logo (white bg) | `.github/assets/entelewallet-logo-horizontal.png`  |
+| Icon mark (white bg) | `.github/assets/entelewallet-icon-512.png`         |
+| Dark banner          | `.github/assets/entelewallet-logo-horizontal.png`  |
+| Social preview / OG  | `.github/assets/social-preview.png`                |
+| Website copies       | `apps/web/public/brand/` and `apps/web/public/og/` |
 
 Tagline: **SECURE • INTELLIGENT • CONNECTED**
 
 ## Current Phase
 
-**EnteleWALLET Lite** — Phase 1 production release.
+**EnteleWALLET Lite** — Phase 1 production release with fortress security foundation (Phase 0).
 
 Connect, verify and monitor your EnteleKRON ecosystem wallet. Read-only, non-custodial, no seed phrases or private keys.
 
@@ -53,12 +53,15 @@ Connect, verify and monitor your EnteleKRON ecosystem wallet. Read-only, non-cus
 
 ## Domains
 
-| Domain | Purpose |
-|--------|---------|
-| app.entelewallet.com | Canonical app (this repo) |
-| entelewallet.com | Marketing site (separate repo) |
-| entelewallet.app | Redirect → app.entelewallet.com |
-| wallet.entelekron.io | Redirect → app.entelewallet.com |
+Canonical domain definitions live in `packages/config/src/domains.ts`.
+
+| Domain                                               | Purpose                           |
+| ---------------------------------------------------- | --------------------------------- |
+| [entelewallet.app](https://entelewallet.app)         | Canonical application (this repo) |
+| [entelewallet.com](https://entelewallet.com)         | Marketing website                 |
+| [app.entelewallet.com](https://app.entelewallet.com) | Redirect alias → entelewallet.app |
+| [www.entelewallet.app](https://www.entelewallet.app) | Redirect alias → entelewallet.app |
+| [wallet.entelekron.io](https://wallet.entelekron.io) | Redirect alias → entelewallet.app |
 
 ## Setup
 
@@ -77,22 +80,24 @@ See [docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md) and `.env.example`.
 Copy `apps/web/.env.example` to `apps/web/.env.local` and configure:
 
 - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect Cloud project ID (required for mobile/QR wallets)
-- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — required for email magic-link sign-in
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — required for email magic-link sign-in and production SIWE nonce storage
 - `NEXT_PUBLIC_ETHEREUM_RPC_URL` — Ethereum RPC (optional)
 
-**Vercel:** Add the same variables in Project → Settings → Environment Variables. Without Supabase keys, wallet connect still works; email sign-in shows a configuration notice.
+**Vercel:** Add the same variables in Project → Settings → Environment Variables. Without Supabase keys, wallet connect still works in development; production requires Supabase for SIWE nonce storage.
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Production build |
-| `pnpm lint` | ESLint |
-| `pnpm typecheck` | TypeScript check |
-| `pnpm i18n:check` | Validate all translations |
-| `pnpm security:check` | Verify dangerous flags disabled |
-| `pnpm format` | Prettier format |
+| Script                | Description                                                |
+| --------------------- | ---------------------------------------------------------- |
+| `pnpm dev`            | Start development server                                   |
+| `pnpm build`          | Production build                                           |
+| `pnpm lint`           | ESLint                                                     |
+| `pnpm typecheck`      | TypeScript check                                           |
+| `pnpm test`           | Unit and integration tests (Vitest)                        |
+| `pnpm test:e2e`       | Playwright smoke tests                                     |
+| `pnpm i18n:check`     | Validate all translations                                  |
+| `pnpm security:check` | Verify dangerous flags disabled and release gates enforced |
+| `pnpm format`         | Prettier format                                            |
 
 ## Project Structure
 
@@ -111,9 +116,11 @@ supabase/           Database migrations
 ## Security
 
 - SIWE signatures verify ownership only — no gas, no transactions
-- Dangerous feature flags disabled by default
-- Official domain list: app.entelewallet.com, entelewallet.com, entelekron.io, tvk.group
-- See [docs/SECURITY_MODEL.md](./docs/SECURITY_MODEL.md)
+- Dangerous feature flags disabled by default and not env-overridable
+- Production SIWE requires persistent Supabase nonce storage (fail closed)
+- Security headers and CSP report-only monitoring
+- Official domain list: entelewallet.app, entelewallet.com, entelekron.io, tvk.group
+- See [docs/SECURITY_MODEL.md](./docs/SECURITY_MODEL.md), [docs/THREAT_MODEL.md](./docs/THREAT_MODEL.md), [docs/SECURITY_RELEASE_GATES.md](./docs/SECURITY_RELEASE_GATES.md)
 
 ## Roadmap
 

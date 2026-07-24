@@ -7,6 +7,7 @@ export const nonceStore = new Map<
     chainId: number;
     domain: string;
     message?: string;
+    uri?: string;
   }
 >();
 

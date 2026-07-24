@@ -2,6 +2,10 @@
  * Feature flags for EnteleWALLET Lite.
  * Dangerous full-wallet features must stay false until formal security architecture,
  * independent audit planning and legal approval are completed.
+ *
+ * Dangerous flags cannot be enabled via NEXT_PUBLIC environment variables.
+ * Enabling them requires an intentional source-code change, tests, security review
+ * and a separate PR.
  */
 
 export const FEATURES = {
@@ -33,11 +37,44 @@ export const FEATURES = {
 
 export type FeatureFlag = keyof typeof FEATURES;
 
+/** Flags that must never be toggled via environment variables in production. */
+export const DANGEROUS_FEATURE_FLAGS = [
+  'ENABLE_CREATE_WALLET',
+  'ENABLE_IMPORT_WALLET',
+  'ENABLE_PRIVATE_KEY_STORAGE',
+  'ENABLE_SEND_TOKENS',
+  'ENABLE_SWAP',
+  'ENABLE_MOBILE_WALLET',
+  'ENABLE_BROWSER_EXTENSION',
+  'ENABLE_ACCOUNT_ABSTRACTION',
+  'ENABLE_WALLET_ONLY_LOGIN',
+] as const satisfies readonly FeatureFlag[];
+
+export type DangerousFeatureFlag = (typeof DANGEROUS_FEATURE_FLAGS)[number];
+
+const ENV_OVERRIDABLE_FLAGS: FeatureFlag[] = [
+  'ENABLE_WALLET_CONNECT',
+  'ENABLE_WALLET_VERIFICATION',
+  'ENABLE_CLAIMS',
+  'ENABLE_BASE_ACCOUNT',
+];
+
+export function isDangerousFeatureFlag(flag: FeatureFlag): flag is DangerousFeatureFlag {
+  return (DANGEROUS_FEATURE_FLAGS as readonly string[]).includes(flag);
+}
+
 export function isFeatureEnabled(flag: FeatureFlag): boolean {
-  const envKey = `NEXT_PUBLIC_${flag}`;
-  const envValue = typeof process !== 'undefined' ? process.env[envKey] : undefined;
-  if (envValue !== undefined) {
-    return envValue === 'true';
+  if (isDangerousFeatureFlag(flag)) {
+    return FEATURES[flag];
   }
+
+  if (ENV_OVERRIDABLE_FLAGS.includes(flag)) {
+    const envKey = `NEXT_PUBLIC_${flag}`;
+    const envValue = typeof process !== 'undefined' ? process.env[envKey] : undefined;
+    if (envValue !== undefined) {
+      return envValue === 'true';
+    }
+  }
+
   return FEATURES[flag];
 }

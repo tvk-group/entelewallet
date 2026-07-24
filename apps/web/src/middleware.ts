@@ -1,9 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import {
-  CANONICAL_APP_DOMAIN,
-  shouldRedirectHostToCanonicalApp,
-} from '@entelewallet/config';
+import { CANONICAL_APP_DOMAIN, shouldRedirectHostToCanonicalApp } from '@entelewallet/config';
 import { updateSession } from '@/lib/supabase/middleware';
+import { applySecurityHeaders } from '@/lib/security-headers';
+
+function withSecurityHeaders(response: NextResponse): NextResponse {
+  const isProduction =
+    process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+  return applySecurityHeaders(response, isProduction) as NextResponse;
+}
 
 export async function middleware(request: NextRequest) {
   const host = request.headers.get('host');
@@ -12,17 +16,14 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.protocol = 'https:';
     url.host = CANONICAL_APP_DOMAIN;
-    return NextResponse.redirect(url, 308);
+    return withSecurityHeaders(NextResponse.redirect(url, 308));
   }
 
-  if (
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return updateSession(request);
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return withSecurityHeaders(await updateSession(request));
   }
 
-  return NextResponse.next();
+  return withSecurityHeaders(NextResponse.next());
 }
 
 export const config = {

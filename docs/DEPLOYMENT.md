@@ -2,11 +2,12 @@
 
 ## Target
 
-- **Primary domain:** entelewallet.app
-- **Alias:** app.entelewallet.com (redirects to entelewallet.app)
+- **Canonical application:** https://entelewallet.app
+- **Marketing website:** https://entelewallet.com
+- **Redirect aliases:** app.entelewallet.com, www.entelewallet.app, wallet.entelekron.io
 - **Platform:** Vercel (recommended) or any Node.js host
 
-See [DOMAINS.md](./DOMAINS.md) for Vercel domain setup and the common `www.entelewallet.app` redirect mistake.
+Domain definitions: `packages/config/src/domains.ts`. See [DOMAINS.md](./DOMAINS.md) for Vercel domain setup.
 
 ## Vercel (monorepo)
 
@@ -14,12 +15,12 @@ This repo is a pnpm + Turborepo monorepo. The Next.js app lives in `apps/web`.
 
 In the Vercel project **Settings → General**:
 
-| Setting | Value |
-|---------|-------|
-| **Root Directory** | `apps/web` |
-| **Framework Preset** | Next.js |
-| **Install Command** | `cd ../.. && pnpm install` (or leave default if Root Directory is set) |
-| **Build Command** | `cd ../.. && pnpm turbo build --filter=@entelewallet/web` |
+| Setting              | Value                                                                  |
+| -------------------- | ---------------------------------------------------------------------- |
+| **Root Directory**   | `apps/web`                                                             |
+| **Framework Preset** | Next.js                                                                |
+| **Install Command**  | `cd ../.. && pnpm install` (or leave default if Root Directory is set) |
+| **Build Command**    | `cd ../.. && pnpm turbo build --filter=@entelewallet/web`              |
 
 `apps/web/vercel.json` encodes these commands for preview/production deploys.
 
@@ -50,7 +51,8 @@ In Vercel Domains, **do not** point `app.entelewallet.com` at `www.entelewallet.
 
 - [ ] WalletConnect Project ID configured
 - [ ] Private RPC URLs set
-- [ ] Supabase migrations applied
+- [ ] Supabase migrations applied (including `consume_wallet_nonce` function)
+- [ ] Production SIWE nonce storage verified (no memory fallback)
 - [ ] SIWE domain matches production domain
 - [ ] OG image uploaded to public/og/
 - [ ] i18n:check passes

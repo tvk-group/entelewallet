@@ -178,10 +178,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const res = await fetch(
-          `/api/wallet/verify?address=${encodeURIComponent(address!)}`,
-          { cache: 'no-store' },
-        );
+        const res = await fetch(`/api/wallet/verify?address=${encodeURIComponent(address!)}`, {
+          cache: 'no-store',
+          credentials: 'include',
+        });
         if (res.ok) {
           const data = (await res.json()) as { verified?: boolean; verifiedAt?: string };
           if (data.verified && data.verifiedAt) {
@@ -212,8 +212,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       value={{
         verificationStatus,
         setVerificationStatus: handleSetVerified,
-        isVerified:
-          verificationStatus === 'verified' || verificationStatus === 'linked_to_account',
+        isVerified: verificationStatus === 'verified' || verificationStatus === 'linked_to_account',
         isLinkedToAccount: verificationStatus === 'linked_to_account',
         verifiedAt,
         linkedAt,
