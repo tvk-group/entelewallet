@@ -12,8 +12,7 @@ const ICONS_DIR = join(ROOT, 'apps/web/public/icons');
 const CHAINS_DIR = join(ICONS_DIR, 'chains');
 const TOKENS_DIR = join(ICONS_DIR, 'tokens');
 
-const TW_BASE =
-  'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
+const TW_BASE = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 
 /** Registry chain id -> Trust Wallet blockchain folder name */
 const CHAIN_SOURCES = {

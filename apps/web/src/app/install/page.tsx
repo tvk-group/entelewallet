@@ -54,7 +54,9 @@ export default function InstallPage() {
         </div>
 
         <Card className="border-amber-200 bg-amber-50/50">
-          <CardContent className="p-6 text-sm text-amber-900">{t('install.storeFuture')}</CardContent>
+          <CardContent className="p-6 text-sm text-amber-900">
+            {t('install.storeFuture')}
+          </CardContent>
         </Card>
 
         <div className="flex flex-wrap gap-3">

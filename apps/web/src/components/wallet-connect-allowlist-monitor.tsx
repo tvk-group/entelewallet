@@ -9,7 +9,7 @@ function isReownAllowlistMessage(text: string): boolean {
   const lower = text.toLowerCase();
   return (
     lower.includes('not found on allowlist') ||
-    lower.includes('origin') && lower.includes('allowlist') ||
+    (lower.includes('origin') && lower.includes('allowlist')) ||
     lower.includes('cloud.reown.com')
   );
 }

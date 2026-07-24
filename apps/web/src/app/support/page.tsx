@@ -31,7 +31,12 @@ function SupportPageContent() {
   const provider = getActiveSupportProvider();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [form, setForm] = useState({
-    reportType: params.get('type') === 'phishing' ? 'report_phishing' : params.get('type') === 'domain' ? 'report_fake_domain' : 'general_support',
+    reportType:
+      params.get('type') === 'phishing'
+        ? 'report_phishing'
+        : params.get('type') === 'domain'
+          ? 'report_fake_domain'
+          : 'general_support',
     email: '',
     subject: '',
     message: '',
@@ -153,9 +158,7 @@ function SupportPageContent() {
                 <Button type="submit" disabled={status === 'loading'}>
                   {t('support.formSubmit')}
                 </Button>
-                {status === 'error' && (
-                  <Alert variant="error">{t('support.formError')}</Alert>
-                )}
+                {status === 'error' && <Alert variant="error">{t('support.formError')}</Alert>}
               </form>
             )}
           </CardContent>

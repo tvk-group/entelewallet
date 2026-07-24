@@ -64,11 +64,7 @@ export function WalletConnectQrButton({ disabled, className }: WalletConnectQrBu
         onClick={handleClick}
         className="w-full gap-2 border-cyan-200 bg-cyan-50 text-cyan-900 hover:bg-cyan-100"
       >
-        {isPending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <QrCode className="h-4 w-4" />
-        )}
+        {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <QrCode className="h-4 w-4" />}
         {t('connect.walletConnectButton')}
       </Button>
       <p className="text-center text-[11px] leading-relaxed text-slate-500">

@@ -5,10 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { getAlchemyDiscoveryChainIds } from '@entelewallet/config';
 import type { PortfolioAsset } from '@entelewallet/types';
-import {
-  hideDiscoveredToken,
-  readHiddenDiscovered,
-} from '@/lib/discovered-token-storage';
+import { hideDiscoveredToken, readHiddenDiscovered } from '@/lib/discovered-token-storage';
 
 const DISCOVERY_CHAIN_IDS = getAlchemyDiscoveryChainIds();
 

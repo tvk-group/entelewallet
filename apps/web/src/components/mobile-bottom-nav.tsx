@@ -26,19 +26,21 @@ export function MobileBottomNav() {
     >
       <div className="mx-auto flex max-w-lg items-stretch justify-around px-1 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-1">
         {TABS.map(({ href, key, icon: Icon }) => {
-          const active = pathname === href || (href !== ROUTES.overview && pathname.startsWith(href));
+          const active =
+            pathname === href || (href !== ROUTES.overview && pathname.startsWith(href));
           return (
             <Link
               key={href}
               href={href}
               className={cn(
                 'flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl px-2 py-2 text-[10px] font-medium transition',
-                active
-                  ? 'text-cyan-800'
-                  : 'text-slate-500 hover:bg-white/60 hover:text-slate-800',
+                active ? 'text-cyan-800' : 'text-slate-500 hover:bg-white/60 hover:text-slate-800',
               )}
             >
-              <Icon className={cn('h-5 w-5', active && 'text-cyan-600')} strokeWidth={active ? 2.25 : 2} />
+              <Icon
+                className={cn('h-5 w-5', active && 'text-cyan-600')}
+                strokeWidth={active ? 2.25 : 2}
+              />
               <span className="truncate">{t(key)}</span>
             </Link>
           );

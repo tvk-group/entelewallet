@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
-import {
-  isWalletConnectConfigured,
-  walletConnectProjectId,
-} from '@/lib/wagmi';
+import { isWalletConnectConfigured, walletConnectProjectId } from '@/lib/wagmi';
 import {
   describeConnector,
   findAnyWalletConnectConnector,
@@ -50,9 +47,7 @@ export function WalletDebugPanel() {
         <p>ui state: {uiState}</p>
         <p>chain: {chainId ?? '—'}</p>
         <p>address: {address ?? '—'}</p>
-        <p>
-          active connector: {connector ? describeConnector(connector) : '—'}
-        </p>
+        <p>active connector: {connector ? describeConnector(connector) : '—'}</p>
         <p>WC modal connector: {wcModal ? describeConnector(wcModal) : 'no'}</p>
         <p>WC connector exists: {wcAny ? 'yes' : 'no'}</p>
         <p>connect error: {connectError?.message ?? uiError ?? '—'}</p>

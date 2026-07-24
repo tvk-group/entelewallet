@@ -45,11 +45,26 @@ export function useWalletUi() {
 }
 
 const RK_LOCALE_MAP: Partial<Record<LocaleCode, string>> = {
-  en: 'en', de: 'de', fr: 'fr', es: 'es', it: 'it', pt: 'pt', nl: 'nl',
-  ru: 'ru', ja: 'ja', ko: 'ko', zh: 'zh', tr: 'tr', ar: 'ar',
+  en: 'en',
+  de: 'de',
+  fr: 'fr',
+  es: 'es',
+  it: 'it',
+  pt: 'pt',
+  nl: 'nl',
+  ru: 'ru',
+  ja: 'ja',
+  ko: 'ko',
+  zh: 'zh',
+  tr: 'tr',
+  ar: 'ar',
 };
 
-function WalletRejectionHandler({ setConnectError }: { setConnectError: (e: string | null) => void }) {
+function WalletRejectionHandler({
+  setConnectError,
+}: {
+  setConnectError: (e: string | null) => void;
+}) {
   useEffect(() => {
     const onRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason;

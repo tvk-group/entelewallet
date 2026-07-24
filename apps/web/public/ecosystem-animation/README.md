@@ -4,11 +4,11 @@ Portable export of the EnteleKRON ecosystem layer animation for cloning and adve
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `embed.html` | Standalone demo page — open locally or host anywhere |
-| `ecosystem-cyber-coin.css` | All animation styles |
-| `brand/` | Official EnteleKRON and TVK Labs coin logos |
+| File                       | Purpose                                              |
+| -------------------------- | ---------------------------------------------------- |
+| `embed.html`               | Standalone demo page — open locally or host anywhere |
+| `ecosystem-cyber-coin.css` | All animation styles                                 |
+| `brand/`                   | Official EnteleKRON and TVK Labs coin logos          |
 
 ## Clone to other sites
 

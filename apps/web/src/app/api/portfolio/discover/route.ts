@@ -45,7 +45,9 @@ export async function GET(request: Request) {
     const known = configuredContracts(chainId);
     const raw = await fetchAlchemyTokenBalances(chainId, wallet);
     const balances = filterAlchemyBalances(raw).filter(
-      (row) => !known.has(row.contractAddress.toLowerCase()) && !hidden.has(row.contractAddress.toLowerCase()),
+      (row) =>
+        !known.has(row.contractAddress.toLowerCase()) &&
+        !hidden.has(row.contractAddress.toLowerCase()),
     );
 
     const discovered: PortfolioAsset[] = [];

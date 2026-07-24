@@ -1,14 +1,17 @@
 import { chromium } from 'playwright';
 
 const BASE = process.env.BASE_URL || 'http://localhost:3000';
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '21fef48091f12692cad574a6f7753643';
+const projectId =
+  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '21fef48091f12692cad574a6f7753643';
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   const errors = [];
-  page.on('pageerror', (err) => errors.push({ type: 'pageerror', message: err.message, stack: err.stack }));
+  page.on('pageerror', (err) =>
+    errors.push({ type: 'pageerror', message: err.message, stack: err.stack }),
+  );
   page.on('console', (msg) => {
     if (msg.type() === 'error') errors.push({ type: 'console', message: msg.text() });
   });
@@ -38,15 +41,22 @@ async function main() {
   }
 
   const bodyText = await page.locator('body').innerText();
-  const crashed = bodyText.includes('Something went wrong') || bodyText.includes('Application error');
+  const crashed =
+    bodyText.includes('Something went wrong') || bodyText.includes('Application error');
 
-  console.log(JSON.stringify({
-    base: BASE,
-    projectIdSet: Boolean(projectId),
-    crashed,
-    bodySnippet: bodyText.slice(0, 500),
-    errors,
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        base: BASE,
+        projectIdSet: Boolean(projectId),
+        crashed,
+        bodySnippet: bodyText.slice(0, 500),
+        errors,
+      },
+      null,
+      2,
+    ),
+  );
 
   await browser.close();
   process.exit(crashed ? 1 : 0);

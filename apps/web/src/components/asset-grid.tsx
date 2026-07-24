@@ -110,7 +110,9 @@ export function AssetGrid() {
       )}
 
       {visibleRows.length === 0 ? (
-        <div className="px-4 py-10 text-center text-sm text-slate-500">{t('assets.noVisibleTokens')}</div>
+        <div className="px-4 py-10 text-center text-sm text-slate-500">
+          {t('assets.noVisibleTokens')}
+        </div>
       ) : (
         <ul className="divide-y divide-slate-100">
           {visibleRows.map(({ token, balance, fiatUsd, key }) => (

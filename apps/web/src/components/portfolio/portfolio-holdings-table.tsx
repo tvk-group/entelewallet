@@ -54,11 +54,9 @@ export function PortfolioHoldingsTable({
             const priceLabel =
               asset.fiatQuotePolicy === 'none'
                 ? t('assets.noMarketPrice')
-                : formatUsd(asset.priceUsd) ?? '—';
+                : (formatUsd(asset.priceUsd) ?? '—');
             const valueLabel =
-              asset.fiatQuotePolicy === 'none'
-                ? '—'
-                : formatUsd(asset.valueUsd) ?? '—';
+              asset.fiatQuotePolicy === 'none' ? '—' : (formatUsd(asset.valueUsd) ?? '—');
 
             return (
               <tr key={asset.id} className="hover:bg-slate-50/80">

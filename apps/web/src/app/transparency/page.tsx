@@ -18,9 +18,12 @@ import { ExternalLink, Copy, ShieldCheck } from 'lucide-react';
 import type { OfficialAddressStatus } from '@entelewallet/config';
 
 function statusBadge(status: OfficialAddressStatus, t: (k: string) => string) {
-  if (status === 'verified') return { variant: 'success' as const, label: t('transparency.verified') };
-  if (status === 'internal_only') return { variant: 'default' as const, label: t('transparency.internalOnly') };
-  if (status === 'not_published') return { variant: 'default' as const, label: t('transparency.notPublished') };
+  if (status === 'verified')
+    return { variant: 'success' as const, label: t('transparency.verified') };
+  if (status === 'internal_only')
+    return { variant: 'default' as const, label: t('transparency.internalOnly') };
+  if (status === 'not_published')
+    return { variant: 'default' as const, label: t('transparency.notPublished') };
   return { variant: 'warning' as const, label: t('transparency.pendingVerification') };
 }
 

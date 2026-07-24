@@ -25,7 +25,8 @@ function mapRow(row: WalletConnectionRow): WalletConnectionRecord {
     chainId: row.chain_id ?? 0,
     walletType: row.wallet_type ?? undefined,
     isPrimary: row.is_primary ?? false,
-    verificationStatus: (row.verification_status as WalletConnectionRecord['verificationStatus']) ?? 'verified',
+    verificationStatus:
+      (row.verification_status as WalletConnectionRecord['verificationStatus']) ?? 'verified',
     verifiedAt: row.verified_at ?? undefined,
     linkedAt: row.linked_at ?? undefined,
     revokedAt: row.revoked_at ?? undefined,
@@ -249,10 +250,7 @@ export async function linkWalletToUser(params: {
   return mapRow(data as WalletConnectionRow);
 }
 
-export async function unlinkWalletForUser(
-  userId: string,
-  walletAddress: string,
-): Promise<void> {
+export async function unlinkWalletForUser(userId: string, walletAddress: string): Promise<void> {
   const admin = createAdminClient();
   if (!admin) throw new Error('supabase_not_configured');
 

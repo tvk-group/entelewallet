@@ -1,11 +1,6 @@
 export type ChainStatus = 'active' | 'testnet' | 'planned' | 'experimental';
 
-export type UiCategory =
-  | 'active'
-  | 'testnet'
-  | 'tvk-ecosystem'
-  | 'coming-soon'
-  | 'experimental';
+export type UiCategory = 'active' | 'testnet' | 'tvk-ecosystem' | 'coming-soon' | 'experimental';
 
 export type RiskFlag = 'low' | 'medium' | 'high' | 'unverified';
 
@@ -26,7 +21,6 @@ export type ChainCapabilities = {
   walletConnect: boolean;
   transactions: boolean;
 };
-
 
 export type ChainDefinition = {
   id: string;

@@ -32,7 +32,11 @@ export default function EcosystemPage() {
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {ECOSYSTEM_PROJECTS.map((item, i) => (
-          <Card key={item.id} className="animate-slide-up" style={{ animationDelay: `${i * 30}ms` }}>
+          <Card
+            key={item.id}
+            className="animate-slide-up"
+            style={{ animationDelay: `${i * 30}ms` }}
+          >
             <CardContent className="flex items-center justify-between p-4">
               <span className="font-medium text-slate-900">{item.name}</span>
               <Badge variant={statusVariant(item.status)}>{statusLabel(item.status)}</Badge>

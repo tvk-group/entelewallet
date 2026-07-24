@@ -8,11 +8,7 @@ export type CachedPortfolioBalances = {
   erc20: Record<string, string>;
 };
 
-export function balanceCacheKey(
-  address: string,
-  chainId: number,
-  networkViewId: string,
-): string {
+export function balanceCacheKey(address: string, chainId: number, networkViewId: string): string {
   return `${STORAGE_PREFIX}${address.toLowerCase()}:${chainId}:${networkViewId}`;
 }
 

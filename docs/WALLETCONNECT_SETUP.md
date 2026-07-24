@@ -88,12 +88,12 @@ Base Account is disabled (`NEXT_PUBLIC_ENABLE_BASE_ACCOUNT=false`).
 
 ## 7. Troubleshooting
 
-| Symptom | Likely cause |
-|--------|----------------|
-| WalletConnect option missing | Invalid or missing project ID |
-| Click does nothing | Wrong Reown project ID in Vercel build, or origin not allowlisted |
-| QR never appears | Popup blocked; or project ID invalid |
+| Symptom                        | Likely cause                                                                                                                                                         |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WalletConnect option missing   | Invalid or missing project ID                                                                                                                                        |
+| Click does nothing             | Wrong Reown project ID in Vercel build, or origin not allowlisted                                                                                                    |
+| QR never appears               | Popup blocked; or project ID invalid                                                                                                                                 |
 | Works locally, fails on Vercel | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` missing at **build** time — app falls back to embedded project ID; ensure Vercel env matches your Reown project (`7eb3d2a4…`) |
-| Stuck on “Connecting wallet…” | Connection timeout — use Reset wallet state on `/connect` |
+| Stuck on “Connecting wallet…”  | Connection timeout — use Reset wallet state on `/connect`                                                                                                            |
 
 Support: security@entelewallet.com

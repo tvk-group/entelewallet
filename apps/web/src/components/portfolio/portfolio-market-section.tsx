@@ -42,9 +42,7 @@ export function PortfolioMarketSection({ assets, formatBalance }: PortfolioMarke
               <p className="truncate text-xs text-slate-500">{asset.network}</p>
             </div>
             <div className="shrink-0 text-right">
-              <p className="text-sm font-medium tabular-nums text-slate-900">
-                {priceLabel ?? '—'}
-              </p>
+              <p className="text-sm font-medium tabular-nums text-slate-900">{priceLabel ?? '—'}</p>
               {balance && asset.hasBalance ? (
                 <p className="text-xs tabular-nums text-slate-500">
                   <LtrSpan>{balance}</LtrSpan> {asset.symbol}

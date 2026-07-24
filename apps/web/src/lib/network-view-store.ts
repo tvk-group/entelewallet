@@ -1,7 +1,4 @@
-import {
-  getDefaultNetworkViewId,
-  getDisplayNetworkById,
-} from '@entelewallet/config';
+import { getDefaultNetworkViewId, getDisplayNetworkById } from '@entelewallet/config';
 import { readPortfolioPreferences, updatePortfolioPreferences } from '@/lib/portfolio-preferences';
 
 const NETWORK_VIEW_KEY = 'entelewallet-network-view';

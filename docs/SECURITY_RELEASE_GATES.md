@@ -67,7 +67,7 @@ Applied via middleware (`apps/web/src/lib/security-headers.ts`):
 | `Permissions-Policy`                  | Restrictive defaults              |
 | `X-Frame-Options`                     | `DENY`                            |
 | `frame-ancestors`                     | `'none'` (via CSP)                |
-| `Cross-Origin-Opener-Policy`          | `same-origin`                     |
+| `Cross-Origin-Opener-Policy`          | `same-origin-allow-popups`        |
 | `Cross-Origin-Resource-Policy`        | `same-site`                       |
 | `Content-Security-Policy-Report-Only` | Yes (monitor before enforce)      |
 
@@ -84,6 +84,24 @@ Documented in `apps/web/src/lib/security-headers.ts` (`CSP_ORIGIN_INVENTORY`):
 - **Analytics:** none currently
 
 Do not add broad wildcards or `unsafe-eval` to silence violations. Fix violations by narrowing sources or refactoring.
+
+Do not add broad wildcards or `unsafe-eval` to silence violations. Fix violations by narrowing sources or refactoring.
+
+## Distributed Rate Limiting
+
+Production uses Supabase `increment_rate_limit_bucket()` with HMAC-derived bucket keys (`RATE_LIMIT_HMAC_SECRET`). In-memory `Map` fallback is permitted only in development and tests. Production fails closed when rate-limit storage is unavailable.
+
+## Verification Session Secret
+
+`WALLET_VERIFICATION_SECRET` is required in production (minimum 32 cryptographically random bytes). It must not fall back to `SUPABASE_SERVICE_ROLE_KEY`. Signed cookies include `sessionId`, `issuedAt`, `expiresAt`, `address`, `chainId`, and `verifiedAt`.
+
+## CSP Violation Review
+
+1. Browser sends reports to `POST /api/security/csp-report` (report-only mode)
+2. Server redacts addresses, tokens, and long strings before logging
+3. Reports are rate-limited per IP (HMAC-derived key)
+4. Review logs in Vercel/hosting dashboard; tune `CSP_ORIGIN_INVENTORY` before enforcing
+5. `Cross-Origin-Opener-Policy: same-origin-allow-popups` permits WalletConnect verify popups
 
 ## CI Pipeline (every PR)
 

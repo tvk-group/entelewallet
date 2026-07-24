@@ -34,12 +34,9 @@ export class WalletErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
-          <p className="font-semibold">
-            {this.props.fallbackTitle ?? 'Wallet connection failed'}
-          </p>
+          <p className="font-semibold">{this.props.fallbackTitle ?? 'Wallet connection failed'}</p>
           <p className="mt-1 text-red-800">
-            {this.props.fallbackMessage ??
-              'Please refresh the page or try another wallet.'}
+            {this.props.fallbackMessage ?? 'Please refresh the page or try another wallet.'}
           </p>
           {process.env.NODE_ENV === 'development' && this.state.message && (
             <p className="mt-2 font-mono text-xs text-red-700">{this.state.message}</p>

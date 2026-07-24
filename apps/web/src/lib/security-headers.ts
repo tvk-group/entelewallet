@@ -44,6 +44,8 @@ export const CSP_ORIGIN_INVENTORY = {
   appOrigins: WALLETCONNECT_ALLOWED_ORIGINS.filter((origin) => origin.startsWith('https://')),
 } as const;
 
+export const CSP_REPORT_PATH = '/api/security/csp-report';
+
 function buildContentSecurityPolicyReportOnly(): string {
   const directives = [
     `default-src 'self'`,
@@ -66,6 +68,7 @@ function buildContentSecurityPolicyReportOnly(): string {
     `frame-src 'self' https://verify.walletconnect.com https://verify.walletconnect.org`,
     `worker-src 'self' blob:`,
     `manifest-src 'self'`,
+    `report-uri ${CSP_REPORT_PATH}`,
   ];
 
   return directives.join('; ');
@@ -78,7 +81,8 @@ export function getSecurityHeaders(isProduction: boolean): Record<string, string
     'Permissions-Policy':
       'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()',
     'X-Frame-Options': 'DENY',
-    'Cross-Origin-Opener-Policy': 'same-origin',
+    // WalletConnect verify popups require same-origin-allow-popups.
+    'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
     'Cross-Origin-Resource-Policy': 'same-site',
     'Content-Security-Policy-Report-Only': buildContentSecurityPolicyReportOnly(),
   };

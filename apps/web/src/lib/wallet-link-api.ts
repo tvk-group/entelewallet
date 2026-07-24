@@ -14,9 +14,7 @@ export interface WalletConnectionsResponse {
   };
 }
 
-export async function fetchWalletConnections(
-  address?: string,
-): Promise<WalletConnectionsResponse> {
+export async function fetchWalletConnections(address?: string): Promise<WalletConnectionsResponse> {
   const url = address
     ? `/api/wallet/connections?address=${encodeURIComponent(address)}`
     : '/api/wallet/connections';

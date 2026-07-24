@@ -168,8 +168,7 @@ export async function fetchMultiChainPortfolio(
 
 export function formatAssetBalance(asset: PortfolioAsset): string | null {
   if (!asset.balance) return null;
-  return parseFloat(formatUnits(BigInt(asset.balance), asset.decimals)).toLocaleString(
-    undefined,
-    { maximumFractionDigits: 6 },
-  );
+  return parseFloat(formatUnits(BigInt(asset.balance), asset.decimals)).toLocaleString(undefined, {
+    maximumFractionDigits: 6,
+  });
 }

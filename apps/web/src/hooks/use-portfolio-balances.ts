@@ -19,7 +19,7 @@ const balanceQueryOptions = {
   gcTime: BALANCE_GC_MS,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
-  placeholderData: <T,>(previous: T | undefined) => previous,
+  placeholderData: <T>(previous: T | undefined) => previous,
 } as const;
 
 /**
@@ -40,10 +40,7 @@ export function usePortfolioBalances() {
 
   const cacheKey =
     address && viewChainId ? balanceCacheKey(address, viewChainId, networkViewId) : null;
-  const cached = useMemo(
-    () => (cacheKey ? readBalanceCache(cacheKey) : null),
-    [cacheKey],
-  );
+  const cached = useMemo(() => (cacheKey ? readBalanceCache(cacheKey) : null), [cacheKey]);
 
   const chainConfig = getChainConfig(viewChainId);
   const nativeSymbol = chainConfig?.nativeCurrency.symbol ?? 'ETH';
@@ -129,13 +126,11 @@ export function usePortfolioBalances() {
   }, [cached, erc20Results, erc20Tokens]);
 
   const nativeValue =
-    nativeBalance?.value ??
-    (cached?.native !== undefined ? BigInt(cached.native) : undefined);
+    nativeBalance?.value ?? (cached?.native !== undefined ? BigInt(cached.native) : undefined);
 
   const hasCachedData = Boolean(cached);
   const hasLiveNative = nativeBalance !== undefined;
-  const hasLiveErc20 =
-    contracts.length === 0 || (erc20Results !== undefined && !erc20Loading);
+  const hasLiveErc20 = contracts.length === 0 || (erc20Results !== undefined && !erc20Loading);
 
   useEffect(() => {
     if (!cacheKey || !address) return;
@@ -179,8 +174,7 @@ export function usePortfolioBalances() {
       (erc20Loading && contracts.length > 0 && erc20Balances.size === 0));
 
   const isRefreshing =
-    (nativeFetching && nativeValue !== undefined) ||
-    (erc20Fetching && erc20Balances.size > 0);
+    (nativeFetching && nativeValue !== undefined) || (erc20Fetching && erc20Balances.size > 0);
 
   return {
     tokens,

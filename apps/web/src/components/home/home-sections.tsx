@@ -72,7 +72,9 @@ export function HomeWhatItDoes() {
   return (
     <section className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.whatItDoesTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.whatItDoesTitle')}
+        </h2>
         <p className="mt-2 text-slate-600">{t('home.whatItDoesSubtitle')}</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -106,7 +108,9 @@ export function HomeWhatItDoesNot() {
   return (
     <section className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.whatItDoesNotTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.whatItDoesNotTitle')}
+        </h2>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {notKeys.map((key, i) => (
@@ -126,7 +130,9 @@ export function HomeEcosystemMap() {
   return (
     <section className="relative space-y-6 py-4">
       <div className="relative z-10 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.ecosystemTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.ecosystemTitle')}
+        </h2>
         <p className="mx-auto mt-2 max-w-2xl text-slate-600">{t('home.ecosystemSubtitle')}</p>
       </div>
       <EcosystemCyberCoin />
@@ -149,7 +155,9 @@ export function HomeSecurityTimeline() {
   return (
     <section className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.securityTimelineTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.securityTimelineTitle')}
+        </h2>
       </div>
       <ol className="relative mx-auto max-w-3xl space-y-0">
         {TIMELINE_KEYS.map((key, i) => (
@@ -187,7 +195,9 @@ export function HomeEnkPreview() {
   return (
     <section className="space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.transparencyPreviewTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.transparencyPreviewTitle')}
+        </h2>
       </div>
       <PremiumCard className="relative mx-auto max-w-2xl !p-8 verified-glow border-emerald-200/60">
         <div className="mb-4 flex items-center justify-between gap-3">
@@ -195,7 +205,9 @@ export function HomeEnkPreview() {
             <CheckCircle2 className="h-8 w-8 text-emerald-600" />
             <div>
               <h3 className="text-lg font-bold text-slate-900">{enk.name}</h3>
-              <p className="text-sm text-slate-500">{enk.network} · {t('transparency.verified')}</p>
+              <p className="text-sm text-slate-500">
+                {enk.network} · {t('transparency.verified')}
+              </p>
             </div>
           </div>
           <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
@@ -222,7 +234,9 @@ export function HomeEnkPreview() {
             </a>
           )}
           <Link href={ROUTES.transparency}>
-            <Button variant="ghost" size="sm">{t('common.transparencyCenter')}</Button>
+            <Button variant="ghost" size="sm">
+              {t('common.transparencyCenter')}
+            </Button>
           </Link>
         </div>
       </PremiumCard>
@@ -246,7 +260,9 @@ export function HomePwaSection() {
     <section className="space-y-8">
       <div className="flex flex-col items-center gap-2 text-center">
         <Sparkles className="h-8 w-8 text-violet-600" />
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('home.pwaSectionTitle')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t('home.pwaSectionTitle')}
+        </h2>
         <p className="max-w-xl text-slate-600">{t('install.description')}</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">

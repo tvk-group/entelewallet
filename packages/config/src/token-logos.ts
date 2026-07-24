@@ -2,7 +2,8 @@
 const COINGECKO_THUMB: Record<string, string> = {
   ethereum: 'https://coin-images.coingecko.com/coins/images/279/small/ethereum.png',
   weth: 'https://coin-images.coingecko.com/coins/images/2518/small/weth.png',
-  'wrapped-bitcoin': 'https://coin-images.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png',
+  'wrapped-bitcoin':
+    'https://coin-images.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png',
   tether: 'https://coin-images.coingecko.com/coins/images/325/small/Tether.png',
   'usd-coin': 'https://coin-images.coingecko.com/coins/images/6319/small/usdc.png',
   dai: 'https://coin-images.coingecko.com/coins/images/9956/small/Badge_Dai.png',
@@ -24,9 +25,11 @@ const COINGECKO_THUMB: Record<string, string> = {
   litecoin: 'https://coin-images.coingecko.com/coins/images/2/small/litecoin.png',
   'shiba-inu': 'https://coin-images.coingecko.com/coins/images/11939/small/shiba.png',
   'the-open-network': 'https://coin-images.coingecko.com/coins/images/17980/small/ton_symbol.png',
-  'polygon-ecosystem-token': 'https://coin-images.coingecko.com/coins/images/32440/small/polygon.png',
+  'polygon-ecosystem-token':
+    'https://coin-images.coingecko.com/coins/images/32440/small/polygon.png',
   binancecoin: 'https://coin-images.coingecko.com/coins/images/825/small/bnb-icon2_2x.png',
-  'avalanche-2': 'https://coin-images.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png',
+  'avalanche-2':
+    'https://coin-images.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png',
 };
 
 export function getCoingeckoThumbUrl(coingeckoId?: string): string | undefined {

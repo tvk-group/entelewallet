@@ -35,9 +35,7 @@ export const wagmiChains = getWagmiViemChains();
 
 function walletConnectMetadata() {
   const origin =
-    typeof window !== 'undefined'
-      ? window.location.origin
-      : CANONICAL_APP_URL.replace(/\/$/, '');
+    typeof window !== 'undefined' ? window.location.origin : CANONICAL_APP_URL.replace(/\/$/, '');
 
   return {
     name: 'EnteleWALLET',
@@ -86,8 +84,7 @@ function createEnteleWalletConfig(): Config {
     appName: 'EnteleWALLET',
     appDescription:
       'EnteleWALLET Lite — connect and verify your wallet for the EnteleKRON ecosystem.',
-    appUrl:
-      typeof window !== 'undefined' ? window.location.origin : CANONICAL_APP_URL,
+    appUrl: typeof window !== 'undefined' ? window.location.origin : CANONICAL_APP_URL,
     projectId,
     wallets,
     chains: [...wagmiChains],

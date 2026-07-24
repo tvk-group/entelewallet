@@ -6,10 +6,7 @@ import { useAccount, useConnectors } from 'wagmi';
 import { PageLayout } from '@/components/page-layout';
 import { WalletDebugPanel } from '@/components/wallet-debug-panel';
 import { WalletErrorBoundary } from '@/components/wallet-error-boundary';
-import {
-  isWalletConnectConfigured,
-  walletConnectProjectId,
-} from '@/lib/wagmi';
+import { isWalletConnectConfigured, walletConnectProjectId } from '@/lib/wagmi';
 import {
   describeConnector,
   findAnyWalletConnectConnector,

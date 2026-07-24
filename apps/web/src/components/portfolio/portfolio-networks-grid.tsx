@@ -75,7 +75,9 @@ export function PortfolioNetworksGrid() {
                       />
                     </div>
                     <div className="min-w-0 w-full">
-                      <p className="truncate text-xs font-semibold text-slate-900">{network.name}</p>
+                      <p className="truncate text-xs font-semibold text-slate-900">
+                        {network.name}
+                      </p>
                       <p className="truncate text-[10px] text-slate-500">
                         {network.nativeCurrency.symbol}
                       </p>

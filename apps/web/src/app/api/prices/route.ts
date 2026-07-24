@@ -16,11 +16,25 @@ let cache: PriceCache = { updatedAt: 0, prices: {} };
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const idsParam = searchParams.get('ids') ?? '';
-  const ids = [...new Set(idsParam.split(',').map((id) => id.trim()).filter(Boolean))];
+  const ids = [
+    ...new Set(
+      idsParam
+        .split(',')
+        .map((id) => id.trim())
+        .filter(Boolean),
+    ),
+  ];
 
   const platform = searchParams.get('platform')?.trim();
   const contractsParam = searchParams.get('contracts') ?? '';
-  const contracts = [...new Set(contractsParam.split(',').map((c) => c.trim().toLowerCase()).filter(Boolean))];
+  const contracts = [
+    ...new Set(
+      contractsParam
+        .split(',')
+        .map((c) => c.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ];
   const chainId = Number(searchParams.get('chainId') ?? '0');
 
   if (ids.length === 0 && contracts.length === 0) {
@@ -88,10 +102,7 @@ export async function GET(request: Request) {
           partial: true,
         });
       }
-      return NextResponse.json(
-        { error: 'Price fetch failed', prices: {} },
-        { status: 502 },
-      );
+      return NextResponse.json({ error: 'Price fetch failed', prices: {} }, { status: 502 });
     }
   }
 

@@ -162,7 +162,9 @@ export function NetworkChainPicker({ className, variant = 'panel' }: NetworkChai
                           <p className="text-xs text-slate-500">
                             {network.nativeCurrency.symbol} · ID {network.chainId}
                             {walletOnNetwork && (
-                              <span className="ml-1 text-emerald-700">· {t('networks.walletActive')}</span>
+                              <span className="ml-1 text-emerald-700">
+                                · {t('networks.walletActive')}
+                              </span>
                             )}
                           </p>
                         </div>

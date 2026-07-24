@@ -19,14 +19,14 @@ EnteleWALLET Lite is **read-only and non-custodial**:
 
 ## Verification Security
 
-| Control | Implementation |
-|---------|---------------|
-| Signature type | SIWE (EIP-4361) — ownership only |
-| Nonce expiry | 8 minutes |
-| Nonce reuse | Single-use, marked after verification |
-| Domain check | Must match the browser origin on an allowed host (`entelewallet.app` or alias) |
-| Chain ID | Stored and verified |
-| Gas cost | Zero — signature only, no transaction |
+| Control        | Implementation                                                                 |
+| -------------- | ------------------------------------------------------------------------------ |
+| Signature type | SIWE (EIP-4361) — ownership only                                               |
+| Nonce expiry   | 8 minutes                                                                      |
+| Nonce reuse    | Single-use, marked after verification                                          |
+| Domain check   | Must match the browser origin on an allowed host (`entelewallet.app` or alias) |
+| Chain ID       | Stored and verified                                                            |
+| Gas cost       | Zero — signature only, no transaction                                          |
 
 ## Feature Flags
 
@@ -48,6 +48,7 @@ Dangerous features are disabled by default in `packages/config/src/features.ts`:
 ## User-Facing Warnings
 
 All pages display:
+
 - Lite custody warning
 - Signature safety warning on connect/verify flows
 - Official domain list in Security Center

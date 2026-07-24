@@ -237,7 +237,13 @@
     "riskFlag": "low",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "scroll",
@@ -254,7 +260,13 @@
     "riskFlag": "low",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "zksync",
@@ -271,7 +283,13 @@
     "riskFlag": "low",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "blast",
@@ -288,7 +306,13 @@
     "riskFlag": "medium",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "fantom",
@@ -305,7 +329,13 @@
     "riskFlag": "medium",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "gnosis",
@@ -322,7 +352,13 @@
     "riskFlag": "low",
     "portfolioTier": "full",
     "capabilities": { "watchOnly": true, "walletConnect": true, "transactions": false },
-    "verification": { "rpcVerified": false, "explorerVerified": false, "signingTested": false, "balanceDetectionTested": false, "tokenDetectionTested": false }
+    "verification": {
+      "rpcVerified": false,
+      "explorerVerified": false,
+      "signingTested": false,
+      "balanceDetectionTested": false,
+      "tokenDetectionTested": false
+    }
   },
   {
     "id": "mantle",

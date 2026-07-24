@@ -1,15 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  ShieldCheck,
-  Wallet,
-  FileCheck,
-  Lock,
-  Eye,
-  Coins,
-  Ban,
-} from 'lucide-react';
+import { ShieldCheck, Wallet, FileCheck, Lock, Eye, Coins, Ban } from 'lucide-react';
 import { useT } from '@/lib/i18n-context';
 import { useAccount } from 'wagmi';
 import { useWalletStatus } from '@/lib/wallet-context';

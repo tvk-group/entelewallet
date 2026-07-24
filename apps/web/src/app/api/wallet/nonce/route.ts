@@ -9,10 +9,11 @@ import {
   getClientIp,
   readWalletApiBody,
   SAFE_NONCE_UNAVAILABLE_ERROR,
+  SAFE_RATE_LIMIT_UNAVAILABLE_ERROR,
   SAFE_WALLET_API_ERROR,
   validateWalletApiOrigin,
 } from '@/lib/siwe-api-security';
-import { enforceWalletApiRateLimit } from '@/lib/rate-limit';
+import { enforceWalletApiRateLimit, RateLimitStorageUnavailableError } from '@/lib/rate-limit';
 
 const schema = z.object({
   address: z.string(),
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     const body = schema.parse(JSON.parse(rawBody));
     const normalized = normalizeAddress(body.address);
 
-    const rateLimit = enforceWalletApiRateLimit({
+    const rateLimit = await enforceWalletApiRateLimit({
       scope: 'nonce',
       ip: getClientIp(request),
       walletAddress: normalized,
@@ -80,6 +81,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message, nonce, expiresAt: expiresAt.toISOString(), domain });
   } catch (err) {
+    if (err instanceof RateLimitStorageUnavailableError) {
+      return NextResponse.json({ error: SAFE_RATE_LIMIT_UNAVAILABLE_ERROR }, { status: 503 });
+    }
     if (err instanceof NonceStorageUnavailableError) {
       return NextResponse.json({ error: SAFE_NONCE_UNAVAILABLE_ERROR }, { status: 503 });
     }

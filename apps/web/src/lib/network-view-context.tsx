@@ -73,19 +73,14 @@ export function NetworkViewProvider({ children }: { children: ReactNode }) {
     }
   }, [isConnected, chainId]);
 
-  const activeNetwork = useMemo(
-    () => getDisplayNetworkById(networkViewId),
-    [networkViewId],
-  );
+  const activeNetwork = useMemo(() => getDisplayNetworkById(networkViewId), [networkViewId]);
 
   const value = useMemo(
     () => ({ networkViewId, setNetworkViewId, activeNetwork }),
     [networkViewId, setNetworkViewId, activeNetwork],
   );
 
-  return (
-    <NetworkViewContext.Provider value={value}>{children}</NetworkViewContext.Provider>
-  );
+  return <NetworkViewContext.Provider value={value}>{children}</NetworkViewContext.Provider>;
 }
 
 export function useNetworkView() {

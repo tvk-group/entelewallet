@@ -4,17 +4,17 @@ EnteleWALLET Lite is the first production phase of the EnteleWALLET master walle
 
 ## Documents
 
-| Document | Description |
-|----------|-------------|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | System architecture and monorepo structure |
-| [SECURITY_MODEL.md](./SECURITY_MODEL.md) | Security model and verification flow |
-| [THREAT_MODEL.md](./THREAT_MODEL.md) | Threat model and mitigations |
-| [PHASES.md](./PHASES.md) | Product phases (Lite → Account → Full Wallet) |
-| [FUTURE_FULL_WALLET.md](./FUTURE_FULL_WALLET.md) | Future non-custodial wallet plan |
-| [LEGAL_AND_COMPLIANCE_NOTES.md](./LEGAL_AND_COMPLIANCE_NOTES.md) | Legal and compliance notes |
-| [I18N.md](./I18N.md) | Internationalization system |
-| [DEPLOYMENT.md](./DEPLOYMENT.md) | Deployment guide |
-| [ENVIRONMENT.md](./ENVIRONMENT.md) | Environment variables |
+| Document                                                                   | Description                                        |
+| -------------------------------------------------------------------------- | -------------------------------------------------- |
+| [ARCHITECTURE.md](./ARCHITECTURE.md)                                       | System architecture and monorepo structure         |
+| [SECURITY_MODEL.md](./SECURITY_MODEL.md)                                   | Security model and verification flow               |
+| [THREAT_MODEL.md](./THREAT_MODEL.md)                                       | Threat model and mitigations                       |
+| [PHASES.md](./PHASES.md)                                                   | Product phases (Lite → Account → Full Wallet)      |
+| [FUTURE_FULL_WALLET.md](./FUTURE_FULL_WALLET.md)                           | Future non-custodial wallet plan                   |
+| [LEGAL_AND_COMPLIANCE_NOTES.md](./LEGAL_AND_COMPLIANCE_NOTES.md)           | Legal and compliance notes                         |
+| [I18N.md](./I18N.md)                                                       | Internationalization system                        |
+| [DEPLOYMENT.md](./DEPLOYMENT.md)                                           | Deployment guide                                   |
+| [ENVIRONMENT.md](./ENVIRONMENT.md)                                         | Environment variables                              |
 | [ENTELEWALLET-PORTFOLIO-TASKLIST.md](./ENTELEWALLET-PORTFOLIO-TASKLIST.md) | Portfolio screens, API contracts, phased checklist |
 
 ## Quick Start
