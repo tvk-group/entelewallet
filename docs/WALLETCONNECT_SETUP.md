@@ -33,11 +33,27 @@ In the Reown Cloud dashboard for your project, add **exactly** these origins to 
 https://entelewallet.app
 https://app.entelewallet.com
 https://wallet.entelekron.io
+https://staging.entelewallet.app
 http://localhost:3000
 http://localhost:3001
 ```
 
 Requests from origins not on this list can be **denied**, which causes WalletConnect to fail silently or with a generic error on production domains.
+
+### Preview / staging deployments
+
+A working preview requires **both**:
+
+1. **`PREVIEW_ORIGIN_ALLOWLIST`** in Vercel — comma-separated exact origins for SIWE nonce/verify
+2. **Reown Dashboard → Project Domains** — add the same stable origin for WalletConnect
+
+Recommended stable preview origin:
+
+```text
+https://staging.entelewallet.app
+```
+
+Do **not** add wildcard `*.vercel.app` access. If you use per-branch preview URLs, list each URL explicitly in both places.
 
 After changing the allowlist, wait a few minutes and hard-refresh the app.
 

@@ -52,8 +52,9 @@ In Vercel Domains, **do not** point `app.entelewallet.com` at `www.entelewallet.
 - [ ] WalletConnect Project ID configured
 - [ ] Private RPC URLs set
 - [ ] `WALLET_VERIFICATION_SECRET` set (min 32 bytes — `openssl rand -hex 32`)
-- [ ] `RATE_LIMIT_HMAC_SECRET` set (or same value as verification secret)
-- [ ] Supabase migrations applied (nonces, rate limits, `consume_wallet_nonce`)
+- [ ] `RATE_LIMIT_HMAC_SECRET` set (min 32 bytes — **must differ** from `WALLET_VERIFICATION_SECRET`)
+- [ ] Supabase migrations applied (nonces, rate limits, privileged RPC hardening, pg_cron cleanup)
+- [ ] For preview/staging SIWE: `PREVIEW_ORIGIN_ALLOWLIST` includes the stable preview origin (see [WALLETCONNECT_SETUP.md](./WALLETCONNECT_SETUP.md))
 - [ ] SIWE domain matches production domain
 - [ ] OG image uploaded to public/og/
 - [ ] i18n:check passes

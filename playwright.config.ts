@@ -8,6 +8,7 @@ const e2eServerEnv = {
     process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '7eb3d2a411af6026d82c5d710156efce',
   WALLET_VERIFICATION_SECRET: process.env.WALLET_VERIFICATION_SECRET || 'a'.repeat(64),
   RATE_LIMIT_HMAC_SECRET: process.env.RATE_LIMIT_HMAC_SECRET || 'b'.repeat(64),
+  PLAYWRIGHT: 'true',
 };
 
 export default defineConfig({

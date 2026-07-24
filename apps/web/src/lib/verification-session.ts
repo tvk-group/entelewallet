@@ -1,6 +1,6 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'crypto';
 import { cookies } from 'next/headers';
-import { isProductionRuntime } from '@entelewallet/config';
+import { isProductionRuntime, isSecretStrongEnough } from '@entelewallet/config';
 import { normalizeAddress } from '@entelewallet/utils';
 
 const COOKIE_NAME = 'ew-wallet-verification';
@@ -40,10 +40,10 @@ export function getVerificationSecret(): string {
   const secret = process.env.WALLET_VERIFICATION_SECRET?.trim();
 
   if (isProductionRuntime()) {
-    if (!secret || getSecretByteLength(secret) < 32) {
+    if (!isSecretStrongEnough(secret)) {
       throw new VerificationSecretUnavailableError();
     }
-    return secret;
+    return secret!;
   }
 
   if (secret && getSecretByteLength(secret) >= 32) {
