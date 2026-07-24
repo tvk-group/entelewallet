@@ -1,25 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getClientIp } from '@/lib/siwe-api-security';
+import { parseSanitizedCspReport } from '@/lib/csp-report-parser';
 import { enforceCspReportRateLimit, RateLimitStorageUnavailableError } from '@/lib/rate-limit';
 
 const MAX_CSP_REPORT_BYTES = 8_192;
 
-function redactCspReportValue(value: unknown): unknown {
-  if (typeof value === 'string') {
-    if (value.length > 200) return `${value.slice(0, 80)}…[redacted]`;
-    if (/0x[a-fA-F0-9]{40}/.test(value)) return '[redacted-address]';
-    if (/[A-Za-z0-9+/]{40,}={0,2}/.test(value) && value.length > 32) return '[redacted-token]';
-    return value;
-  }
-  if (Array.isArray(value)) return value.map(redactCspReportValue);
-  if (value && typeof value === 'object') {
-    const out: Record<string, unknown> = {};
-    for (const [key, nested] of Object.entries(value)) {
-      out[key] = redactCspReportValue(nested);
+async function readBodyWithByteLimit(request: Request, maxBytes: number): Promise<string | null> {
+  if (!request.body) return null;
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let total = 0;
+  let body = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel();
+      return null;
     }
-    return out;
+    body += decoder.decode(value, { stream: true });
   }
-  return value;
+
+  body += decoder.decode();
+  return body;
 }
 
 export async function POST(request: NextRequest) {
@@ -56,18 +62,20 @@ export async function POST(request: NextRequest) {
     return new NextResponse(null, { status: 415 });
   }
 
-  const raw = await request.text();
-  if (!raw || raw.length > MAX_CSP_REPORT_BYTES) {
+  const raw = await readBodyWithByteLimit(request, MAX_CSP_REPORT_BYTES);
+  if (raw === null) {
+    return new NextResponse(null, { status: 413 });
+  }
+  if (!raw) {
     return new NextResponse(null, { status: 400 });
   }
 
-  try {
-    const parsed = JSON.parse(raw) as unknown;
-    const redacted = redactCspReportValue(parsed);
-    console.info('[csp_report]', JSON.stringify(redacted));
-  } catch {
+  const sanitized = parseSanitizedCspReport(raw);
+  if (!sanitized) {
     return new NextResponse(null, { status: 400 });
   }
+
+  console.info('[csp_report]', JSON.stringify(sanitized));
 
   return new NextResponse(null, { status: 204 });
 }

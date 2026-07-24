@@ -187,7 +187,7 @@ export async function readWalletApiBody(request: NextRequest): Promise<string | 
   return raw;
 }
 
-export function getClientIp(request: NextRequest): string {
+export function getClientIp(request: Pick<NextRequest, 'headers'>): string {
   return (
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||

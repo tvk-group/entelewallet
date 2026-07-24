@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server';
-import { CHAIN_COINGECKO_PLATFORM, contractPriceKey } from '@entelewallet/config';
+import { contractPriceKey } from '@entelewallet/config';
+import { getClientIp } from '@/lib/siwe-api-security';
+import { enforcePricesApiRateLimit, RateLimitStorageUnavailableError } from '@/lib/rate-limit';
+import {
+  estimateUpstreamRequestCount,
+  parsePriceContracts,
+  parsePriceIds,
+  PRICES_API_LIMITS,
+  resolveTrustedCoingeckoPlatform,
+} from '@/lib/prices-api';
 import {
   fetchCmcContracts,
   fetchCmcIds,
@@ -14,39 +23,87 @@ let cache: PriceCache = { updatedAt: 0, prices: {} };
 
 /** Server-side USD price proxy — CoinGecko primary, CoinMarketCap silent failover. */
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const idsParam = searchParams.get('ids') ?? '';
-  const ids = [
-    ...new Set(
-      idsParam
-        .split(',')
-        .map((id) => id.trim())
-        .filter(Boolean),
-    ),
-  ];
+  const requestUrl = request.url;
+  if (requestUrl.length > PRICES_API_LIMITS.maxQueryLength) {
+    return NextResponse.json({ error: 'Query too long' }, { status: 414 });
+  }
 
-  const platform = searchParams.get('platform')?.trim();
-  const contractsParam = searchParams.get('contracts') ?? '';
-  const contracts = [
-    ...new Set(
-      contractsParam
-        .split(',')
-        .map((c) => c.trim().toLowerCase())
-        .filter(Boolean),
-    ),
-  ];
-  const chainId = Number(searchParams.get('chainId') ?? '0');
+  const ip = getClientIp(request);
+  try {
+    const rateLimit = await enforcePricesApiRateLimit(ip);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: rateLimit.retryAfterSeconds
+            ? { 'Retry-After': String(rateLimit.retryAfterSeconds) }
+            : undefined,
+        },
+      );
+    }
+  } catch (err) {
+    if (err instanceof RateLimitStorageUnavailableError) {
+      return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+    }
+    throw err;
+  }
+
+  const { searchParams } = new URL(requestUrl);
+  const ids = parsePriceIds(searchParams.get('ids') ?? '');
+  const contracts = parsePriceContracts(searchParams.get('contracts') ?? '');
+  const chainIdParam = searchParams.get('chainId');
+  const chainId = chainIdParam ? Number(chainIdParam) : 0;
+  const requestedPlatform = searchParams.get('platform');
 
   if (ids.length === 0 && contracts.length === 0) {
     return NextResponse.json({ prices: {}, currency: 'usd' });
   }
 
+  if (contracts.length > 0) {
+    const platformResult = resolveTrustedCoingeckoPlatform({ chainId, requestedPlatform });
+    if ('error' in platformResult) {
+      return NextResponse.json({ error: platformResult.error }, { status: platformResult.status });
+    }
+
+    const upstreamCount = estimateUpstreamRequestCount(ids, contracts);
+    if (upstreamCount > PRICES_API_LIMITS.maxUpstreamRequests) {
+      return NextResponse.json({ error: 'Too many upstream requests' }, { status: 400 });
+    }
+
+    return handlePriceRequest({
+      ids,
+      contracts,
+      chainId,
+      platform: platformResult.platform,
+    });
+  }
+
+  if (requestedPlatform) {
+    return NextResponse.json({ error: 'Platform requires contracts and chainId' }, { status: 400 });
+  }
+
+  const upstreamCount = estimateUpstreamRequestCount(ids, contracts);
+  if (upstreamCount > PRICES_API_LIMITS.maxUpstreamRequests) {
+    return NextResponse.json({ error: 'Too many upstream requests' }, { status: 400 });
+  }
+
+  return handlePriceRequest({ ids, contracts, chainId: 0, platform: undefined });
+}
+
+async function handlePriceRequest(params: {
+  ids: string[];
+  contracts: string[];
+  chainId: number;
+  platform: string | undefined;
+}) {
+  const { ids, contracts, chainId, platform } = params;
   const now = Date.now();
   const stale = now - cache.updatedAt > CACHE_TTL_MS;
 
   const requestedKeys = [
     ...ids,
-    ...contracts.map((c) => (chainId ? contractPriceKey(chainId, c) : c)),
+    ...contracts.map((contract) => contractPriceKey(chainId, contract)),
   ];
   const missing = requestedKeys.filter((key) => cache.prices[key] === undefined);
 
@@ -70,19 +127,21 @@ export async function GET(request: Request) {
         }
       }
 
-      if (contracts.length > 0 && platform) {
+      if (contracts.length > 0 && platform && chainId > 0) {
         const fetchContracts = stale
           ? contracts
-          : contracts.filter((c) => nextPrices[contractPriceKey(chainId, c)] === undefined);
+          : contracts.filter(
+              (contract) => nextPrices[contractPriceKey(chainId, contract)] === undefined,
+            );
 
         if (fetchContracts.length > 0) {
           const fromCg = await fetchCoingeckoContracts(platform, chainId, fetchContracts);
           Object.assign(nextPrices, fromCg);
 
           const stillMissing = fetchContracts.filter(
-            (c) => nextPrices[contractPriceKey(chainId, c)] === undefined,
+            (contract) => nextPrices[contractPriceKey(chainId, contract)] === undefined,
           );
-          if (stillMissing.length > 0 && chainId) {
+          if (stillMissing.length > 0) {
             const fromCmc = await fetchCmcContracts(chainId, stillMissing);
             for (const [key, price] of Object.entries(fromCmc)) {
               if (nextPrices[key] === undefined) nextPrices[key] = price;
@@ -110,8 +169,6 @@ export async function GET(request: Request) {
     prices: pickPrices(requestedKeys, cache.prices),
     currency: 'usd',
     updatedAt: cache.updatedAt,
-    platform: platform ?? undefined,
-    supportedPlatforms: Object.values(CHAIN_COINGECKO_PLATFORM),
   });
 }
 

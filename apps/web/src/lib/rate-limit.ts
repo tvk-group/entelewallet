@@ -1,10 +1,11 @@
 import { createHmac } from 'crypto';
 import {
   allowMemoryNonceStore,
-  isDeployedProduction,
-  isProductionRuntime,
+  isSecretStrongEnough,
+  requiresIndependentSecrets,
+  secretsAreIndependent,
 } from '@entelewallet/config';
-import { createAdminClient, isSupabaseAdminConfigured } from '@/lib/supabase/admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export class RateLimitStorageUnavailableError extends Error {
   constructor(message = 'rate_limit_storage_unavailable') {
@@ -38,28 +39,57 @@ export const WALLET_API_LIMITS = {
   cspReport: {
     perIp: { limit: 30, windowMs: 60_000 },
   },
+  prices: {
+    perIp: { limit: 60, windowMs: 60_000 },
+  },
+  supportReport: {
+    perIp: { limit: 10, windowMs: 60_000 },
+  },
 } as const;
+
+const TEST_RATE_LIMIT_SECRET = 'test-rate-limit-hmac-secret-32-bytes-min!!';
 
 function allowMemoryRateLimit(): boolean {
   return allowMemoryNonceStore();
 }
 
-function getRateLimitHmacSecret(): string {
-  const secret =
-    process.env.RATE_LIMIT_HMAC_SECRET?.trim() || process.env.WALLET_VERIFICATION_SECRET?.trim();
+function validateRateLimitSecrets(): void {
+  const rateLimitSecret = process.env.RATE_LIMIT_HMAC_SECRET?.trim();
+  const walletSecret = process.env.WALLET_VERIFICATION_SECRET?.trim();
 
-  if (isProductionRuntime()) {
-    if (!secret || secret.length < 32) {
+  if (requiresIndependentSecrets()) {
+    if (!isSecretStrongEnough(rateLimitSecret)) {
       throw new RateLimitStorageUnavailableError();
     }
-    return secret;
+    if (!isSecretStrongEnough(walletSecret)) {
+      throw new RateLimitStorageUnavailableError();
+    }
+    if (!secretsAreIndependent(rateLimitSecret, walletSecret)) {
+      throw new RateLimitStorageUnavailableError();
+    }
+    return;
   }
 
-  return secret || 'test-rate-limit-hmac-secret-32-bytes-min!!';
+  if (rateLimitSecret && !isSecretStrongEnough(rateLimitSecret)) {
+    throw new RateLimitStorageUnavailableError();
+  }
+}
+
+function getRateLimitHmacSecret(): string {
+  validateRateLimitSecrets();
+
+  const secret = process.env.RATE_LIMIT_HMAC_SECRET?.trim();
+  if (secret) return secret;
+
+  if (allowMemoryRateLimit()) {
+    return TEST_RATE_LIMIT_SECRET;
+  }
+
+  throw new RateLimitStorageUnavailableError();
 }
 
 function shouldUsePersistentRateLimit(): boolean {
-  return isSupabaseAdminConfigured() && (isDeployedProduction() || !allowMemoryRateLimit());
+  return !allowMemoryRateLimit();
 }
 
 export function deriveRateLimitBucketKey(scope: string, identifier: string): string {
@@ -116,10 +146,7 @@ async function checkPersistentRateLimit(
 ): Promise<RateLimitResult> {
   const admin = createAdminClient();
   if (!admin) {
-    if (isDeployedProduction()) {
-      throw new RateLimitStorageUnavailableError();
-    }
-    return checkMemoryRateLimit(bucketKey, limit, windowMs);
+    throw new RateLimitStorageUnavailableError();
   }
 
   const windowSeconds = Math.max(1, Math.floor(windowMs / 1000));
@@ -130,19 +157,13 @@ async function checkPersistentRateLimit(
   });
 
   if (error) {
-    if (isDeployedProduction()) {
-      console.error('[rate_limit] Supabase increment failed in production');
-      throw new RateLimitStorageUnavailableError();
-    }
-    return checkMemoryRateLimit(bucketKey, limit, windowMs);
+    console.error('[rate_limit] Supabase increment failed');
+    throw new RateLimitStorageUnavailableError();
   }
 
   const row = Array.isArray(data) ? data[0] : data;
   if (!row) {
-    if (isDeployedProduction()) {
-      throw new RateLimitStorageUnavailableError();
-    }
-    return checkMemoryRateLimit(bucketKey, limit, windowMs);
+    throw new RateLimitStorageUnavailableError();
   }
 
   return {
@@ -194,6 +215,18 @@ export async function enforceCspReportRateLimit(ip: string): Promise<RateLimitRe
   const limits = WALLET_API_LIMITS.cspReport;
   const { ipKey } = deriveClientIdentifier(ip);
   return checkRateLimitKey(`csp-report:ip:${ipKey}`, limits.perIp.limit, limits.perIp.windowMs);
+}
+
+export async function enforcePricesApiRateLimit(ip: string): Promise<RateLimitResult> {
+  const limits = WALLET_API_LIMITS.prices;
+  const { ipKey } = deriveClientIdentifier(ip);
+  return checkRateLimitKey(`prices:ip:${ipKey}`, limits.perIp.limit, limits.perIp.windowMs);
+}
+
+export async function enforceSupportReportRateLimit(ip: string): Promise<RateLimitResult> {
+  const limits = WALLET_API_LIMITS.supportReport;
+  const { ipKey } = deriveClientIdentifier(ip);
+  return checkRateLimitKey(`support-report:ip:${ipKey}`, limits.perIp.limit, limits.perIp.windowMs);
 }
 
 /** Reset in-memory buckets — test helper only. */

@@ -1,5 +1,6 @@
 export * from './features';
 export * from './runtime';
+export * from './secrets';
 export * from './chains';
 export * from './tokens';
 export * from './brand';

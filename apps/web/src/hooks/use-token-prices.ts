@@ -22,11 +22,10 @@ async function fetchPrices(ids: string[]): Promise<TokenPrices> {
 
 async function fetchContractPrices(chainId: number, contracts: string[]): Promise<TokenPrices> {
   if (contracts.length === 0) return {};
-  const platform = getCoingeckoPlatform(chainId);
-  if (!platform) return {};
+  if (!getCoingeckoPlatform(chainId)) return {};
 
   const res = await fetch(
-    `/api/prices?platform=${encodeURIComponent(platform)}&chainId=${chainId}&contracts=${encodeURIComponent(contracts.join(','))}`,
+    `/api/prices?chainId=${chainId}&contracts=${encodeURIComponent(contracts.join(','))}`,
   );
   const data = (await res.json()) as { prices?: TokenPrices };
   return data.prices ?? {};

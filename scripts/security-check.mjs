@@ -142,6 +142,20 @@ try {
   if (!rateLimitContent.includes('deriveRateLimitBucketKey')) {
     errors.push('rate-limit.ts must HMAC-derive bucket keys');
   }
+  if (
+    /RATE_LIMIT_HMAC_SECRET\?\.trim\(\)\s*\|\|\s*process\.env\.WALLET_VERIFICATION_SECRET/.test(
+      rateLimitContent,
+    )
+  ) {
+    errors.push(
+      'rate-limit.ts must not fall back RATE_LIMIT_HMAC_SECRET to WALLET_VERIFICATION_SECRET',
+    );
+  }
+  if (!rateLimitContent.includes('secretsAreIndependent')) {
+    errors.push(
+      'rate-limit.ts must reject equal WALLET_VERIFICATION_SECRET and RATE_LIMIT_HMAC_SECRET',
+    );
+  }
 } catch {
   errors.push('rate-limit.ts not found');
 }
@@ -180,9 +194,45 @@ try {
 // 10. CSP reporting endpoint must exist
 const cspReportPath = join(root, 'apps/web/src/app/api/security/csp-report/route.ts');
 try {
-  read(cspReportPath);
+  const cspContent = read(cspReportPath);
+  if (!cspContent.includes('readBodyWithByteLimit')) {
+    errors.push('csp-report route must enforce a streaming byte limit');
+  }
+  if (!cspContent.includes('parseSanitizedCspReport')) {
+    errors.push('csp-report route must parse only documented CSP report fields');
+  }
 } catch {
   errors.push('CSP report endpoint missing at apps/web/src/app/api/security/csp-report/route.ts');
+}
+
+// 10b. Support reports must require service role key
+const supportReportPath = join(root, 'apps/web/src/app/api/support/report/route.ts');
+try {
+  const supportContent = read(supportReportPath);
+  if (supportContent.includes('NEXT_PUBLIC_SUPABASE_ANON_KEY')) {
+    errors.push('support report route must not use NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  }
+  if (!supportContent.includes('createAdminClient')) {
+    errors.push(
+      'support report route must require SUPABASE_SERVICE_ROLE_KEY via createAdminClient()',
+    );
+  }
+} catch {
+  errors.push('support report route missing at apps/web/src/app/api/support/report/route.ts');
+}
+
+// 10c. Prices route must derive CoinGecko platform from chainId
+const pricesRoutePath = join(root, 'apps/web/src/app/api/prices/route.ts');
+try {
+  const pricesContent = read(pricesRoutePath);
+  if (!pricesContent.includes('resolveTrustedCoingeckoPlatform')) {
+    errors.push('prices route must derive platform from CHAIN_COINGECKO_PLATFORM via chainId');
+  }
+  if (!pricesContent.includes('enforcePricesApiRateLimit')) {
+    errors.push('prices route must enforce public-endpoint rate limiting');
+  }
+} catch {
+  errors.push('prices route missing at apps/web/src/app/api/prices/route.ts');
 }
 
 // 11. Node.js 22 runtime

@@ -13,6 +13,7 @@ describe('rate limiting', () => {
     vi.stubEnv('NODE_ENV', 'test');
     vi.stubEnv('VITEST', 'true');
     vi.stubEnv('WALLET_VERIFICATION_SECRET', 'a'.repeat(64));
+    vi.stubEnv('RATE_LIMIT_HMAC_SECRET', 'b'.repeat(64));
   });
 
   it('allows requests under the limit', () => {
@@ -87,6 +88,39 @@ describe('rate limiting', () => {
       enforceWalletApiRateLimit({
         scope: 'verify',
         ip: '203.0.113.2',
+      }),
+    ).rejects.toThrow('rate_limit_storage_unavailable');
+  });
+
+  it('fails closed on public preview deployments without persistent storage', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('VERCEL_ENV', 'preview');
+    vi.stubEnv('VITEST', '');
+    delete process.env.VITEST;
+    vi.stubEnv('WALLET_VERIFICATION_SECRET', 'a'.repeat(64));
+    vi.stubEnv('RATE_LIMIT_HMAC_SECRET', 'b'.repeat(64));
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    await expect(
+      enforceWalletApiRateLimit({
+        scope: 'nonce',
+        ip: '203.0.113.3',
+      }),
+    ).rejects.toThrow('rate_limit_storage_unavailable');
+  });
+
+  it('rejects equal verification and rate-limit secrets in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('VERCEL_ENV', 'production');
+    const shared = 'c'.repeat(64);
+    vi.stubEnv('WALLET_VERIFICATION_SECRET', shared);
+    vi.stubEnv('RATE_LIMIT_HMAC_SECRET', shared);
+
+    await expect(
+      enforceWalletApiRateLimit({
+        scope: 'verify',
+        ip: '203.0.113.4',
       }),
     ).rejects.toThrow('rate_limit_storage_unavailable');
   });
