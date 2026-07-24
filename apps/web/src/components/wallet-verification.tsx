@@ -59,13 +59,16 @@ export function WalletVerification() {
       const nonceRes = await fetch('/api/wallet/nonce', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ address, chainId }),
       });
 
       const nonceBody = await nonceRes.json().catch(() => ({}));
       if (!nonceRes.ok) {
         throw new Error(
-          typeof nonceBody.error === 'string' ? nonceBody.error : 'Failed to create verification nonce',
+          typeof nonceBody.error === 'string'
+            ? nonceBody.error
+            : 'Failed to create verification nonce',
         );
       }
 
@@ -80,6 +83,7 @@ export function WalletVerification() {
       const verifyRes = await fetch('/api/wallet/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ message, signature, address, chainId }),
       });
 
@@ -95,7 +99,10 @@ export function WalletVerification() {
     } catch (err) {
       setVerificationStatus('verification_failed');
       const message = err instanceof Error ? err.message : t('connect.verificationFailed');
-      if (message.toLowerCase().includes('user rejected') || message.toLowerCase().includes('denied')) {
+      if (
+        message.toLowerCase().includes('user rejected') ||
+        message.toLowerCase().includes('denied')
+      ) {
         setError(t('connect.signatureRejected'));
       } else {
         setError(message);

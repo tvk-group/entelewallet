@@ -5,7 +5,7 @@
 EnteleWALLET Lite is a TypeScript monorepo built with pnpm workspaces and Turborepo.
 
 ```
-entelewallet/
+entelewallet-app/
 ├── apps/web/              # Next.js App Router application
 ├── packages/
 │   ├── config/            # Domains, routes, feature flags, tokens, chains
@@ -40,9 +40,12 @@ entelewallet/
 
 ## Domain Model
 
-- **Canonical app:** `entelewallet.app`
+Canonical definitions: `packages/config/src/domains.ts`
+
+- **Canonical application:** `https://entelewallet.app`
+- **Marketing website:** `https://entelewallet.com`
 - **Official domains:** entelewallet.app, entelewallet.com, entelekron.io, tvk.group
-- **Redirects:** app.entelewallet.com, www.entelewallet.app, wallet.entelekron.io, entelewallet.org → entelewallet.app
+- **Redirect aliases:** app.entelewallet.com, www.entelewallet.app, wallet.entelekron.io, entelewallet.org → entelewallet.app
 
 ## Future Architecture
 

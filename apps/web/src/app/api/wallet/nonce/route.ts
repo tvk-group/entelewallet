@@ -4,7 +4,15 @@ import { SIWE_STATEMENT } from '@entelewallet/security';
 import { normalizeAddress } from '@entelewallet/utils';
 import { z } from 'zod';
 import { resolveSiweOrigin } from '@/lib/siwe-request';
-import { storeWalletNonce } from '@/lib/wallet-nonce-server';
+import { NonceStorageUnavailableError, storeWalletNonce } from '@/lib/wallet-nonce-server';
+import {
+  getClientIp,
+  readWalletApiBody,
+  SAFE_NONCE_UNAVAILABLE_ERROR,
+  SAFE_WALLET_API_ERROR,
+  validateWalletApiOrigin,
+} from '@/lib/siwe-api-security';
+import { enforceWalletApiRateLimit } from '@/lib/rate-limit';
 
 const schema = z.object({
   address: z.string(),
@@ -12,10 +20,36 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  if (!validateWalletApiOrigin(request)) {
+    return NextResponse.json({ error: SAFE_WALLET_API_ERROR }, { status: 403 });
+  }
+
+  const rawBody = await readWalletApiBody(request);
+  if (rawBody === null) {
+    return NextResponse.json({ error: SAFE_WALLET_API_ERROR }, { status: 413 });
+  }
+
   try {
-    const body = await request.json();
-    const { address, chainId } = schema.parse(body);
-    const normalized = normalizeAddress(address);
+    const body = schema.parse(JSON.parse(rawBody));
+    const normalized = normalizeAddress(body.address);
+
+    const rateLimit = enforceWalletApiRateLimit({
+      scope: 'nonce',
+      ip: getClientIp(request),
+      walletAddress: normalized,
+    });
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: SAFE_WALLET_API_ERROR },
+        {
+          status: 429,
+          headers: rateLimit.retryAfterSeconds
+            ? { 'Retry-After': String(rateLimit.retryAfterSeconds) }
+            : undefined,
+        },
+      );
+    }
+
     const nonce = generateNonce();
     const expiresAt = new Date(Date.now() + 8 * 60 * 1000);
     const host = request.headers.get('host');
@@ -24,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     const siweMessage = createSiweMessage({
       address: normalized,
-      chainId,
+      chainId: body.chainId,
       nonce,
       domain,
       uri,
@@ -36,18 +70,19 @@ export async function POST(request: NextRequest) {
 
     await storeWalletNonce({
       walletAddress: normalized,
-      chainId,
+      chainId: body.chainId,
       nonce,
       message,
       domain,
+      uri,
       expiresAt,
     });
 
     return NextResponse.json({ message, nonce, expiresAt: expiresAt.toISOString(), domain });
   } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Invalid request' },
-      { status: 400 },
-    );
+    if (err instanceof NonceStorageUnavailableError) {
+      return NextResponse.json({ error: SAFE_NONCE_UNAVAILABLE_ERROR }, { status: 503 });
+    }
+    return NextResponse.json({ error: SAFE_WALLET_API_ERROR }, { status: 400 });
   }
 }

@@ -24,3 +24,15 @@ export function hashString(input: string): string {
   }
   return Math.abs(hash).toString(16);
 }
+
+/** Redact wallet address for production logs. */
+export function redactAddress(address: string): string {
+  if (address.length < 12) return '0x…';
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+}
+
+/** Redact signature for production logs. */
+export function redactSignature(signature: string): string {
+  if (signature.length <= 16) return '0x…';
+  return `${signature.slice(0, 10)}…`;
+}
