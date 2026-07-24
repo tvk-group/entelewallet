@@ -93,9 +93,7 @@ export function CryptoMarketSearch() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium text-slate-900">
-                      {formatUsd(price) ?? '—'}
-                    </p>
+                    <p className="text-sm font-medium text-slate-900">{formatUsd(price) ?? '—'}</p>
                     {coin.rank && (
                       <Badge variant="info" className="mt-1 text-[10px]">
                         #{coin.rank}

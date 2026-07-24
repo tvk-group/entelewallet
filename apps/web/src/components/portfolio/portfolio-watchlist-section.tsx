@@ -109,7 +109,7 @@ export function PortfolioWatchlistSection() {
                     pricesLoading ? 'text-slate-400' : 'text-slate-900',
                   )}
                 >
-                  {pricesLoading ? t('assets.priceLoading') : formatUsd(priceUsd) ?? '—'}
+                  {pricesLoading ? t('assets.priceLoading') : (formatUsd(priceUsd) ?? '—')}
                 </td>
               </tr>
             ))}

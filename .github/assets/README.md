@@ -4,11 +4,11 @@ Official EnteleWALLET logos and banners.
 
 ## Files
 
-| File | Use |
-|------|------|
+| File                               | Use                                          |
+| ---------------------------------- | -------------------------------------------- |
 | `entelewallet-logo-horizontal.png` | Full logo — icon, wordmark, tagline on white |
-| `entelewallet-icon-512.png` | Icon mark on white — PWA, favicon, UI |
-| `social-preview.png` | GitHub social preview / Open Graph |
+| `entelewallet-icon-512.png`        | Icon mark on white — PWA, favicon, UI        |
+| `social-preview.png`               | GitHub social preview / Open Graph           |
 
 ## Website paths
 

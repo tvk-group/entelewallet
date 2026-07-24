@@ -1,5 +1,9 @@
 import type { TokenConfig } from '@entelewallet/types';
-import { getChainByChainId, getDefaultNetworkViewId, getDisplayNetworkById } from './chain-registry/registry';
+import {
+  getChainByChainId,
+  getDefaultNetworkViewId,
+  getDisplayNetworkById,
+} from './chain-registry/registry';
 import { MAJOR_TOKENS } from './major-tokens';
 
 const ENK_CONTRACT = '0xC95343B3f8A5af57a9b3B1acFf3D2a7654Fa28F6';

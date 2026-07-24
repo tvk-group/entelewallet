@@ -5,10 +5,7 @@ import {
   fetchWalletPreferences as fetchRemotePreferences,
 } from '@/lib/entelekron-api';
 import { EntelekronApiError } from '@/lib/entelekron-api';
-import {
-  readPortfolioPreferences,
-  writePortfolioPreferences,
-} from '@/lib/portfolio-preferences';
+import { readPortfolioPreferences, writePortfolioPreferences } from '@/lib/portfolio-preferences';
 
 async function fetchLocalPreferences(): Promise<WalletPreferences | null> {
   try {
@@ -30,7 +27,9 @@ function mergePreferences(partial: Partial<WalletPreferences>): WalletPreference
   };
 }
 
-async function patchLocalPreferences(patch: Partial<WalletPreferences>): Promise<WalletPreferences> {
+async function patchLocalPreferences(
+  patch: Partial<WalletPreferences>,
+): Promise<WalletPreferences> {
   const current = readPortfolioPreferences();
   const next = mergePreferences({ ...current, ...patch });
   writePortfolioPreferences(next);

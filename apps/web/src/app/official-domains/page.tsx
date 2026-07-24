@@ -3,10 +3,7 @@
 import { PageLayout } from '@/components/page-layout';
 import { useT } from '@/lib/i18n-context';
 import { Alert, Card, CardContent, LtrSpan } from '@entelewallet/ui';
-import {
-  CANONICAL_APP_URL,
-  APP_ALIAS_URL,
-} from '@entelewallet/config';
+import { CANONICAL_APP_URL, APP_ALIAS_URL } from '@entelewallet/config';
 
 const DOMAINS = [
   { domain: 'entelewallet.app', key: 'officialDomains.app', primary: true },
@@ -34,10 +31,15 @@ export default function OfficialDomainsPage() {
       </p>
       <div className="grid gap-3">
         {DOMAINS.map((d) => (
-          <Card key={d.domain} className={'primary' in d && d.primary ? 'border-cyan-300 bg-cyan-50/30' : ''}>
+          <Card
+            key={d.domain}
+            className={'primary' in d && d.primary ? 'border-cyan-300 bg-cyan-50/30' : ''}
+          >
             <CardContent className="flex flex-col gap-1 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <LtrSpan className="font-mono text-sm font-semibold text-slate-900">{d.domain}</LtrSpan>
+                <LtrSpan className="font-mono text-sm font-semibold text-slate-900">
+                  {d.domain}
+                </LtrSpan>
                 {'primary' in d && d.primary && (
                   <span className="ml-2 rounded-full bg-cyan-600 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
                     Primary

@@ -4,12 +4,12 @@ Portable ecosystem layer animation with 3D EnteleKRON / TVK Labs coin and 28 orb
 
 ## Quick links
 
-| Use case | URL / path |
-|----------|------------|
-| Live standalone demo | https://entelewallet.app/ecosystem-animation/embed.html |
-| Export bundle (copy/deploy) | `apps/web/public/ecosystem-animation/` |
-| React component | `apps/web/src/components/ecosystem-cyber-coin.tsx` |
-| Official 28 projects config | `packages/config/src/ecosystem.ts` |
+| Use case                    | URL / path                                              |
+| --------------------------- | ------------------------------------------------------- |
+| Live standalone demo        | https://entelewallet.app/ecosystem-animation/embed.html |
+| Export bundle (copy/deploy) | `apps/web/public/ecosystem-animation/`                  |
+| React component             | `apps/web/src/components/ecosystem-cyber-coin.tsx`      |
+| Official 28 projects config | `packages/config/src/ecosystem.ts`                      |
 
 Regenerate the portable bundle after changes:
 
@@ -53,36 +53,36 @@ For self-hosted copies, deploy the `ecosystem-animation/` folder to each domain:
 
 Single source of truth: `packages/config/src/ecosystem.ts`
 
-| # | Chip label | Full name |
-|---|------------|-----------|
-| 1 | ENK | ENK |
-| 2 | SOVRA AI | SOVRA AI |
-| 3 | EnergieMIND | EnergieMIND |
-| 4 | ENM | ENM |
-| 5 | EnteleWALLET | EnteleWALLET |
-| 6 | EnteleSCAN | EnteleSCAN |
-| 7 | EnteleLINK | EnteleLINK |
-| 8 | EnteleLEDGER | EnteleLEDGER |
-| 9 | EnteleCLOS | EnteleCLOS |
-| 10 | EnteleVAULT | EnteleVAULT |
-| 11 | TVK ID | TVK ID |
-| 12 | GraphVault | GraphVault |
-| 13 | ChronoSeal | ChronoSeal |
-| 14 | Q-Presence | Q-Presence |
-| 15 | Cerebthra | Cerebthra |
-| 16 | Cognethra | Cognethra |
-| 17 | SYNTHERRA | SYNTHERRA |
-| 18 | Sentient Signals | Sentient Signals |
-| 19 | TVK CyberLab | TVK CyberLab |
-| 20 | TVK Labs | TVK Labs & Technologies |
-| 21 | TVK Group Türkiye | TVK Group Türkiye |
-| 22 | TVK Wallet | TVK Wallet |
-| 23 | TVK Group | TVK Group |
-| 24 | ALVINA | ALVINA |
-| 25 | Ava Sentient | Ava Sentient |
-| 26 | Ava Santé | Ava Santé |
-| 27 | PuppyKRON | PuppyKRON |
-| 28 | KRON Assets | KRON Ecosystem Assets |
+| #   | Chip label        | Full name               |
+| --- | ----------------- | ----------------------- |
+| 1   | ENK               | ENK                     |
+| 2   | SOVRA AI          | SOVRA AI                |
+| 3   | EnergieMIND       | EnergieMIND             |
+| 4   | ENM               | ENM                     |
+| 5   | EnteleWALLET      | EnteleWALLET            |
+| 6   | EnteleSCAN        | EnteleSCAN              |
+| 7   | EnteleLINK        | EnteleLINK              |
+| 8   | EnteleLEDGER      | EnteleLEDGER            |
+| 9   | EnteleCLOS        | EnteleCLOS              |
+| 10  | EnteleVAULT       | EnteleVAULT             |
+| 11  | TVK ID            | TVK ID                  |
+| 12  | GraphVault        | GraphVault              |
+| 13  | ChronoSeal        | ChronoSeal              |
+| 14  | Q-Presence        | Q-Presence              |
+| 15  | Cerebthra         | Cerebthra               |
+| 16  | Cognethra         | Cognethra               |
+| 17  | SYNTHERRA         | SYNTHERRA               |
+| 18  | Sentient Signals  | Sentient Signals        |
+| 19  | TVK CyberLab      | TVK CyberLab            |
+| 20  | TVK Labs          | TVK Labs & Technologies |
+| 21  | TVK Group Türkiye | TVK Group Türkiye       |
+| 22  | TVK Wallet        | TVK Wallet              |
+| 23  | TVK Group         | TVK Group               |
+| 24  | ALVINA            | ALVINA                  |
+| 25  | Ava Sentient      | Ava Sentient            |
+| 26  | Ava Santé         | Ava Santé               |
+| 27  | PuppyKRON         | PuppyKRON               |
+| 28  | KRON Assets       | KRON Ecosystem Assets   |
 
 Replaced outdated chip names from earlier drafts (e.g. `GraphVAULT`, `Ava Sante`, experimental `*KRON` token variants not listed on official sites).
 

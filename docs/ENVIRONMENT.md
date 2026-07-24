@@ -4,9 +4,9 @@ See `.env.example` for the full list.
 
 ## Required for Production
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_APP_URL` | Canonical app URL (`https://entelewallet.app`) |
+| Variable                               | Description                                                                                                                                                                                                                                                                      |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                  | Canonical app URL (`https://entelewallet.app`)                                                                                                                                                                                                                                   |
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Reown (WalletConnect) Cloud project ID — 32-char hex from [cloud.reown.com](https://cloud.reown.com). Aliases: `NEXT_PUBLIC_REOWN_PROJECT_ID`, `NEXT_PUBLIC_WC_PROJECT_ID`. **Must be set before `pnpm build` / Vercel deploy** (Next.js inlines `NEXT_PUBLIC_*` at build time). |
 
 ## Supabase (account linking & auth)
@@ -36,29 +36,28 @@ Until Supabase is configured, wallet linking UI shows a configuration notice and
 
 ## Recommended
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_ETHEREUM_RPC_URL` | Private Ethereum RPC endpoint |
-| `NEXT_PUBLIC_BASE_RPC_URL` | Private Base RPC endpoint |
-| `ALCHEMY_API_KEY` | Server-only Alchemy key for ERC-20 auto-discovery and multi-network token balances |
-| `COINGECKO_API_KEY` | Optional CoinGecko demo API key for higher rate limits on `/api/prices` and `/api/markets/search` |
-| `COINMARKETCAP_API_KEY` | Optional CoinMarketCap Pro API key — silent failover on `/api/prices` when CoinGecko returns no quote |
-| `NEXT_PUBLIC_WALLET_IDLE_MS` | Auto-disconnect wallet after inactivity in ms (default `180000` = 3 minutes) |
+| Variable                       | Description                                                                                           |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_ETHEREUM_RPC_URL` | Private Ethereum RPC endpoint                                                                         |
+| `NEXT_PUBLIC_BASE_RPC_URL`     | Private Base RPC endpoint                                                                             |
+| `ALCHEMY_API_KEY`              | Server-only Alchemy key for ERC-20 auto-discovery and multi-network token balances                    |
+| `COINGECKO_API_KEY`            | Optional CoinGecko demo API key for higher rate limits on `/api/prices` and `/api/markets/search`     |
+| `COINMARKETCAP_API_KEY`        | Optional CoinMarketCap Pro API key — silent failover on `/api/prices` when CoinGecko returns no quote |
+| `NEXT_PUBLIC_WALLET_IDLE_MS`   | Auto-disconnect wallet after inactivity in ms (default `180000` = 3 minutes)                          |
 
 ## Portfolio (Phases B–E)
 
-| Variable | Description |
-|----------|-------------|
-| `ALCHEMY_API_KEY` | Required for auto-discovered ERC-20 tokens (`/api/portfolio/discover`). Set in Vercel for all preview/production environments. Never expose as `NEXT_PUBLIC_*`. |
-| `NEXT_PUBLIC_ENTELEKRON_URL` | EnteleKRON platform base for preferences/watchlist sync (default `https://entelekron.io`) |
+| Variable                     | Description                                                                                                                                                     |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ALCHEMY_API_KEY`            | Required for auto-discovered ERC-20 tokens (`/api/portfolio/discover`). Set in Vercel for all preview/production environments. Never expose as `NEXT_PUBLIC_*`. |
+| `NEXT_PUBLIC_ENTELEKRON_URL` | EnteleKRON platform base for preferences/watchlist sync (default `https://entelekron.io`)                                                                       |
 
 Preferences and watchlist sync via `/api/user/*` BFF routes when an EnteleKRON session cookie or Bearer token is present; otherwise localStorage fallback applies.
 
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NEXT_PUBLIC_ENABLE_WALLET_CONNECT` | true | Enable wallet connection |
-| `NEXT_PUBLIC_ENABLE_CLAIMS` | false | Enable claims (must stay false until ready) |
+| Variable                            | Default | Description                                 |
+| ----------------------------------- | ------- | ------------------------------------------- |
+| `NEXT_PUBLIC_ENABLE_WALLET_CONNECT` | true    | Enable wallet connection                    |
+| `NEXT_PUBLIC_ENABLE_CLAIMS`         | false   | Enable claims (must stay false until ready) |
 
 ## Missing WalletConnect Project ID
 
@@ -67,9 +66,9 @@ Preferences and watchlist sync via `/api/user/*` BFF routes when an EnteleKRON s
 
 ## Contact
 
-| Variable | Default |
-|----------|---------|
-| `GENERAL_CONTACT_EMAIL` | contact@entelewallet.com |
-| `SUPPORT_EMAIL` | support@entelewallet.com |
+| Variable                 | Default                   |
+| ------------------------ | ------------------------- |
+| `GENERAL_CONTACT_EMAIL`  | contact@entelewallet.com  |
+| `SUPPORT_EMAIL`          | support@entelewallet.com  |
 | `SECURITY_CONTACT_EMAIL` | security@entelewallet.com |
-| `LEGAL_CONTACT_EMAIL` | legal@entelewallet.com |
+| `LEGAL_CONTACT_EMAIL`    | legal@entelewallet.com    |

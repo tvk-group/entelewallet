@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -83,6 +83,8 @@ jobs:
         run: pnpm test:e2e --project=chromium
         env:
           NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: 7eb3d2a411af6026d82c5d710156efce
+          WALLET_VERIFICATION_SECRET: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          RATE_LIMIT_HMAC_SECRET: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
       - uses: actions/upload-artifact@v4
         if: failure()

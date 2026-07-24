@@ -107,7 +107,11 @@ export default function SettingsPage() {
                     >
                       {unlinking ? t('common.loading') : t('common.confirm')}
                     </Button>
-                    <Button variant="secondary" size="sm" onClick={() => setShowUnlinkConfirm(false)}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => setShowUnlinkConfirm(false)}
+                    >
                       {t('common.cancel')}
                     </Button>
                   </div>

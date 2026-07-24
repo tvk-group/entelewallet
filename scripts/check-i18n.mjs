@@ -61,21 +61,34 @@ for (const file of files) {
   });
 
   // Detect German leakage in English file only
-  const germanLeak = locale === 'en'
-    ? enKeys.filter((k) => {
-        const val = getValue(data, k);
-        return typeof val === 'string' && /\b(verbinden|bestätigen|unterstützung|sicherheit)\b/i.test(val);
-      })
-    : [];
+  const germanLeak =
+    locale === 'en'
+      ? enKeys.filter((k) => {
+          const val = getValue(data, k);
+          return (
+            typeof val === 'string' &&
+            /\b(verbinden|bestätigen|unterstützung|sicherheit)\b/i.test(val)
+          );
+        })
+      : [];
 
   if (missing.length || extra.length || empty.length || invalid.length || germanLeak.length) {
     hasErrors = true;
     console.error(`❌ ${locale}:`);
-    if (missing.length) console.error(`  Missing keys (${missing.length}): ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '...' : ''}`);
-    if (extra.length) console.error(`  Extra keys (${extra.length}): ${extra.slice(0, 5).join(', ')}`);
-    if (empty.length) console.error(`  Empty values (${empty.length}): ${empty.slice(0, 5).join(', ')}`);
-    if (invalid.length) console.error(`  Invalid values (${invalid.length}): ${invalid.slice(0, 5).join(', ')}`);
-    if (germanLeak.length) console.error(`  German leakage (${germanLeak.length}): ${germanLeak.slice(0, 5).join(', ')}`);
+    if (missing.length)
+      console.error(
+        `  Missing keys (${missing.length}): ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '...' : ''}`,
+      );
+    if (extra.length)
+      console.error(`  Extra keys (${extra.length}): ${extra.slice(0, 5).join(', ')}`);
+    if (empty.length)
+      console.error(`  Empty values (${empty.length}): ${empty.slice(0, 5).join(', ')}`);
+    if (invalid.length)
+      console.error(`  Invalid values (${invalid.length}): ${invalid.slice(0, 5).join(', ')}`);
+    if (germanLeak.length)
+      console.error(
+        `  German leakage (${germanLeak.length}): ${germanLeak.slice(0, 5).join(', ')}`,
+      );
   } else {
     console.log(`✅ ${locale}`);
   }

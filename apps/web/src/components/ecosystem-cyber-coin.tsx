@@ -196,7 +196,9 @@ export function EcosystemCyberCoin({ className }: EcosystemCyberCoinProps) {
                   <div
                     key={i}
                     className="cyber-coin-edge"
-                    style={{ '--edge-angle': `${(360 / COIN_EDGE_COUNT) * i}deg` } as React.CSSProperties}
+                    style={
+                      { '--edge-angle': `${(360 / COIN_EDGE_COUNT) * i}deg` } as React.CSSProperties
+                    }
                   />
                 ))}
               </div>

@@ -15,7 +15,9 @@ export function PortfolioNetworkBreakdown({ breakdown }: PortfolioNetworkBreakdo
 
   if (breakdown.length === 0) {
     return (
-      <p className="px-4 py-6 text-center text-sm text-slate-500">{t('portfolio.breakdownEmpty')}</p>
+      <p className="px-4 py-6 text-center text-sm text-slate-500">
+        {t('portfolio.breakdownEmpty')}
+      </p>
     );
   }
 

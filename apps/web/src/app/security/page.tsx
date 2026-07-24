@@ -92,7 +92,10 @@ export default function SecurityPage() {
       content: (
         <div className="space-y-3 text-sm text-slate-600">
           <p>{t('security.reportConcernIntro')}</p>
-          <a href={`mailto:${CONTACT.security}`} className="inline-flex items-center font-medium text-cyan-800 hover:text-cyan-950">
+          <a
+            href={`mailto:${CONTACT.security}`}
+            className="inline-flex items-center font-medium text-cyan-800 hover:text-cyan-950"
+          >
             <LtrSpan>{CONTACT.security}</LtrSpan>
           </a>
         </div>

@@ -9,7 +9,9 @@ function LegalTemplate({ titleKey, bodyKey }: { titleKey: string; bodyKey: strin
   return (
     <PageLayout title={t(titleKey)} description="">
       <Card className="mx-auto max-w-3xl">
-        <CardContent className="p-8 text-sm leading-relaxed text-slate-700">{t(bodyKey)}</CardContent>
+        <CardContent className="p-8 text-sm leading-relaxed text-slate-700">
+          {t(bodyKey)}
+        </CardContent>
       </Card>
     </PageLayout>
   );

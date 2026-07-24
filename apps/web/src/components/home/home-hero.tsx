@@ -47,7 +47,9 @@ export function HomeHero() {
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.25rem]">
               <span className="text-gradient">{t('home.heroGateway')}</span>
             </h1>
-            <p className="max-w-xl text-lg leading-relaxed text-slate-600">{t('home.heroSubtitleLong')}</p>
+            <p className="max-w-xl text-lg leading-relaxed text-slate-600">
+              {t('home.heroSubtitleLong')}
+            </p>
             <p className="text-sm font-medium text-slate-500">{t('home.productIdentity')}</p>
           </div>
 

@@ -50,10 +50,7 @@ export async function POST(request: NextRequest) {
 
     const recentlyVerified = await hasRecentVerification(normalized);
     if (!recentlyVerified) {
-      return NextResponse.json(
-        { success: false, error: 'verification_required' },
-        { status: 400 },
-      );
+      return NextResponse.json({ success: false, error: 'verification_required' }, { status: 400 });
     }
 
     const connection = await linkWalletToUser({

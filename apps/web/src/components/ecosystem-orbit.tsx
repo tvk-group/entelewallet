@@ -13,7 +13,9 @@ export function EcosystemOrbit({ items, className, compact }: EcosystemOrbitProp
     <div
       className={cn(
         'ecosystem-orbit-container relative isolate overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-xl',
-        compact ? 'aspect-square w-full max-w-[280px]' : 'aspect-square w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[520px]',
+        compact
+          ? 'aspect-square w-full max-w-[280px]'
+          : 'aspect-square w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[520px]',
         className,
       )}
       style={{ contain: 'paint' }}

@@ -24,6 +24,7 @@ const dangerousFlags = [
 
 const errors = [];
 const warnings = [];
+const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 
 function read(path) {
   return readFileSync(path, 'utf8');
@@ -128,8 +129,68 @@ try {
   errors.push('wallet-nonce-server.ts not found');
 }
 
-// 7. Test command must not be a placeholder
-const packageJson = JSON.parse(read(join(root, 'package.json')));
+// 7. Distributed rate limiting must fail closed in production
+const rateLimitPath = join(root, 'apps/web/src/lib/rate-limit.ts');
+try {
+  const rateLimitContent = read(rateLimitPath);
+  if (!rateLimitContent.includes('RateLimitStorageUnavailableError')) {
+    errors.push('rate-limit.ts must define RateLimitStorageUnavailableError');
+  }
+  if (!rateLimitContent.includes('increment_rate_limit_bucket')) {
+    errors.push('rate-limit.ts must use Supabase increment_rate_limit_bucket RPC');
+  }
+  if (!rateLimitContent.includes('deriveRateLimitBucketKey')) {
+    errors.push('rate-limit.ts must HMAC-derive bucket keys');
+  }
+} catch {
+  errors.push('rate-limit.ts not found');
+}
+
+// 8. Verification session must not reuse Supabase service role key
+const verificationSessionPath = join(root, 'apps/web/src/lib/verification-session.ts');
+try {
+  const verificationContent = read(verificationSessionPath);
+  if (verificationContent.includes('SUPABASE_SERVICE_ROLE_KEY')) {
+    errors.push('verification-session.ts must not fall back to SUPABASE_SERVICE_ROLE_KEY');
+  }
+  if (!verificationContent.includes('VerificationSecretUnavailableError')) {
+    errors.push('verification-session.ts must fail closed without WALLET_VERIFICATION_SECRET');
+  }
+  if (!verificationContent.includes('sessionId')) {
+    errors.push('verification-session.ts must include sessionId in signed payload');
+  }
+} catch {
+  errors.push('verification-session.ts not found');
+}
+
+// 9. Preview origins must not accept wildcard vercel.app
+const siweSecurityPath = join(root, 'apps/web/src/lib/siwe-api-security.ts');
+try {
+  const siweContent = read(siweSecurityPath);
+  if (siweContent.includes("endsWith('.vercel.app')")) {
+    errors.push('siwe-api-security.ts must not accept all *.vercel.app origins');
+  }
+  if (!siweContent.includes('PREVIEW_ORIGIN_ALLOWLIST')) {
+    errors.push('siwe-api-security.ts must support PREVIEW_ORIGIN_ALLOWLIST');
+  }
+} catch {
+  errors.push('siwe-api-security.ts not found');
+}
+
+// 10. CSP reporting endpoint must exist
+const cspReportPath = join(root, 'apps/web/src/app/api/security/csp-report/route.ts');
+try {
+  read(cspReportPath);
+} catch {
+  errors.push('CSP report endpoint missing at apps/web/src/app/api/security/csp-report/route.ts');
+}
+
+// 11. Node.js 22 runtime
+if (!packageJson.engines?.node?.includes('22')) {
+  errors.push('package.json engines.node must require Node.js 22');
+}
+
+// 12. Test command must not be a placeholder
 if (
   typeof packageJson.scripts?.test === 'string' &&
   packageJson.scripts.test.includes('placeholder')

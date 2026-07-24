@@ -2,18 +2,18 @@
 
 ## Findings (before upgrade)
 
-| Area | Issue | Status |
-|------|-------|--------|
-| Wallet modal | Header used raw `ConnectButton` (English); body used custom button; z-index risk | Fixed |
-| WalletConnect | Dummy project ID when missing; no prod warning | Fixed |
-| i18n | `generate-locales.mjs` polluted DE with "Verbinden Wallet"; partial locales | Fixed |
-| ENK token | `pendingOfficialConfiguration`, no contract address | Fixed → verified |
-| Transparency | All addresses pending, no ENK contract | Fixed |
-| Support | mailto only, misleading success, no Supabase API | Fixed |
-| Design | Basic template, no brand tokens, minimal animation | Fixed |
-| PWA | No manifest, no install page | Fixed |
-| Pre-connect | No checkbox gate before wallet connect | Fixed |
-| Legal | Only `/legal`; missing privacy/terms/risk/disclaimer | Fixed |
+| Area          | Issue                                                                            | Status           |
+| ------------- | -------------------------------------------------------------------------------- | ---------------- |
+| Wallet modal  | Header used raw `ConnectButton` (English); body used custom button; z-index risk | Fixed            |
+| WalletConnect | Dummy project ID when missing; no prod warning                                   | Fixed            |
+| i18n          | `generate-locales.mjs` polluted DE with "Verbinden Wallet"; partial locales      | Fixed            |
+| ENK token     | `pendingOfficialConfiguration`, no contract address                              | Fixed → verified |
+| Transparency  | All addresses pending, no ENK contract                                           | Fixed            |
+| Support       | mailto only, misleading success, no Supabase API                                 | Fixed            |
+| Design        | Basic template, no brand tokens, minimal animation                               | Fixed            |
+| PWA           | No manifest, no install page                                                     | Fixed            |
+| Pre-connect   | No checkbox gate before wallet connect                                           | Fixed            |
+| Legal         | Only `/legal`; missing privacy/terms/risk/disclaimer                             | Fixed            |
 
 ## Fixes applied
 

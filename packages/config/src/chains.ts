@@ -24,9 +24,7 @@ export type { ChainDefinition, TvkModule, UiCategory, PortfolioTier } from './ch
 
 function toChainConfig(chain: ReturnType<typeof loadChains>[number]): ChainConfig {
   const explorer = chain.blockExplorerUrls[0] ?? '';
-  const explorerName = explorer.includes('etherscan')
-    ? 'Etherscan'
-    : chain.name;
+  const explorerName = explorer.includes('etherscan') ? 'Etherscan' : chain.name;
 
   return {
     id: chain.chainId,

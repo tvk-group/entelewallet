@@ -29,7 +29,12 @@ export function PageLayout({
   const useMobileShell = appShell && isAppMode;
 
   return (
-    <div className={cn('app-futuristic-bg flex min-h-screen flex-col', useMobileShell && 'mobile-app-shell')}>
+    <div
+      className={cn(
+        'app-futuristic-bg flex min-h-screen flex-col',
+        useMobileShell && 'mobile-app-shell',
+      )}
+    >
       <Header />
       <main className="relative z-10 flex-1">
         <div

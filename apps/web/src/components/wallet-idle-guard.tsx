@@ -12,7 +12,13 @@ function getIdleMs(): number {
   return DEFAULT_IDLE_MS;
 }
 
-const ACTIVITY_EVENTS = ['mousedown', 'keydown', 'touchstart', 'scroll', 'visibilitychange'] as const;
+const ACTIVITY_EVENTS = [
+  'mousedown',
+  'keydown',
+  'touchstart',
+  'scroll',
+  'visibilitychange',
+] as const;
 
 interface WalletIdleGuardProps {
   /** Do not auto-disconnect while waiting for a verification signature. */

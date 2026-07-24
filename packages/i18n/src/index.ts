@@ -1,4 +1,11 @@
-export { LANGUAGES, DEFAULT_LOCALE, RTL_LOCALES, isRtlLocale, getLanguageByCode, PROTECTED_NAMES } from './languages';
+export {
+  LANGUAGES,
+  DEFAULT_LOCALE,
+  RTL_LOCALES,
+  isRtlLocale,
+  getLanguageByCode,
+  PROTECTED_NAMES,
+} from './languages';
 export type { LocaleCode } from './languages';
 
 import en from '../messages/en.json';
@@ -31,7 +38,31 @@ import type { LocaleCode } from './languages';
 export type Messages = typeof en;
 
 const messages: Record<LocaleCode, Messages> = {
-  en, tr, de, fr, es, it, pt, nl, ar, ru, zh, ja, ko, hi, ur, id, ms, fa, el, bg, ro, pl, uk, az, ka,
+  en,
+  tr,
+  de,
+  fr,
+  es,
+  it,
+  pt,
+  nl,
+  ar,
+  ru,
+  zh,
+  ja,
+  ko,
+  hi,
+  ur,
+  id,
+  ms,
+  fa,
+  el,
+  bg,
+  ro,
+  pl,
+  uk,
+  az,
+  ka,
 };
 
 export function getMessages(locale: string): Messages {

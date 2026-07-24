@@ -109,7 +109,9 @@ export function PortfolioSettingsCard({ onPreferencesChange }: PortfolioSettings
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-medium text-slate-600">{t('settings.cardanoAddress')}</label>
+            <label className="text-xs font-medium text-slate-600">
+              {t('settings.cardanoAddress')}
+            </label>
             <div className="flex gap-2">
               <input
                 value={adaDraft}

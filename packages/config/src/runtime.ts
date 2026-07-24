@@ -14,3 +14,8 @@ export function allowMemoryNonceStore(): boolean {
     process.env.VITEST === 'true'
   );
 }
+
+/** True only on live Vercel production deployments (not local production builds). */
+export function isDeployedProduction(): boolean {
+  return process.env.VERCEL_ENV === 'production';
+}

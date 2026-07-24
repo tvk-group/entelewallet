@@ -18,7 +18,5 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(
-    `${redirectBase}${ROUTES.signIn}?error=auth_callback_failed`,
-  );
+  return NextResponse.redirect(`${redirectBase}${ROUTES.signIn}?error=auth_callback_failed`);
 }

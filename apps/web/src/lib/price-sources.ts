@@ -1,8 +1,4 @@
-import {
-  contractPriceKey,
-  getCmcPlatform,
-  resolveCmcSlug,
-} from '@entelewallet/config';
+import { contractPriceKey, getCmcPlatform, resolveCmcSlug } from '@entelewallet/config';
 
 const COINGECKO_BASE = 'https://api.coingecko.com/api/v3';
 const CMC_BASE = 'https://pro-api.coinmarketcap.com';
@@ -36,7 +32,10 @@ export async function fetchCoingeckoIds(ids: string[]): Promise<Record<string, n
   url.searchParams.set('ids', ids.join(','));
   url.searchParams.set('vs_currencies', 'usd');
 
-  const res = await fetch(url.toString(), { headers: coingeckoHeaders(), next: { revalidate: 60 } });
+  const res = await fetch(url.toString(), {
+    headers: coingeckoHeaders(),
+    next: { revalidate: 60 },
+  });
   if (!res.ok) return {};
 
   const data = (await res.json()) as Record<string, { usd?: number }>;
@@ -63,7 +62,10 @@ export async function fetchCoingeckoContracts(
     url.searchParams.set('contract_addresses', chunk.join(','));
     url.searchParams.set('vs_currencies', 'usd');
 
-    const res = await fetch(url.toString(), { headers: coingeckoHeaders(), next: { revalidate: 60 } });
+    const res = await fetch(url.toString(), {
+      headers: coingeckoHeaders(),
+      next: { revalidate: 60 },
+    });
     if (!res.ok) continue;
 
     const data = (await res.json()) as Record<string, { usd?: number }>;
@@ -83,11 +85,15 @@ export async function fetchCmcIds(coingeckoIds: string[]): Promise<Record<string
   if (!headers || coingeckoIds.length === 0) return {};
 
   const slugToCoingecko = new Map<string, string>();
-  const slugs = [...new Set(coingeckoIds.map((id) => {
-    const slug = resolveCmcSlug(id);
-    slugToCoingecko.set(slug, id);
-    return slug;
-  }))];
+  const slugs = [
+    ...new Set(
+      coingeckoIds.map((id) => {
+        const slug = resolveCmcSlug(id);
+        slugToCoingecko.set(slug, id);
+        return slug;
+      }),
+    ),
+  ];
 
   const url = new URL(`${CMC_BASE}/v2/cryptocurrency/quotes/latest`);
   url.searchParams.set('slug', slugs.join(','));

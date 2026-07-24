@@ -8,59 +8,66 @@ Handoff document for the EnteleWALLET team. Tracks the seven portfolio screens, 
 https://entelewallet.app/?source=entelekron&view=wallet&sync=portfolio
 ```
 
-| Param | Value | Behavior |
-|-------|-------|----------|
-| `source` | `entelekron` | Marks entry from EnteleKRON investor dashboard |
-| `view` | `wallet` | Opens wallet portfolio view (`/assets`) |
-| `sync` | `portfolio` | Triggers portfolio refresh + preference sync from EnteleKRON APIs |
+| Param    | Value        | Behavior                                                          |
+| -------- | ------------ | ----------------------------------------------------------------- |
+| `source` | `entelekron` | Marks entry from EnteleKRON investor dashboard                    |
+| `view`   | `wallet`     | Opens wallet portfolio view (`/assets`)                           |
+| `sync`   | `portfolio`  | Triggers portfolio refresh + preference sync from EnteleKRON APIs |
 
 ## Seven screens
 
-| # | Screen | Section | Key UI |
-|---|--------|---------|--------|
-| 1 | Wallet home | Header | Display mode dropdown, total USD card, empty state |
-| 2 | Your holdings | Balances | Symbol, network, price, balance, value — **only `hasBalance === true`** |
-| 3 | Auto-discovered tokens | Discovery | Alchemy ERC-20 discovery + disclaimer |
-| 4 | Live market assets | Market | Holdings-first / all-market display modes |
-| 5 | Watchlist | Tracking | Editor chips + price table (default: SUI, ADA, MNT, BlockDAG) |
-| 6 | Ecosystem tokens | TVK | ENK, SOVRA, ENM + lockup/vesting links |
-| 7 | Network switcher | Chains | Ethereum, Base, Mantle (**full**); Sui, Cardano, BlockDAG (**price-only v1**) |
+| #   | Screen                 | Section   | Key UI                                                                        |
+| --- | ---------------------- | --------- | ----------------------------------------------------------------------------- |
+| 1   | Wallet home            | Header    | Display mode dropdown, total USD card, empty state                            |
+| 2   | Your holdings          | Balances  | Symbol, network, price, balance, value — **only `hasBalance === true`**       |
+| 3   | Auto-discovered tokens | Discovery | Alchemy ERC-20 discovery + disclaimer                                         |
+| 4   | Live market assets     | Market    | Holdings-first / all-market display modes                                     |
+| 5   | Watchlist              | Tracking  | Editor chips + price table (default: SUI, ADA, MNT, BlockDAG)                 |
+| 6   | Ecosystem tokens       | TVK       | ENK, SOVRA, ENM + lockup/vesting links                                        |
+| 7   | Network switcher       | Chains    | Ethereum, Base, Mantle (**full**); Sui, Cardano, BlockDAG (**price-only v1**) |
 
 ### Screen notes
 
 **1 — Wallet home**
+
 - Reuses connected wallet identicon + truncated address
 - Total USD reflects listed/market-quoted assets; ecosystem tokens without quotes show partial-total disclaimer
 - Display mode selector: `holdings-first` (default) | `all-market`
 
 **2 — Your holdings**
+
 - Table rows: symbol, network badge, spot price, formatted balance, USD value
 - Filter: `hasBalance === true` only (hide zero-balance configured tokens)
 - Sort: USD value descending, ENK pinned first on EnteleKRON view
 
 **3 — Auto-discovered tokens**
+
 - Shown when `preferences.autoDiscoverEnabled === true`
 - Source: Alchemy `getTokenBalances` + metadata on Ethereum mainnet (Phase D)
 - Disclaimer: unverified contracts, user must hide/dismiss per token
 - Hidden when toggle off or no discoveries
 
 **4 — Live market assets**
+
 - `holdings-first`: holdings section first, then catalog assets without balance
 - `all-market`: full catalog sorted by market cap / catalog order
 - Price via CoinGecko (existing `/api/prices` proxy) or EnteleKRON catalog
 
 **5 — Watchlist**
+
 - Chip editor: add/remove symbols from catalog
 - Default symbols: **SUI**, **ADA**, **MNT**, **BlockDAG**
 - Price table: symbol, network, 24h change (when available), USD price
 - Persisted via `PUT /api/user/watchlist` when authenticated; local fallback in Lite
 
 **6 — Ecosystem tokens**
+
 - ENK (verified contract), SOVRA, ENM cards
 - Link to vesting page + EnteleKRON investor dashboard for lockup/vesting detail
 - SOVRA/ENM show `pendingOfficialConfiguration` until contracts published
 
 **7 — Network switcher**
+
 - **Full balance support:** Ethereum, Base, Mantle — on-chain reads via wagmi
 - **Price-only v1:** Sui, Cardano, BlockDAG — spot prices only, no balance reads
 - Badge: `Price only` on non-EVM / v1 chains
@@ -103,7 +110,7 @@ interface PortfolioAsset {
   logo?: string;
   coingeckoId?: string;
   priceUsd?: number;
-  balance?: string;       // raw base units
+  balance?: string; // raw base units
   valueUsd?: number;
   hasBalance: boolean;
   fiatQuotePolicy?: 'market' | 'none';
@@ -180,14 +187,14 @@ interface WatchlistCatalogItem {
 
 When EnteleKRON APIs return `401` or are unreachable, EnteleWALLET Lite composes portfolio data locally:
 
-| Data | Source |
-|------|--------|
-| Holdings | wagmi `useBalance` + `useReadContracts` (existing) |
-| Prices | `/api/prices` → CoinGecko |
-| Preferences | `localStorage` key `entelewallet-portfolio-prefs` |
-| Watchlist | `localStorage` key `entelewallet-watchlist` (defaults: SUI, ADA, MNT, BDAG) |
-| Discovered | Empty until Phase D (Alchemy) |
-| Ecosystem | Token registry ENK / SOVRA / ENM |
+| Data        | Source                                                                      |
+| ----------- | --------------------------------------------------------------------------- |
+| Holdings    | wagmi `useBalance` + `useReadContracts` (existing)                          |
+| Prices      | `/api/prices` → CoinGecko                                                   |
+| Preferences | `localStorage` key `entelewallet-portfolio-prefs`                           |
+| Watchlist   | `localStorage` key `entelewallet-watchlist` (defaults: SUI, ADA, MNT, BDAG) |
+| Discovered  | Empty until Phase D (Alchemy)                                               |
+| Ecosystem   | Token registry ENK / SOVRA / ENM                                            |
 
 ---
 
@@ -237,18 +244,18 @@ When EnteleKRON APIs return `401` or are unreachable, EnteleWALLET Lite composes
 
 ## Files (EnteleWALLET repo)
 
-| Area | Path |
-|------|------|
-| Task list | `docs/ENTELEWALLET-PORTFOLIO-TASKLIST.md` |
-| Types | `packages/types/src/portfolio.ts` |
-| Defaults / catalog | `packages/config/src/portfolio.ts` |
-| Chain tiers | `packages/config/src/chain-registry/chains.json` |
-| API client | `apps/web/src/lib/entelekron-api.ts` |
-| Preferences | `apps/web/src/lib/portfolio-preferences.ts` |
-| Portfolio hook | `apps/web/src/hooks/use-entelekron-portfolio.ts` |
-| UI sections | `apps/web/src/components/portfolio/*` |
-| Page | `apps/web/src/app/assets/page.tsx` |
-| Deep link | `apps/web/src/components/portfolio-sync-handler.tsx` |
+| Area               | Path                                                 |
+| ------------------ | ---------------------------------------------------- |
+| Task list          | `docs/ENTELEWALLET-PORTFOLIO-TASKLIST.md`            |
+| Types              | `packages/types/src/portfolio.ts`                    |
+| Defaults / catalog | `packages/config/src/portfolio.ts`                   |
+| Chain tiers        | `packages/config/src/chain-registry/chains.json`     |
+| API client         | `apps/web/src/lib/entelekron-api.ts`                 |
+| Preferences        | `apps/web/src/lib/portfolio-preferences.ts`          |
+| Portfolio hook     | `apps/web/src/hooks/use-entelekron-portfolio.ts`     |
+| UI sections        | `apps/web/src/components/portfolio/*`                |
+| Page               | `apps/web/src/app/assets/page.tsx`                   |
+| Deep link          | `apps/web/src/components/portfolio-sync-handler.tsx` |
 
 ---
 

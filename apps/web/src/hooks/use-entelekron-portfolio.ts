@@ -9,15 +9,17 @@ import { EntelekronApiError, fetchPortfolio } from '@/lib/entelekron-api';
 import { formatAssetBalance } from '@/lib/multi-chain-balances';
 import { readPortfolioPreferences } from '@/lib/portfolio-preferences';
 import { loadSyncedPreferences, patchLocalPreferences } from '@/lib/wallet-preferences-sync';
-import {
-  hasExplicitNetworkViewSelection,
-  setNetworkViewIdStore,
-} from '@/lib/network-view-store';
+import { hasExplicitNetworkViewSelection, setNetworkViewIdStore } from '@/lib/network-view-store';
 import { usePortfolioBalances } from '@/hooks/use-portfolio-balances';
 import { useMultiChainPortfolio } from '@/hooks/use-multi-chain-portfolio';
 import { useDiscoveredTokens } from '@/hooks/use-discovered-tokens';
 import { useLinkedAddresses } from '@/hooks/use-linked-addresses';
-import { getAssetUsdValue, getTokenUsdValue, useDiscoveredAssetPrices, useTokenPrices } from '@/hooks/use-token-prices';
+import {
+  getAssetUsdValue,
+  getTokenUsdValue,
+  useDiscoveredAssetPrices,
+  useTokenPrices,
+} from '@/hooks/use-token-prices';
 import { useNetworkView } from '@/lib/network-view-context';
 import { useWalletStatus } from '@/lib/wallet-context';
 import type { TokenConfig } from '@entelewallet/types';
@@ -237,12 +239,9 @@ export function useEntelekronPortfolio() {
   ]);
 
   const isLoading =
-    (isInitialLoading && !portfolio?.holdings.length) ||
-    discoveredLoading ||
-    nonEvmLoading;
+    (isInitialLoading && !portfolio?.holdings.length) || discoveredLoading || nonEvmLoading;
 
-  const isRefreshing =
-    activeRefreshing || multiChainFetching || discoveredFetching;
+  const isRefreshing = activeRefreshing || multiChainFetching || discoveredFetching;
 
   const syncPortfolio = useCallback(async () => {
     await Promise.all([

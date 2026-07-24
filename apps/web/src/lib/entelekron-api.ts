@@ -1,9 +1,5 @@
 import { DOMAIN_CONFIG } from '@entelewallet/config';
-import type {
-  PortfolioResponse,
-  WalletPreferences,
-  WatchlistResponse,
-} from '@entelewallet/types';
+import type { PortfolioResponse, WalletPreferences, WatchlistResponse } from '@entelewallet/types';
 
 const ENTELEKRON_BASE = (DOMAIN_CONFIG.entelekron || 'https://entelekron.io').replace(/\/$/, '');
 
@@ -25,7 +21,10 @@ function getAuthHeaders(token?: string | null): HeadersInit {
   return headers;
 }
 
-async function entelekronFetch<T>(path: string, init?: RequestInit & { token?: string | null }): Promise<T> {
+async function entelekronFetch<T>(
+  path: string,
+  init?: RequestInit & { token?: string | null },
+): Promise<T> {
   const { token, ...rest } = init ?? {};
   const res = await fetch(`${ENTELEKRON_BASE}${path}`, {
     ...rest,
@@ -67,7 +66,10 @@ export async function fetchWatchlist(token?: string | null): Promise<WatchlistRe
   return entelekronFetch<WatchlistResponse>('/api/user/watchlist', { token });
 }
 
-export async function putWatchlist(symbols: string[], token?: string | null): Promise<WatchlistResponse> {
+export async function putWatchlist(
+  symbols: string[],
+  token?: string | null,
+): Promise<WatchlistResponse> {
   return entelekronFetch<WatchlistResponse>('/api/user/watchlist', {
     method: 'PUT',
     token,

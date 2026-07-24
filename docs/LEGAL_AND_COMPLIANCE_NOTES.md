@@ -18,6 +18,7 @@ EnteleWALLET Lite is a wallet connection and verification interface. It:
 ## Future Features
 
 Any future feature (send, swap, create wallet, etc.) is subject to:
+
 - Legal review
 - Security audit
 - Updated terms of service

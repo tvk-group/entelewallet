@@ -13,11 +13,7 @@ export type AlchemyTokenMetadata = {
   logo?: string;
 };
 
-async function alchemyRpc<T>(
-  chainId: number,
-  method: string,
-  params: unknown[],
-): Promise<T> {
+async function alchemyRpc<T>(chainId: number, method: string, params: unknown[]): Promise<T> {
   const apiKey = process.env.ALCHEMY_API_KEY?.trim();
   if (!apiKey) {
     throw new Error('ALCHEMY_API_KEY not configured');
@@ -68,15 +64,16 @@ export async function fetchAlchemyTokenMetadata(
   chainId: number,
   contractAddress: string,
 ): Promise<AlchemyTokenMetadata> {
-  return alchemyRpc<AlchemyTokenMetadata>(chainId, 'alchemy_getTokenMetadata', [
-    contractAddress,
-  ]);
+  return alchemyRpc<AlchemyTokenMetadata>(chainId, 'alchemy_getTokenMetadata', [contractAddress]);
 }
 
 /** Drop zero balances and invalid contracts. */
 export function filterAlchemyBalances(balances: AlchemyTokenBalance[]): AlchemyTokenBalance[] {
   return balances.filter((row) => {
-    if (!row.contractAddress || row.contractAddress === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
+    if (
+      !row.contractAddress ||
+      row.contractAddress === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    ) {
       return false;
     }
     try {

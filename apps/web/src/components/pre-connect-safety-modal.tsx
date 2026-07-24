@@ -64,12 +64,7 @@ export function PreConnectSafetyModal({
           <Button type="button" variant="outline" className="flex-1" onClick={onClose}>
             {t('common.cancel')}
           </Button>
-          <Button
-            type="button"
-            className="flex-1"
-            disabled={!acknowledged}
-            onClick={onContinue}
-          >
+          <Button type="button" className="flex-1" disabled={!acknowledged} onClick={onContinue}>
             {t('connect.continueConnect')}
           </Button>
         </div>

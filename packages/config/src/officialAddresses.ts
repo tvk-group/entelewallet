@@ -10,11 +10,7 @@ export type OfficialAddressCategory =
   | 'wallet_app';
 
 export type OfficialAddressStatus =
-  | 'verified'
-  | 'pending_verification'
-  | 'internal_only'
-  | 'archived'
-  | 'not_published';
+  'verified' | 'pending_verification' | 'internal_only' | 'archived' | 'not_published';
 
 export interface OfficialAddress {
   id: string;

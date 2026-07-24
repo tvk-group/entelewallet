@@ -24,11 +24,7 @@ export function usePreConnectAck() {
   return { acknowledged, confirm, loaded };
 }
 
-export function PreConnectSafetyPanel({
-  onAckChange,
-}: {
-  onAckChange?: (ack: boolean) => void;
-}) {
+export function PreConnectSafetyPanel({ onAckChange }: { onAckChange?: (ack: boolean) => void }) {
   const t = useT();
   const { acknowledged, confirm, loaded } = usePreConnectAck();
   const [checked, setChecked] = useState(false);
@@ -80,7 +76,9 @@ export function PreConnectSafetyPanel({
         <p className="text-sm text-slate-700">{t('connect.noticeIntro')}</p>
 
         <div>
-          <p className="mb-2 text-sm font-semibold text-slate-800">{t('connect.noticeDoesNotTitle')}</p>
+          <p className="mb-2 text-sm font-semibold text-slate-800">
+            {t('connect.noticeDoesNotTitle')}
+          </p>
           <ul className="space-y-1.5">
             {doesNotItems.map((key) => (
               <li key={key} className="flex gap-2 text-sm text-slate-700">
@@ -92,7 +90,9 @@ export function PreConnectSafetyPanel({
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-semibold text-slate-800">{t('connect.noticeSignatureTitle')}</p>
+          <p className="mb-2 text-sm font-semibold text-slate-800">
+            {t('connect.noticeSignatureTitle')}
+          </p>
           <ul className="space-y-1.5">
             {signatureItems.map((key) => (
               <li key={key} className="flex gap-2 text-sm text-slate-700">
@@ -121,9 +121,7 @@ export function PreConnectSafetyPanel({
           />
           <span className="text-sm text-slate-800">{t('connect.ackCheckbox')}</span>
         </label>
-        {!checked && (
-          <p className="text-xs text-amber-700">{t('connect.ackRequired')}</p>
-        )}
+        {!checked && <p className="text-xs text-amber-700">{t('connect.ackRequired')}</p>}
       </CardContent>
     </Card>
   );

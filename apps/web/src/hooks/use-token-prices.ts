@@ -20,10 +20,7 @@ async function fetchPrices(ids: string[]): Promise<TokenPrices> {
   return data.prices ?? {};
 }
 
-async function fetchContractPrices(
-  chainId: number,
-  contracts: string[],
-): Promise<TokenPrices> {
+async function fetchContractPrices(chainId: number, contracts: string[]): Promise<TokenPrices> {
   if (contracts.length === 0) return {};
   const platform = getCoingeckoPlatform(chainId);
   if (!platform) return {};
@@ -60,7 +57,8 @@ export function useDiscoveredAssetPrices(assets: PortfolioAsset[]) {
   const contractGroups = useMemo(() => {
     const map = new Map<number, string[]>();
     for (const asset of assets) {
-      if (!asset.contractAddress || asset.fiatQuotePolicy === 'none' || asset.chainId === undefined) continue;
+      if (!asset.contractAddress || asset.fiatQuotePolicy === 'none' || asset.chainId === undefined)
+        continue;
       const list = map.get(asset.chainId) ?? [];
       list.push(asset.contractAddress.toLowerCase());
       map.set(asset.chainId, list);
@@ -107,10 +105,19 @@ export function getTokenUsdValue(
 }
 
 export function getAssetUsdValue(
-  asset: Pick<PortfolioAsset, 'chainId' | 'contractAddress' | 'decimals' | 'balance' | 'coingeckoId' | 'fiatQuotePolicy'>,
+  asset: Pick<
+    PortfolioAsset,
+    'chainId' | 'contractAddress' | 'decimals' | 'balance' | 'coingeckoId' | 'fiatQuotePolicy'
+  >,
   prices: TokenPrices,
 ): number | undefined {
-  if (!asset.balance || asset.fiatQuotePolicy === 'none' || asset.chainId === undefined || asset.decimals === undefined) return undefined;
+  if (
+    !asset.balance ||
+    asset.fiatQuotePolicy === 'none' ||
+    asset.chainId === undefined ||
+    asset.decimals === undefined
+  )
+    return undefined;
   const balance = BigInt(asset.balance);
   if (balance === 0n) return undefined;
 

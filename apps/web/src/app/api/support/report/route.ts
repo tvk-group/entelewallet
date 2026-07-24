@@ -20,7 +20,8 @@ export async function POST(request: NextRequest) {
 
     if (provider === 'supabase') {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+      const key =
+        process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
       const res = await fetch(`${url}/rest/v1/support_security_reports`, {
         method: 'POST',

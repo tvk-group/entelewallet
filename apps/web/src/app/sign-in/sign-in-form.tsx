@@ -63,9 +63,7 @@ export default function SignInForm() {
       <div className="mx-auto max-w-md space-y-6">
         {callbackError && <Alert variant="error">{t('auth.callbackError')}</Alert>}
 
-        {!supabaseConfigured && (
-          <Alert variant="warning">{t('auth.supabaseNotConfigured')}</Alert>
-        )}
+        {!supabaseConfigured && <Alert variant="warning">{t('auth.supabaseNotConfigured')}</Alert>}
 
         <Card>
           <CardContent className="space-y-4 p-6">

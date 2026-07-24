@@ -38,7 +38,8 @@ export function AssetCard({
       : null;
 
   const fiatLabel = formatUsd(fiatUsd);
-  const showUnlisted = !hasMarketQuote(token) && balance !== undefined && !token.pendingOfficialConfiguration;
+  const showUnlisted =
+    !hasMarketQuote(token) && balance !== undefined && !token.pendingOfficialConfiguration;
 
   return (
     <div className="flex items-center gap-3.5 px-4 py-3.5 transition hover:bg-slate-50/90">

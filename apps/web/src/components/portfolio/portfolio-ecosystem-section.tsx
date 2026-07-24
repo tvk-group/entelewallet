@@ -19,7 +19,9 @@ export function PortfolioEcosystemSection({ assets }: PortfolioEcosystemSectionP
 
   if (assets.length === 0) {
     return (
-      <p className="px-4 py-8 text-center text-sm text-slate-500">{t('portfolio.ecosystemEmpty')}</p>
+      <p className="px-4 py-8 text-center text-sm text-slate-500">
+        {t('portfolio.ecosystemEmpty')}
+      </p>
     );
   }
 
@@ -53,16 +55,16 @@ export function PortfolioEcosystemSection({ assets }: PortfolioEcosystemSectionP
                   <p className="mt-1 text-sm tabular-nums text-slate-700">
                     <LtrSpan>{balance}</LtrSpan> {asset.symbol}
                     {asset.valueUsd !== undefined && (
-                      <span className="ml-2 text-xs text-slate-500">{formatUsd(asset.valueUsd)}</span>
+                      <span className="ml-2 text-xs text-slate-500">
+                        {formatUsd(asset.valueUsd)}
+                      </span>
                     )}
                   </p>
                 ) : (
                   <p className="mt-1 text-xs text-slate-500">{t('portfolio.ecosystemNoBalance')}</p>
                 )}
                 <p className="mt-2 text-xs text-slate-500">
-                  {asset.vestingLinked
-                    ? asset.lockupSummary
-                    : t('portfolio.ecosystemVestingHint')}
+                  {asset.vestingLinked ? asset.lockupSummary : t('portfolio.ecosystemVestingHint')}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Link href={ROUTES.vesting}>

@@ -18,14 +18,17 @@ import {
   getClientIp,
   readWalletApiBody,
   SAFE_NONCE_UNAVAILABLE_ERROR,
+  SAFE_RATE_LIMIT_UNAVAILABLE_ERROR,
   SAFE_WALLET_API_ERROR,
   validateWalletApiOrigin,
 } from '@/lib/siwe-api-security';
-import { enforceWalletApiRateLimit } from '@/lib/rate-limit';
+import { enforceWalletApiRateLimit, RateLimitStorageUnavailableError } from '@/lib/rate-limit';
 import {
   buildVerificationCookieHeader,
   canReadVerificationStatus,
+  createVerificationPayload,
   getVerificationFromCookie,
+  VerificationSecretUnavailableError,
 } from '@/lib/verification-session';
 
 const schema = z.object({
@@ -49,7 +52,7 @@ export async function POST(request: NextRequest) {
     const body = schema.parse(JSON.parse(rawBody));
     const normalized = normalizeAddress(body.address);
 
-    const rateLimit = enforceWalletApiRateLimit({
+    const rateLimit = await enforceWalletApiRateLimit({
       scope: 'verify',
       ip: getClientIp(request),
       walletAddress: normalized,
@@ -161,17 +164,28 @@ export async function POST(request: NextRequest) {
       verifiedAt,
     });
 
-    response.headers.set(
-      'Set-Cookie',
-      buildVerificationCookieHeader({
-        address: normalized,
-        chainId: body.chainId,
-        verifiedAt,
-      }),
-    );
+    const verificationPayload = createVerificationPayload({
+      address: normalized,
+      chainId: body.chainId,
+      verifiedAt,
+    });
+
+    response.headers.set('Set-Cookie', buildVerificationCookieHeader(verificationPayload));
 
     return response;
   } catch (err) {
+    if (err instanceof VerificationSecretUnavailableError) {
+      return NextResponse.json(
+        { success: false, error: SAFE_NONCE_UNAVAILABLE_ERROR },
+        { status: 503 },
+      );
+    }
+    if (err instanceof RateLimitStorageUnavailableError) {
+      return NextResponse.json(
+        { success: false, error: SAFE_RATE_LIMIT_UNAVAILABLE_ERROR },
+        { status: 503 },
+      );
+    }
     if (err instanceof NonceStorageUnavailableError) {
       return NextResponse.json(
         { success: false, error: SAFE_NONCE_UNAVAILABLE_ERROR },

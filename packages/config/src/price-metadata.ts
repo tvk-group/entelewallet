@@ -17,14 +17,18 @@ const NATIVE_COINGECKO: Record<string, string> = {
 };
 
 /** Resolve CoinGecko id for portfolio pricing. */
-export function getCoingeckoId(token: Pick<TokenConfig, 'symbol' | 'coingeckoId' | 'isNative' | 'fiatQuotePolicy'>): string | undefined {
+export function getCoingeckoId(
+  token: Pick<TokenConfig, 'symbol' | 'coingeckoId' | 'isNative' | 'fiatQuotePolicy'>,
+): string | undefined {
   if (token.fiatQuotePolicy === 'none') return undefined;
   if (token.coingeckoId) return token.coingeckoId;
   if (token.isNative) return NATIVE_COINGECKO[token.symbol];
   return undefined;
 }
 
-export function hasMarketQuote(token: Pick<TokenConfig, 'symbol' | 'coingeckoId' | 'isNative' | 'fiatQuotePolicy'>): boolean {
+export function hasMarketQuote(
+  token: Pick<TokenConfig, 'symbol' | 'coingeckoId' | 'isNative' | 'fiatQuotePolicy'>,
+): boolean {
   return getCoingeckoId(token) !== undefined;
 }
 
